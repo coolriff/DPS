@@ -91,7 +91,7 @@ class BtOgreTestApplication : public ExampleApplication
 	void createScene(void)
 	{
 	    //Some normal stuff.
-	    mSceneMgr->setAmbientLight(ColourValue(0.7,0.7,0.7));
+	    mSceneMgr->setAmbientLight(ColourValue(1,1,1));
 	    mCamera->setPosition(Vector3(10,10,10));
 	    mCamera->lookAt(Vector3::ZERO);
 	    mCamera->setNearClipDistance(0.05);
@@ -113,13 +113,17 @@ class BtOgreTestApplication : public ExampleApplication
 
 	    //Create Ogre stuff.
 
-	    mNinjaEntity = mSceneMgr->createEntity("ninjaEntity", "Player.mesh");
+	    mNinjaEntity = mSceneMgr->createEntity("ninjaEntity", "ogrehead.mesh");
 	    mNinjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaSceneNode", pos, rot);
 	    mNinjaNode->attachObject(mNinjaEntity);
+		mNinjaNode->setScale(Vector3(1,1,1));
 
 	    //Create shape.
 	    BtOgre::StaticMeshToShapeConverter converter(mNinjaEntity);
-	    mNinjaShape = converter.createSphere();
+		//BtOgre::AnimatedMeshToShapeConverter converter(mNinjaEntity);
+	    //mNinjaShape = converter.createTrimesh();
+		mNinjaShape = converter.createConvex();
+		//mNinjaShape = converter.createConvex();
 
 	    //Calculate inertia.
 	    btScalar mass = 5;
@@ -137,12 +141,22 @@ class BtOgreTestApplication : public ExampleApplication
 	    // Ground!
 	    //----------------------------------------------------------
 
+
 	    //Create Ogre stuff.
+
+		Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+		Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+			plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+		mGroundEntity = mSceneMgr->createEntity("GroundEntity", "ground");
+		mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(mGroundEntity);
+		mGroundEntity->setMaterialName("Examples/Rockwall");
+		mGroundEntity->setCastShadows(false);
+
 	    //MeshManager::getSingleton().createPlane("groundPlane", "General", Plane(Vector3::UNIT_Y, 0), 100, 100, 
 	    //10, 10, true, 1, 5, 5, Vector3::UNIT_Z);
-	    mGroundEntity = mSceneMgr->createEntity("groundEntity", "TestLevel_b0.mesh");
+	    //mGroundEntity = mSceneMgr->createEntity("groundEntity", "TestLevel_b0.mesh");
 	    //mGroundEntity->setMaterialName("Examples/Rockwall");
-	    mSceneMgr->getRootSceneNode()->createChildSceneNode("groundNode")->attachObject(mGroundEntity);
+	    //mSceneMgr->getRootSceneNode()->createChildSceneNode("groundNode")->attachObject(mGroundEntity);
 
 	    //Create the ground shape.
 	    BtOgre::StaticMeshToShapeConverter converter2(mGroundEntity);
@@ -155,6 +169,11 @@ class BtOgreTestApplication : public ExampleApplication
 	    //Create the Body.
 	    mGroundBody = new btRigidBody(0, groundState, mGroundShape, btVector3(0,0,0));
 	    Globals::phyWorld->addRigidBody(mGroundBody);
+
+		Ogre::Plane planes;
+		planes.d = 100;
+		planes.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
+		mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 	}
 
 	void createFrameListener(void)
