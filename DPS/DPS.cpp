@@ -174,6 +174,8 @@ void DPS::createScene(void)
 	//planes.d = 100;
 	//planes.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
+
+	//mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 }
 
 void DPS::createFrameListenerBtOgre(void)
