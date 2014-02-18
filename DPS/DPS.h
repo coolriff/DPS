@@ -1,33 +1,34 @@
-
-#ifndef __DPS_h_
-#define __DPS_h_
-
-#include "BaseApplication.h"
-#include "btBulletDynamicsCommon.h"
 #include "ExampleApplication.h"
+#include "BtOgrePG.h"
+#include "BtOgreGP.h"
+#include "BtOgreExtras.h"
 
-class DPS : public BaseApplication, public ExampleFrameListener
+namespace Globals
+{
+    btDynamicsWorld *phyWorld;
+    BtOgre::DebugDrawer *dbgdraw;
+}
+
+class DPS : public ExampleApplication
 {
 	public:
 		DPS(void);
 		~DPS(void);
 
-	protected:
-
-		//btDynamicsWorld * phyWorld;
+    protected:
 		btAxisSweep3 *mBroadphase;
 		btDefaultCollisionConfiguration *mCollisionConfig;
 		btCollisionDispatcher *mDispatcher;
 		btSequentialImpulseConstraintSolver *mSolver;
 
-		Ogre::SceneNode * mNinjaNode;
-		Ogre::Entity * mNinjaEntity;
-		btRigidBody * mNinjaBody;
-		btCollisionShape * mNinjaShape;
+		Ogre::SceneNode *mNinjaNode;
+		Ogre::Entity *mNinjaEntity;
+		btRigidBody *mNinjaBody;
+		btCollisionShape *mNinjaShape;
 
-		Ogre::Entity * mGroundEntity;
-		btRigidBody * mGroundBody;
-		btBvhTriangleMeshShape * mGroundShape;
+		Ogre::Entity *mGroundEntity;
+		btRigidBody *mGroundBody;
+		btBvhTriangleMeshShape *mGroundShape;
 
 		virtual void createScene(void);
 		void createFrameListener(void);
@@ -42,5 +43,3 @@ class DPS : public BaseApplication, public ExampleFrameListener
 		//virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 		//virtual bool gameLoop(const Ogre::FrameEvent& evt);
 };
-
-#endif // #ifndef __DPS_h_

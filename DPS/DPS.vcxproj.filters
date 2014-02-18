@@ -24,7 +24,7 @@
     <ClCompile Include="BtOgre.cpp">
       <Filter>External</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="DPS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,6 +40,9 @@
     </ClInclude>
     <ClInclude Include="BtOgreGP.h">
       <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="DPS.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

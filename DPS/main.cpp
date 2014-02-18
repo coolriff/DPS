@@ -108,7 +108,7 @@ class BtOgreTestApplication : public ExampleApplication
 	    // Ninja!
 	    //----------------------------------------------------------
 
-	    Vector3 pos = Vector3(0,10,0);
+	    Vector3 pos = Vector3(0,100,0);
 	    Quaternion rot = Quaternion::IDENTITY;
 
 	    //Create Ogre stuff.
@@ -121,6 +121,7 @@ class BtOgreTestApplication : public ExampleApplication
 	    //Create shape.
 	    BtOgre::StaticMeshToShapeConverter converter(mNinjaEntity);
 		//BtOgre::AnimatedMeshToShapeConverter converter(mNinjaEntity);
+
 	    //mNinjaShape = converter.createTrimesh();
 		mNinjaShape = converter.createConvex();
 		//mNinjaShape = converter.createConvex();
@@ -170,10 +171,10 @@ class BtOgreTestApplication : public ExampleApplication
 	    mGroundBody = new btRigidBody(0, groundState, mGroundShape, btVector3(0,0,0));
 	    Globals::phyWorld->addRigidBody(mGroundBody);
 
-		Ogre::Plane planes;
-		planes.d = 100;
-		planes.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
-		mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
+		//Ogre::Plane planes;
+		//planes.d = 100;
+		//planes.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
+		//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 	}
 
 	void createFrameListener(void)

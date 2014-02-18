@@ -13,13 +13,14 @@
   <ItemGroup>
     <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="BtOgre.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="DPS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApplication.h" />
     <ClInclude Include="BtOgreExtras.h" />
     <ClInclude Include="BtOgreGP.h" />
     <ClInclude Include="BtOgrePG.h" />
+    <ClInclude Include="DPS.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
