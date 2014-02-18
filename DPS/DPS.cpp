@@ -84,8 +84,15 @@ void DPS::createViewports(void)
 */
 void DPS::createScene(void)
 {
+	Ogre::Light* pLight = mSceneMgr->createLight( "MainLight" );
+	pLight->setType( Light::LightTypes::LT_DIRECTIONAL );
+	pLight->setPosition( 60, 80, 100 );
+	pLight->setDirection( -60, -80, -100 );
+	pLight->setDiffuseColour( 1.0, 1.0, 1.0 );
+	pLight->setSpecularColour( 0.0, 0.0, 1.0 );
+
 	//Some normal stuff.
-	mSceneMgr->setAmbientLight(ColourValue(1,1,1));
+	mSceneMgr->setAmbientLight(ColourValue(0.9,0.9,0.9));
 	mCamera->setPosition(Vector3(10,10,10));
 	mCamera->lookAt(Vector3::ZERO);
 	mCamera->setNearClipDistance(0.05);
@@ -108,6 +115,7 @@ void DPS::createScene(void)
 	mNinjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaSceneNode", pos, rot);
 	mNinjaNode->attachObject(mNinjaEntity);
 	mNinjaNode->setScale(Vector3(1,1,1));
+	mNinjaEntity->setCastShadows(true);
 	setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
 
 	//Create shape.
