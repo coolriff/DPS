@@ -31,7 +31,7 @@ DPS::DPS(void)
 	mSolver = new btSequentialImpulseConstraintSolver();
 
 	Globals::phyWorld = new btDiscreteDynamicsWorld(mDispatcher, mBroadphase, mSolver, mCollisionConfig);
-	Globals::phyWorld->setGravity(btVector3(0,-9.8,0));
+	Globals::phyWorld->setGravity(btVector3(0,-100,0));
 }
 
 
@@ -94,23 +94,21 @@ void DPS::createScene(void)
 	//----------------------------------------------------------
 	// Debug drawing!
 	//----------------------------------------------------------
-
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 
 	//----------------------------------------------------------
 	// Ninja!
 	//----------------------------------------------------------
-
 	Vector3 pos = Vector3(0,100,0);
 	Quaternion rot = Quaternion::IDENTITY;
 
 	//Create Ogre stuff.
-
-	mNinjaEntity = mSceneMgr->createEntity("ninjaEntity", "ogrehead.mesh");
+	mNinjaEntity = mSceneMgr->createEntity("ninjaEntity", "cube.mesh");
 	mNinjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaSceneNode", pos, rot);
 	mNinjaNode->attachObject(mNinjaEntity);
 	mNinjaNode->setScale(Vector3(1,1,1));
+	setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
 
 	//Create shape.
 	BtOgre::StaticMeshToShapeConverter converter(mNinjaEntity);
@@ -121,7 +119,7 @@ void DPS::createScene(void)
 	//mNinjaShape = converter.createConvex();
 
 	//Calculate inertia.
-	btScalar mass = 5;
+	btScalar mass = 1;
 	btVector3 inertia;
 	mNinjaShape->calculateLocalInertia(mass, inertia);
 
@@ -170,10 +168,90 @@ void DPS::createScene(void)
 	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 }
 
-void DPS::createFrameListener(void)
+void DPS::createFrameListenerBtOgre(void)
 {
 	mFrameListener = new BtOgreTestFrameListener(mWindow, mCamera, mSceneMgr);
 	mRoot->addFrameListener(mFrameListener);
+}
+
+void DPS::setColor(Ogre::Entity* ent ,Ogre::Vector3 v)
+{
+	Ogre::MaterialPtr m_pMat = ent->getSubEntity(0)->getMaterial()->clone("newMat");
+	m_pMat->setAmbient(v.x,v.y,v.z);
+	m_pMat->setDiffuse(v.x,v.y,v.z, 1);
+	ent->getSubEntity(0)->getMaterial()->getTechnique(0)->getPass(0)->setSpecular(0.072,0.072,0.072, 1);
+	ent->setMaterial(m_pMat);
+}
+
+void DPS::throws(void)
+{
+	Ogre::Vector3 pos = mCamera->getDerivedPosition() + mCamera->getDerivedDirection().normalisedCopy() * 10;
+
+	Quaternion rot = Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("sphere.mesh");
+	//Ogre::Entity *ent = mSceneMgr->createEntity("cube.mesh");
+	ent->setCastShadows(true);
+	//ent->setMaterialName("Examples/BumpyMetal");
+
+	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+	setColor(ent, Ogre::Vector3(0.3021,0.3308,0.3671));
+	sphereNode->attachObject(ent);
+	sphereNode->setScale(Vector3(0.5,0.5,0.5));
+
+	BtOgre::StaticMeshToShapeConverter converter(ent);
+	btCollisionShape* entShape = converter.createSphere();
+	//btCollisionShape* entShape = converter.createTrimesh();
+
+	//Calculate inertia.
+	btScalar mass = 1;
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	Ogre::Vector3 thro = mCamera->getRealDirection() * 800;
+	entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
+	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
+	Globals::phyWorld->addRigidBody(entBody);
+}
+
+//void DPS::createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic)
+//{
+//	Ogre::SceneNode *node = entity->getParentSceneNode();
+//	Ogre::Vector3 size = node->_getDerivedScale()*entity->getBoundingBox().getHalfSize();
+//	float mass =  bStatic ? 0.0f : 1.0f;
+//	srand( (unsigned)time( NULL ) );
+//
+//	node->setPosition(position);
+//	node->setOrientation(Quaternion(Degree(Ogre::Math::RangeRandom(0.0,60.0)), Vector3::UNIT_Y));
+//
+//	btBoxShape* sceneBoxShape = new btBoxShape(btVector3(width, height, depth) * 0.50);
+//
+//	// and the Bullet rigid body
+//	MyMotionState * defaultMotionState = new MyMotionState(btTransform(btQuaternion(btScalar(0),btScalar(0),btScalar(0),btScalar(1))), node);
+//	btRigidBody *defaultBody = new btRigidBody(btScalar(1), defaultMotionState, sceneBoxShape);
+//	/* defaultBody->setShape(node, 
+//						sceneBoxShape, 
+//						0.6f,                             // dynamic body restitution
+//						0.6f,                             // dynamic body friction
+//						mass,                             // dynamic bodymass
+//						node->_getDerivedPosition(),      // starting position of the box
+//						node->_getDerivedOrientation());  // orientation of the box**/
+//	mShapes.push_back(sceneBoxShape);
+//	mBodies.push_back(defaultBody);
+//	mNumEntitiesInstanced++;		
+//}
+
+bool DPS::keyPressed(const OIS::KeyEvent &arg)
+{
+	if (arg.key == OIS::KC_1) 
+	{
+		throws();
+	}
+	return BaseApplication::keyPressed(arg);
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

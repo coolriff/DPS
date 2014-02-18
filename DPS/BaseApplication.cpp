@@ -34,6 +34,8 @@ BaseApplication::BaseApplication(void)
     mKeyboard(0),
 	mOverlaySystem(0)
 {
+	mFrameListener = 0;
+	mRoot = 0;
 }
 
 //-------------------------------------------------------------------------------------
@@ -163,6 +165,13 @@ void BaseApplication::createFrameListener(void)
 
     mRoot->addFrameListener(this);
 }
+
+void BaseApplication::createFrameListenerBtOgre(void)
+{
+	mFrameListener= new ExampleFrameListener(mWindow, mCamera);
+	mFrameListener->showDebugOverlay(true);
+	mRoot->addFrameListener(mFrameListener);
+}
 //-------------------------------------------------------------------------------------
 void BaseApplication::destroyScene(void)
 {
@@ -258,6 +267,7 @@ bool BaseApplication::setup(void)
     createScene();
 
     createFrameListener();
+	createFrameListenerBtOgre();
 
     return true;
 };

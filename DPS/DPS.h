@@ -1,7 +1,11 @@
-#include "ExampleApplication.h"
+#ifndef __DPS_h_
+#define __DPS_h_
+
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
+#include "BaseApplication.h"
+#include "ExampleApplication.h"
 
 namespace Globals
 {
@@ -9,13 +13,15 @@ namespace Globals
     BtOgre::DebugDrawer *dbgdraw;
 }
 
-class DPS : public ExampleApplication
+class DPS : public BaseApplication
 {
 	public:
 		DPS(void);
-		~DPS(void);
+		virtual ~DPS(void);
 
-    protected:
+	protected:
+		btDynamicsWorld *phyWorld;
+		BtOgre::DebugDrawer *dbgdraw;
 		btAxisSweep3 *mBroadphase;
 		btDefaultCollisionConfiguration *mCollisionConfig;
 		btCollisionDispatcher *mDispatcher;
@@ -31,7 +37,11 @@ class DPS : public ExampleApplication
 		btBvhTriangleMeshShape *mGroundShape;
 
 		virtual void createScene(void);
-		void createFrameListener(void);
+		virtual void createFrameListenerBtOgre(void);
+		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
+		void throws(void);
+		//void createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic);
+		virtual bool keyPressed(const OIS::KeyEvent &arg);
 		//void createCamera(void);
 		//void createViewports(void);
 		//void destroyScene(void);
@@ -43,3 +53,5 @@ class DPS : public ExampleApplication
 		//virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 		//virtual bool gameLoop(const Ogre::FrameEvent& evt);
 };
+
+#endif
