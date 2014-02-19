@@ -111,12 +111,13 @@ void DPS::createScene(void)
 	Quaternion rot = Quaternion::IDENTITY;
 
 	//Create Ogre stuff.
-	mNinjaEntity = mSceneMgr->createEntity("ninjaEntity", "cube.mesh");
+	mNinjaEntity = mSceneMgr->createEntity("ninjaEntity", "ogrehead.mesh");
 	mNinjaNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ninjaSceneNode", pos, rot);
 	mNinjaNode->attachObject(mNinjaEntity);
 	mNinjaNode->setScale(Vector3(1,1,1));
 	mNinjaEntity->setCastShadows(true);
-	setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
+	//setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
+	//mNinjaEntity->setMaterialName("Examples/Rockwall");
 
 	//Create shape.
 	BtOgre::StaticMeshToShapeConverter converter(mNinjaEntity);
@@ -146,10 +147,10 @@ void DPS::createScene(void)
 	//Create Ogre stuff.
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
 	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-		plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+		plane, 15000, 15000, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
 	mGroundEntity = mSceneMgr->createEntity("GroundEntity", "ground");
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(mGroundEntity);
-	mGroundEntity->setMaterialName("Examples/Rockwall");
+	mGroundEntity->setMaterialName("Examples/BumpyMetal");
 	mGroundEntity->setCastShadows(false);
 
 	//MeshManager::getSingleton().createPlane("groundPlane", "General", Plane(Vector3::UNIT_Y, 0), 100, 100, 
@@ -175,7 +176,7 @@ void DPS::createScene(void)
 	//planes.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
 	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 
-	//mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
+	mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 }
 
 void DPS::createFrameListenerBtOgre(void)
@@ -206,7 +207,7 @@ void DPS::throws(void)
 	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
 	setColor(ent, Ogre::Vector3(0.3021,0.3308,0.3671));
 	sphereNode->attachObject(ent);
-	sphereNode->setScale(Vector3(0.5,0.5,0.5));
+	sphereNode->setScale(Vector3(0.1,0.1,0.1));
 
 	BtOgre::StaticMeshToShapeConverter converter(ent);
 	btCollisionShape* entShape = converter.createSphere();
