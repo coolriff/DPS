@@ -2,10 +2,11 @@
 
 using namespace std;
 
-DPSHelper::DPSHelper(btDynamicsWorld* phyWorld, Ogre::Camera* mCamera)
+DPSHelper::DPSHelper(btDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr)
 {
 	this->phyWorld = phyWorld;
 	this->mCamera = mCamera;
+	this->mSceneMgr = mSceneMgr;
 }
 
 
@@ -22,7 +23,7 @@ void DPSHelper::setColor(Ogre::Entity* ent ,Ogre::Vector3 v)
 	ent->setMaterial(m_pMat);
 }
 
-void DPSHelper::createPointLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction, Ogre::SceneManager* mSceneMgr)
+void DPSHelper::createPointLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction)
 {	
 	Ogre::Light* pLight = mSceneMgr->createLight(LightName);
 	pLight->setType(Ogre::Light::LT_POINT);
@@ -32,7 +33,7 @@ void DPSHelper::createPointLight(string LightName, Ogre::Vector3 position ,Ogre:
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
-void DPSHelper::createDirectionLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction, Ogre::SceneManager* mSceneMgr)
+void DPSHelper::createDirectionLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction)
 {
 	Ogre::Light* pLight = mSceneMgr->createLight(LightName);
 	pLight->setType(Ogre::Light::LT_DIRECTIONAL);
@@ -42,7 +43,7 @@ void DPSHelper::createDirectionLight(string LightName, Ogre::Vector3 position ,O
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
-void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction, Ogre::SceneManager* mSceneMgr)
+void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction)
 {
 	Ogre::Light* pLight = mSceneMgr->createLight(LightName);
 	pLight->setType(Ogre::Light::LT_SPOTLIGHT);
@@ -52,7 +53,7 @@ void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
-void DPSHelper::createGround(Ogre::SceneManager* mSceneMgr)
+void DPSHelper::createGround(void)
 {
 	//Create Ogre stuff.
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
@@ -75,14 +76,14 @@ void DPSHelper::createGround(Ogre::SceneManager* mSceneMgr)
 
 	//Create MotionState (no need for BtOgre here, you can use it if you want to though).
 	btDefaultMotionState* groundState = new btDefaultMotionState(
-		btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
+	btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
 
 	//Create the Body.
 	btRigidBody* GroundBody = new btRigidBody(0, groundState, GroundShape, btVector3(0,0,0));
 	phyWorld->addRigidBody(GroundBody);
 }
 
-void DPSHelper::throwSphere(Ogre::SceneManager* mSceneMgr,Ogre::Camera* mCamera)
+void DPSHelper::throwSphere(void)
 {
 	Ogre::Vector3 pos = mCamera->getDerivedPosition() + mCamera->getDerivedDirection().normalisedCopy() * 10;
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
@@ -114,4 +115,39 @@ void DPSHelper::throwSphere(Ogre::SceneManager* mSceneMgr,Ogre::Camera* mCamera)
 	entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
 	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
 	phyWorld->addRigidBody(entBody);
+}
+
+void DPSHelper::createOgreHead(void)
+{
+	Ogre::Vector3 pos = Ogre::Vector3(0,100,0);
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+
+	//Create Ogre stuff.
+	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity("ogrehead.mesh");
+	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos, rot);
+	ogreHeadNode->attachObject(ogreHeadEntity);
+	ogreHeadNode->setScale(Ogre::Vector3(1,1,1));
+	ogreHeadEntity->setCastShadows(true);
+	//setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
+	//mNinjaEntity->setMaterialName("Examples/Rockwall");
+
+	//Create shape.
+	BtOgre::StaticMeshToShapeConverter converter(ogreHeadEntity);
+	//BtOgre::AnimatedMeshToShapeConverter converter(mNinjaEntity);
+
+	//mNinjaShape = converter.createTrimesh();
+	btCollisionShape* ogreHeadShape = converter.createConvex();
+	//mNinjaShape = converter.createConvex();
+
+	//Calculate inertia.
+	btScalar mass = 1;
+	btVector3 inertia;
+	ogreHeadShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState *ogreheadState = new BtOgre::RigidBodyState(ogreHeadNode);
+
+	//Create the Body.
+	btRigidBody* ogreHeadBody = new btRigidBody(mass, ogreheadState, ogreHeadShape, inertia);
+	phyWorld->addRigidBody(ogreHeadBody);
 }

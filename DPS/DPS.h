@@ -27,15 +27,6 @@ class DPS : public BaseApplication
 		btCollisionDispatcher *mDispatcher;
 		btSequentialImpulseConstraintSolver *mSolver;
 
-		Ogre::SceneNode *mNinjaNode;
-		Ogre::Entity *mNinjaEntity;
-		btRigidBody *mNinjaBody;
-		btCollisionShape *mNinjaShape;
-
-		//Ogre::Entity *mGroundEntity;
-		//btRigidBody *mGroundBody;
-		//btBvhTriangleMeshShape *mGroundShape;
-
 		//DPSHelper* dpsHelper;
 		std::shared_ptr<DPSHelper> dpsHelper;
 
