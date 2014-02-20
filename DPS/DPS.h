@@ -1,27 +1,27 @@
 #ifndef __DPS_h_
 #define __DPS_h_
 
+#include "BaseApplication.h"
+#include "DPSHelper.h"
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
-#include "BaseApplication.h"
 #include "ExampleApplication.h"
 
 namespace Globals
 {
-    btDynamicsWorld *phyWorld;
-    BtOgre::DebugDrawer *dbgdraw;
+	btDynamicsWorld* phyWorld;
+    BtOgre::DebugDrawer* dbgdraw;
 }
 
 class DPS : public BaseApplication
 {
 	public:
 		DPS(void);
-		virtual ~DPS(void);
+		~DPS(void);
 
 	protected:
-		btDynamicsWorld *phyWorld;
-		BtOgre::DebugDrawer *dbgdraw;
+		//Bullet things.
 		btAxisSweep3 *mBroadphase;
 		btDefaultCollisionConfiguration *mCollisionConfig;
 		btCollisionDispatcher *mDispatcher;
@@ -32,16 +32,20 @@ class DPS : public BaseApplication
 		btRigidBody *mNinjaBody;
 		btCollisionShape *mNinjaShape;
 
-		Ogre::Entity *mGroundEntity;
-		btRigidBody *mGroundBody;
-		btBvhTriangleMeshShape *mGroundShape;
+		//Ogre::Entity *mGroundEntity;
+		//btRigidBody *mGroundBody;
+		//btBvhTriangleMeshShape *mGroundShape;
+
+		//DPSHelper* dpsHelper;
+		std::shared_ptr<DPSHelper> dpsHelper;
 
 		virtual void createScene(void);
 		virtual void createFrameListenerBtOgre(void);
 		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
-		void throws(void);
+		void throwSphere(void);
+		//void createGround(void);
 		//void createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic);
-		virtual bool keyPressed(const OIS::KeyEvent &arg);
+		bool keyPressed(const OIS::KeyEvent &arg);
 		//void createCamera(void);
 		//void createViewports(void);
 		//void destroyScene(void);

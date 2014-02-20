@@ -14,6 +14,7 @@
     <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="BtOgre.cpp" />
     <ClCompile Include="DPS.cpp" />
+    <ClCompile Include="DPSHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApplication.h" />
@@ -21,6 +22,7 @@
     <ClInclude Include="BtOgreGP.h" />
     <ClInclude Include="BtOgrePG.h" />
     <ClInclude Include="DPS.h" />
+    <ClInclude Include="DPSHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
