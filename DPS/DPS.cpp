@@ -96,6 +96,7 @@ void DPS::createScene(void)
 
 	// Main light in scene
 	dpsHelper->createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
+	dpsHelper->createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
 
 	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
@@ -159,8 +160,6 @@ void DPS::createLiquidBody(const btVector3& startPos)
 	
 	m_LiquidBody->generateClusters(100);
 	m_LiquidBody->m_materials[0]->m_kLST = 0.1f;
-	/*m_pCharacter->m_LiquidBody->setCcdMotionThreshold(0.1);
-	m_pCharacter->m_LiquidBody->setCcdSweptSphereRadius(3.f);*/
 	//Globals::phyWorld->addSoftBody(m_LiquidBody);
 }
 
@@ -169,8 +168,6 @@ void DPS::initLiquidBody(void)
 	//manual objects are used to generate new meshes based on raw vertex data
 	//this is used for the liquid form
 	m_ManualObject = mSceneMgr->createManualObject();
-	m_ManualObject->setDynamic(true);
-	m_ManualObject->setCastShadows(true);
 
 	/*
 		The following code needs to be run once to setup the vertex buffer with data based on
@@ -182,7 +179,7 @@ void DPS::initLiquidBody(void)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	for (int i = 0; i < faces.size(); i++)
 	{
 		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
@@ -191,18 +188,27 @@ void DPS::initLiquidBody(void)
 		node2 = faces[i].m_n[2];
 				
 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(1.0f,0.0f,0.0f,1.0f));
 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 				
 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.0f,1.0f,0.0f,1.0f));
 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 				
 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.0f,0.0f,1.0f,1.0f));
 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+
+	
+
 		m_ManualObject->index(i*3);
 		m_ManualObject->index(i*3+1);
 		m_ManualObject->index(i*3+2);
 	}
 	m_ManualObject->end();
+
+	m_ManualObject->setDynamic(true);
+	m_ManualObject->setCastShadows(true);
 
 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	mLiquidBodyNode->attachObject(m_ManualObject);
