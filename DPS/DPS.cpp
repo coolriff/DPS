@@ -112,16 +112,16 @@ void DPS::createScene(void)
 	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 	//mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
-	//createLiquidBody(btVector3(0,150,0));
+	createLiquidBody(btVector3(0,150,0));
 
 
-	m_LiquidBody=btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(),btVector3(10,50,10),btVector3(20,20,20),1000);
-	m_LiquidBody->m_cfg.viterations=200;
-	m_LiquidBody->m_cfg.piterations=200;
-	m_LiquidBody->m_cfg.kPR=10000;
-	m_LiquidBody->setTotalMass(3.0);
-	m_LiquidBody->setMass(0,0);
-	Globals::phyWorld->addSoftBody(m_LiquidBody);
+	//m_LiquidBody=btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(),btVector3(10,50,10),btVector3(20,20,20),1000);
+	//m_LiquidBody->m_cfg.viterations=200;
+	//m_LiquidBody->m_cfg.piterations=200;
+	//m_LiquidBody->m_cfg.kPR=100;
+	//m_LiquidBody->setTotalMass(3.0);
+	//m_LiquidBody->setMass(0,0);
+	//Globals::phyWorld->addSoftBody(m_LiquidBody);
 
 
 	initLiquidBody();
@@ -152,7 +152,7 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 
 void DPS::createLiquidBody(const btVector3& startPos)
 {
-	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(*m_SoftBodyWorldInfo, startPos, btVector3(20,20,20), 100);
+	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(20,20,20), 100);
 
 	//set the liquid body properties
 	m_LiquidBody->m_cfg.kPR = 3500.f;
@@ -163,7 +163,7 @@ void DPS::createLiquidBody(const btVector3& startPos)
 	
 	m_LiquidBody->generateClusters(100);
 	m_LiquidBody->m_materials[0]->m_kLST = 0.1f;
-	//Globals::phyWorld->addSoftBody(m_LiquidBody);
+	Globals::phyWorld->addSoftBody(m_LiquidBody);
 }
 
 void DPS::initLiquidBody(void)
@@ -182,8 +182,8 @@ void DPS::initLiquidBody(void)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-	for (int i = 0; i < faces.size(); i++)
+	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	for (int i = 0; i < faces.size(); ++i)
 	{
 		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 		node0 = faces[i].m_n[0];
