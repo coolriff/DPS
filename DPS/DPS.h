@@ -7,10 +7,15 @@
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
 #include "ExampleApplication.h"
+#include <btBulletDynamicsCommon.h>
+#include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
+#include <BulletSoftBody/btDefaultSoftBodySolver.h>
+#include <BulletSoftBody/btSoftBodyHelpers.h>
+#include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
 
 namespace Globals
 {
-	btDynamicsWorld* phyWorld;
+	btSoftRigidDynamicsWorld* phyWorld;
     BtOgre::DebugDrawer* dbgdraw;
 }
 
@@ -22,10 +27,28 @@ class DPS : public BaseApplication
 
 	protected:
 		//Bullet things.
-		btAxisSweep3 *mBroadphase;
-		btDefaultCollisionConfiguration *mCollisionConfig;
-		btCollisionDispatcher *mDispatcher;
-		btSequentialImpulseConstraintSolver *mSolver;
+		//btAxisSweep3 *mBroadphase;
+		//btDefaultCollisionConfiguration *mCollisionConfig;
+		//btCollisionDispatcher *mDispatcher;
+		//btDefaultSoftBodySolver* softSolver;
+		//btSequentialImpulseConstraintSolver *mSolver;
+
+		//btSoftRigidDynamicsWorld* world;
+		btDispatcher* dispatcher;
+		btCollisionConfiguration* collisionConfig;
+		btBroadphaseInterface* broadphase;
+		btConstraintSolver* solver;
+		btSoftBodySolver* softbodySolver;
+
+		Ogre::SceneNode* mClothNode;
+
+		btSoftBodyWorldInfo* m_SoftBodyWorldInfo;
+		btSoftBody* m_LiquidBody;
+
+
+		//manual object replaces the liquid body's entity
+		//Ogre::Entity* m_BlobEntity;
+		Ogre::ManualObject* m_ManualObject;
 
 		//DPSHelper* dpsHelper;
 		std::shared_ptr<DPSHelper> dpsHelper;
@@ -34,6 +57,9 @@ class DPS : public BaseApplication
 		virtual void createFrameListenerBtOgre(void);
 		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
 		void throwSphere(void);
+		void createLiquidBody(const btVector3& startPos);
+		void initLiquidBody(void);
+		void updateLiquidBody(void);
 		//void createGround(void);
 		//void createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic);
 		bool keyPressed(const OIS::KeyEvent &arg);
