@@ -20,6 +20,8 @@ class BtOgreTestFrameListener : public ExampleFrameListener
 		Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 		Globals::dbgdraw->step();
 
+		Globals::app->updateLiquidBody();
+		
 	    return ExampleFrameListener::frameStarted(evt);
 	}
 };
@@ -57,6 +59,7 @@ DPS::~DPS(void)
 	delete Globals::dbgdraw;
 	delete Globals::phyWorld;
 }
+
 
 /*
 void DPS::createCamera(void)
@@ -112,10 +115,10 @@ void DPS::createScene(void)
 	//createLiquidBody(btVector3(0,150,0));
 
 
-	m_LiquidBody=btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(),btVector3(10,150,10),btVector3(20,20,20),1000);
-	m_LiquidBody->m_cfg.viterations=50;
-	m_LiquidBody->m_cfg.piterations=50;
-	m_LiquidBody->m_cfg.kPR=1000;
+	m_LiquidBody=btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(),btVector3(10,50,10),btVector3(20,20,20),1000);
+	m_LiquidBody->m_cfg.viterations=200;
+	m_LiquidBody->m_cfg.piterations=200;
+	m_LiquidBody->m_cfg.kPR=10000;
 	m_LiquidBody->setTotalMass(3.0);
 	m_LiquidBody->setMass(0,0);
 	Globals::phyWorld->addSoftBody(m_LiquidBody);
@@ -167,7 +170,7 @@ void DPS::initLiquidBody(void)
 {
 	//manual objects are used to generate new meshes based on raw vertex data
 	//this is used for the liquid form
-	m_ManualObject = mSceneMgr->createManualObject();
+	m_ManualObject = mSceneMgr->createManualObject("liquidBody");
 
 	/*
 		The following code needs to be run once to setup the vertex buffer with data based on
@@ -188,15 +191,15 @@ void DPS::initLiquidBody(void)
 		node2 = faces[i].m_n[2];
 				
 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(1.0f,0.0f,0.0f,1.0f));
+		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 				
 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.0f,1.0f,0.0f,1.0f));
+		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 				
 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.0f,0.0f,1.0f,1.0f));
+		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 
 	
@@ -265,10 +268,10 @@ void DPS::updateLiquidBody(void)
 #endif
 		{
 			// Create application object
-			DPS app;
- 
+			//DPS app;
+			Globals::app = new DPS();
 			try {
-				app.go();
+				Globals::app->go();
 			} catch( Ogre::Exception& e ) {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 				//MessageBox( NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);

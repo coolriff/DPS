@@ -13,8 +13,12 @@
 #include <BulletSoftBody/btSoftBodyHelpers.h>
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
 
+
+class DPS;
+
 namespace Globals
 {
+	DPS* app;
 	btSoftRigidDynamicsWorld* phyWorld;
     BtOgre::DebugDrawer* dbgdraw;
 }
@@ -24,6 +28,8 @@ class DPS : public BaseApplication
 	public:
 		DPS(void);
 		~DPS(void);
+
+	void updateLiquidBody(void);
 
 	protected:
 		//Bullet things.
@@ -59,7 +65,7 @@ class DPS : public BaseApplication
 		void throwSphere(void);
 		void createLiquidBody(const btVector3& startPos);
 		void initLiquidBody(void);
-		void updateLiquidBody(void);
+		//static void updateLiquidBody(void);
 		//void createGround(void);
 		//void createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic);
 		bool keyPressed(const OIS::KeyEvent &arg);
@@ -74,5 +80,7 @@ class DPS : public BaseApplication
 		//virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 		//virtual bool gameLoop(const Ogre::FrameEvent& evt);
 };
+
+
 
 #endif
