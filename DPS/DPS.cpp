@@ -127,8 +127,8 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 btSoftBody* DPS::createLiquidBody(const btVector3& startPos)
 {
 	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 200);
-	m_LiquidBody->m_cfg.viterations=50;
-	m_LiquidBody->m_cfg.piterations=50;
+	//m_LiquidBody->m_cfg.viterations=50;
+	//m_LiquidBody->m_cfg.piterations=50;
 	//set the liquid body properties
 	m_LiquidBody->m_cfg.kPR = 3500.f;
 	m_LiquidBody->m_cfg.kDP = 0.001f;
@@ -160,6 +160,7 @@ void DPS::initLiquidBody(btSoftBody* body)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
+	//http://www.ogre3d.org/tikiwiki/ManualObject
 	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	for (int i = 0; i < faces.size(); ++i)
 	{
