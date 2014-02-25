@@ -29,17 +29,8 @@ class DPS : public BaseApplication
 		DPS(void);
 		~DPS(void);
 
-	void updateLiquidBody(void);
-
 	protected:
-		//Bullet things.
-		//btAxisSweep3 *mBroadphase;
-		//btDefaultCollisionConfiguration *mCollisionConfig;
-		//btCollisionDispatcher *mDispatcher;
-		//btDefaultSoftBodySolver* softSolver;
-		//btSequentialImpulseConstraintSolver *mSolver;
 
-		//btSoftRigidDynamicsWorld* world;
 		btDispatcher* dispatcher;
 		btCollisionConfiguration* collisionConfig;
 		btBroadphaseInterface* broadphase;
@@ -49,8 +40,8 @@ class DPS : public BaseApplication
 		Ogre::SceneNode* mClothNode;
 
 		btSoftBodyWorldInfo* m_SoftBodyWorldInfo;
-		btSoftBody* m_LiquidBody;
-
+		btSoftBody* m_SoftBody;
+		btSoftBody* m_cloth;
 
 		//manual object replaces the liquid body's entity
 		//Ogre::Entity* m_BlobEntity;
@@ -64,23 +55,11 @@ class DPS : public BaseApplication
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
-		void throwSphere(void);
-		btSoftBody* createLiquidBody(const btVector3& startPos);
-		void initLiquidBody(btSoftBody* body);
-		//static void updateLiquidBody(void);
-		//void createGround(void);
-		//void createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic);
+		btSoftBody* createSoftBody(const btVector3& startPos);
+		btSoftBody* createCloth(void);
+		void initSoftBody(btSoftBody* body);
+		void updateSoftBody(btSoftBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
-		//void createCamera(void);
-		//void createViewports(void);
-		//void destroyScene(void);
-		//void createPhysicalGround(float size);
-		//void createBase(void);
-		//void createLight(void);
-		//void resetCamera(void);
-		//void setFlymode(const Ogre::FrameEvent& evt, bool flag);
-		//virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
-		//virtual bool gameLoop(const Ogre::FrameEvent& evt);
 };
 
 

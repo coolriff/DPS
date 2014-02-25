@@ -14,6 +14,7 @@ DPSHelper::~DPSHelper(void)
 {
 }
 
+
 void DPSHelper::setColor(Ogre::Entity* ent ,Ogre::Vector3 v)
 {
 	Ogre::MaterialPtr m_pMat = ent->getSubEntity(0)->getMaterial()->clone("newMat");
@@ -22,6 +23,7 @@ void DPSHelper::setColor(Ogre::Entity* ent ,Ogre::Vector3 v)
 	ent->getSubEntity(0)->getMaterial()->getTechnique(0)->getPass(0)->setSpecular(0.072f,0.072f,0.072f, 1);
 	ent->setMaterial(m_pMat);
 }
+
 
 void DPSHelper::createPointLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction)
 {	
@@ -33,6 +35,7 @@ void DPSHelper::createPointLight(string LightName, Ogre::Vector3 position ,Ogre:
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
+
 void DPSHelper::createDirectionLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction)
 {
 	Ogre::Light* pLight = mSceneMgr->createLight(LightName);
@@ -42,6 +45,7 @@ void DPSHelper::createDirectionLight(string LightName, Ogre::Vector3 position ,O
 	pLight->setDiffuseColour(1.0, 1.0, 1.0);
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
+
 
 void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction)
 {
@@ -53,6 +57,7 @@ void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
+
 void DPSHelper::createGround(void)
 {
 	//Create Ogre stuff.
@@ -62,7 +67,7 @@ void DPSHelper::createGround(void)
         plane, 1500, 1500, 50, 50, true, 1, 50, 50, Ogre::Vector3::UNIT_Z);
 	Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
     
-	entGround ->setMaterialName("Examples/BumpyMetal");
+	entGround ->setMaterialName("Examples/Rockwall");
 	entGround ->setCastShadows(false);
 
 	//MeshManager::getSingleton().createPlane("groundPlane", "General", Plane(Vector3::UNIT_Y, 0), 100, 100, 
@@ -88,6 +93,7 @@ void DPSHelper::createGround(void)
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
 }
 
+
 void DPSHelper::throwSphere(void)
 {
 	Ogre::Vector3 pos = mCamera->getDerivedPosition();
@@ -112,13 +118,47 @@ void DPSHelper::throwSphere(void)
 
 	//Create the Body.
 	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
-	Ogre::Vector3 thro = mCamera->getDirection() * 200;
+	Ogre::Vector3 thro = mCamera->getDirection() * 100;
 	//entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
 	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
 	phyWorld->addRigidBody(entBody);
 	
 	sphereNode->attachObject(ent);
 }
+
+
+void DPSHelper::throwCube(void)
+{
+	Ogre::Vector3 pos = mCamera->getDerivedPosition();
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("defCube.mesh");
+	setColor(ent, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
+	//Ogre::Entity *ent = mSceneMgr->createEntity("cube.mesh");
+	ent->setCastShadows(true);
+	//ent->setMaterialName("Examples/BumpyMetal");
+
+	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+	//sphereNode->setScale(Ogre::Vector3(0.01f,0.01f,0.01f));
+
+	btCollisionShape* entShape = new btBoxShape(btVector3(0.5,0.5,0.5));
+	//Calculate inertia.
+	btScalar mass = 1;
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	Ogre::Vector3 thro = mCamera->getDirection() * 100;
+	//entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
+	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
+	phyWorld->addRigidBody(entBody);
+
+	sphereNode->attachObject(ent);
+}
+
 
 void DPSHelper::createOgreHead(void)
 {
@@ -129,7 +169,7 @@ void DPSHelper::createOgreHead(void)
 	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity("ogrehead.mesh");
 	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos, rot);
 	ogreHeadNode->attachObject(ogreHeadEntity);
-	ogreHeadNode->setScale(Ogre::Vector3(1,1,1));
+	ogreHeadNode->setScale(Ogre::Vector3(0.1f,0.1f,0.1f));
 	ogreHeadEntity->setCastShadows(true);
 	//setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
 	//mNinjaEntity->setMaterialName("Examples/Rockwall");
@@ -144,7 +184,7 @@ void DPSHelper::createOgreHead(void)
 
 	//Calculate inertia.
 	btScalar mass = 1;
-	btVector3 inertia;
+	btVector3 inertia(0,0,0);
 	ogreHeadShape->calculateLocalInertia(mass, inertia);
 
 	//Create BtOgre MotionState (connects Ogre and Bullet).

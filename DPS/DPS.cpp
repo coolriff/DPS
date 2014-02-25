@@ -3,15 +3,9 @@
 //using namespace std;
 
 
-
 DPS::DPS(void)
 {
 	//Bullet initialisation.
-	//mBroadphase = new btAxisSweep3(btVector3(-10000,-10000,-10000), btVector3(10000,10000,10000), 1024);
-	//mCollisionConfig = new btDefaultCollisionConfiguration();
-	//mDispatcher = new btCollisionDispatcher(mCollisionConfig);
-	//mSolver = new btSequentialImpulseConstraintSolver();
-
 	collisionConfig = new btSoftBodyRigidBodyCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfig);
 	broadphase = new btDbvtBroadphase();
@@ -19,10 +13,6 @@ DPS::DPS(void)
 	softbodySolver = new btDefaultSoftBodySolver();
 	Globals::phyWorld = new btSoftRigidDynamicsWorld(dispatcher,broadphase,solver,collisionConfig,softbodySolver);
 	Globals::phyWorld->setGravity(btVector3(0,-10,0));
-
-
-	//Globals::phyWorld = new btDiscreteDynamicsWorld(mDispatcher, mBroadphase, mSolver, mCollisionConfig);
-	//Globals::phyWorld->setGravity(btVector3(0,-10,0));
 }
 
 
@@ -66,8 +56,8 @@ void DPS::createScene(void)
 {
 	// Basic Ogre stuff.
 	mSceneMgr->setAmbientLight(ColourValue(0.9f,0.9f,0.9f));
-	mCamera->setPosition(Vector3(0,100,100));
-	mCamera->lookAt(Vector3(0,0,-100));
+	mCamera->setPosition(Vector3(0,20,20));
+	mCamera->lookAt(Vector3(0,20,0));
 	mCamera->setNearClipDistance(0.05f);
 	//LogManager::getSingleton().setLogDetail(LL_BOREME);
 
@@ -83,6 +73,8 @@ void DPS::createScene(void)
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 	
+
+	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 	//Create Ogre stuff
 	//Ogre::Plane planes;
 	//planes.d = 100;
@@ -90,25 +82,15 @@ void DPS::createScene(void)
 	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 	//mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
-	
 
-
-	//m_LiquidBody=btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(),btVector3(10,50,10),btVector3(20,20,20),1000);
-	//m_LiquidBody->m_cfg.viterations=200;
-	//m_LiquidBody->m_cfg.piterations=200;
-	//m_LiquidBody->m_cfg.kPR=100;
-	//m_LiquidBody->setTotalMass(3.0);
-	//m_LiquidBody->setMass(0,0);
-	//Globals::phyWorld->addSoftBody(m_LiquidBody);
-
-
-	initLiquidBody(createLiquidBody(btVector3(0,50,0)));
+	//initSoftBody(createSoftBody(btVector3(0,50,0)));
+	initSoftBody(createCloth());
+	//initSoftBody(createSoftBody(btVector3(0,50,0)));
 	//updateLiquidBody();
 	//Globals::phyWorld->addSoftBody(m_LiquidBody);
 
 
 }
-
 
 
 bool DPS::keyPressed(const OIS::KeyEvent &arg)
@@ -119,41 +101,59 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	}
 	if (arg.key == OIS::KC_2) 
 	{
+		dpsHelper->throwCube();
+	}
+	if (arg.key == OIS::KC_3) 
+	{
 		dpsHelper->createOgreHead();
 	}
 	return BaseApplication::keyPressed(arg);
 }
 
-btSoftBody* DPS::createLiquidBody(const btVector3& startPos)
-{
-	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 200);
-	//m_LiquidBody->m_cfg.viterations=50;
-	//m_LiquidBody->m_cfg.piterations=50;
-	//set the liquid body properties
-	m_LiquidBody->m_cfg.kPR = 3500.f;
-	m_LiquidBody->m_cfg.kDP = 0.001f;
-	m_LiquidBody->m_cfg.kDF = 0.1f;
-	m_LiquidBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
-	m_LiquidBody->m_cfg.kCHR  = 1.f;
-	m_LiquidBody->setTotalMass(50.0);
-	m_LiquidBody->setMass(0,0);
-	//m_LiquidBody->generateClusters(100);
-	m_LiquidBody->m_materials[0]->m_kLST = 0.1f;
-	Globals::phyWorld->addSoftBody(m_LiquidBody);
 
-	return m_LiquidBody;
+btSoftBody* DPS::createSoftBody(const btVector3& startPos)
+{
+	m_SoftBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 200);
+	//m_SoftBody->m_cfg.viterations=50;
+	//m_SoftBody->m_cfg.piterations=50;
+	//set the liquid body properties
+	m_SoftBody->m_cfg.kPR = 3500.f;
+	m_SoftBody->m_cfg.kDP = 0.001f;
+	m_SoftBody->m_cfg.kDF = 0.1f;
+	m_SoftBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
+	m_SoftBody->m_cfg.kCHR  = 1.f;
+	m_SoftBody->setTotalMass(50.0);
+	m_SoftBody->setMass(0,0);
+	//m_LiquidBody->generateClusters(100);
+	m_SoftBody->m_materials[0]->m_kLST = 0.1f;
+	Globals::phyWorld->addSoftBody(m_SoftBody);
+
+	return m_SoftBody;
 }
 
-void DPS::initLiquidBody(btSoftBody* body)
+
+btSoftBody* DPS::createCloth(void)
+{
+	float s=4;
+	float h=20;
+	m_cloth = btSoftBodyHelpers::CreatePatch(Globals::phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),50,50,4+8,true);
+	m_cloth->m_cfg.viterations=50;
+	m_cloth->m_cfg.piterations=50;
+	m_cloth->setTotalMass(3.0);
+	//m_cloth->setMass(100,100);
+	Globals::phyWorld->addSoftBody(m_cloth);
+
+	return m_cloth;
+}
+
+
+void DPS::initSoftBody(btSoftBody* body)
 {
 	//manual objects are used to generate new meshes based on raw vertex data
 	//this is used for the liquid form
 	m_ManualObject = mSceneMgr->createManualObject("liquidBody");
 
-	/*
-		The following code needs to be run once to setup the vertex buffer with data based on
-		the bullet soft body information.
-	*/
+
 	btSoftBody::tNodeArray& nodes(body->m_nodes);
 	btSoftBody::tFaceArray& faces(body->m_faces);
 
@@ -161,7 +161,7 @@ void DPS::initLiquidBody(btSoftBody* body)
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
 	//http://www.ogre3d.org/tikiwiki/ManualObject
-	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("ClothMaterial", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	for (int i = 0; i < faces.size(); ++i)
 	{
 		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
@@ -188,7 +188,6 @@ void DPS::initLiquidBody(btSoftBody* body)
 		m_ManualObject->index(i*3+2);
 	}
 	m_ManualObject->end();
-
 	m_ManualObject->setDynamic(true);
 	m_ManualObject->setCastShadows(true);
 
@@ -196,16 +195,12 @@ void DPS::initLiquidBody(btSoftBody* body)
 	mLiquidBodyNode->attachObject(m_ManualObject);
 }
 
-void DPS::updateLiquidBody(void)
+
+void DPS::updateSoftBody(btSoftBody* body)
 {
 	//grab the calculated mesh data from the physics body
-	btSoftBody::tNodeArray& nodes(m_LiquidBody->m_nodes);
-	btSoftBody::tFaceArray& faces(m_LiquidBody->m_faces);
-
-	float minx, miny, minz, maxx, maxy, maxz;
-	minx = maxx = nodes[0].m_x[0];
-	miny = maxy = nodes[0].m_x[1];
-	minz = maxz = nodes[0].m_x[2];
+	btSoftBody::tNodeArray& nodes(body->m_nodes);
+	btSoftBody::tFaceArray& faces(body->m_faces);
 
 	m_ManualObject->beginUpdate(0);
 	for (int i = 0; i < faces.size(); i++)
@@ -230,6 +225,7 @@ void DPS::updateLiquidBody(void)
 	m_ManualObject->end();
 }
 
+
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
 	//Update Bullet world
@@ -240,7 +236,8 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 	Globals::dbgdraw->step();
 
-	Globals::app->updateLiquidBody();
+	Globals::app->updateSoftBody(m_cloth);
+	//Globals::app->updateSoftBody(m_SoftBody);
 	
 	return BaseApplication::frameRenderingQueued(evt);
 }

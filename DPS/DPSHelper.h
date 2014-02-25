@@ -17,6 +17,7 @@ class DPSHelper
 		void createSpotLight(std::string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction);
 		void createGround(void);
 		void throwSphere(void);
+		void throwCube(void);
 		void createOgreHead(void);
 
 		btDynamicsWorld* phyWorld;
