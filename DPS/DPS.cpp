@@ -72,24 +72,12 @@ void DPS::createScene(void)
 	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
-	
 
-	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
-	//Create Ogre stuff
-	//Ogre::Plane planes;
-	//planes.d = 100;
-	//planes.normal = Ogre::Vector3::NEGATIVE_UNIT_Y;
-	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
-	//mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
-
+	mSceneMgr->setSkyBox(true, "Examples/TrippySkyBox");
 
 	//initSoftBody(createSoftBody(btVector3(0,50,0)));
 	initSoftBody(createCloth());
 	//initSoftBody(createSoftBody(btVector3(0,50,0)));
-	//updateLiquidBody();
-	//Globals::phyWorld->addSoftBody(m_LiquidBody);
-
-
 }
 
 
