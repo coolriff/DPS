@@ -12,6 +12,7 @@
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
 #include <BulletSoftBody/btSoftBodyHelpers.h>
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
+#include "objloader.h"
 
 
 class DPS;
@@ -37,11 +38,11 @@ class DPS : public BaseApplication
 		btConstraintSolver* solver;
 		btSoftBodySolver* softbodySolver;
 
-		Ogre::SceneNode* mClothNode;
 
 		btSoftBodyWorldInfo* m_SoftBodyWorldInfo;
 		btSoftBody* m_SoftBody;
 		btSoftBody* m_cloth;
+		btSoftBody* m_deformableModel;
 
 		//manual object replaces the liquid body's entity
 		//Ogre::Entity* m_BlobEntity;
@@ -55,6 +56,7 @@ class DPS : public BaseApplication
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
+		btSoftBody* createDeformableModel(void);
 		btSoftBody* createSoftBody(const btVector3& startPos);
 		btSoftBody* createCloth(void);
 		void initSoftBody(btSoftBody* body);

@@ -160,7 +160,6 @@ void DPSHelper::createOgreHead(void)
 	//Create Ogre stuff.
 	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity("ogrehead.mesh");
 	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos, rot);
-	ogreHeadNode->attachObject(ogreHeadEntity);
 	ogreHeadNode->setScale(Ogre::Vector3(0.1f,0.1f,0.1f));
 	ogreHeadEntity->setCastShadows(true);
 	//setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
@@ -185,4 +184,5 @@ void DPSHelper::createOgreHead(void)
 	//Create the Body.
 	btRigidBody* ogreHeadBody = new btRigidBody(mass, ogreheadState, ogreHeadShape, inertia);
 	phyWorld->addRigidBody(ogreHeadBody);
+	ogreHeadNode->attachObject(ogreHeadEntity);
 }

@@ -15,6 +15,7 @@
     <ClCompile Include="BtOgre.cpp" />
     <ClCompile Include="DPS.cpp" />
     <ClCompile Include="DPSHelper.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApplication.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="BtOgrePG.h" />
     <ClInclude Include="DPS.h" />
     <ClInclude Include="DPSHelper.h" />
+    <ClInclude Include="ObjLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -60,9 +62,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\DPS\Dependencies\glm-0.9.4.3\glm;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\DPS\Dependencies\glm-0.9.4.3;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

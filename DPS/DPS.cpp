@@ -73,11 +73,11 @@ void DPS::createScene(void)
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 
-	mSceneMgr->setSkyBox(true, "Examples/TrippySkyBox");
+	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
-	//initSoftBody(createSoftBody(btVector3(0,50,0)));
-	initSoftBody(createCloth());
-	//initSoftBody(createSoftBody(btVector3(0,50,0)));
+	initSoftBody(createSoftBody(btVector3(0,20,0)));
+	//initSoftBody(createCloth());
+	//initSoftBody(createDeformableModel());
 }
 
 
@@ -96,6 +96,30 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 		dpsHelper->createOgreHead();
 	}
 	return BaseApplication::keyPressed(arg);
+}
+
+btSoftBody* DPS::createDeformableModel(void)
+{
+	std::vector<float> triangles;
+	std::vector<int> indicies;
+	Objloader* obj = new Objloader;
+	obj->LoadModel("monkey",&triangles,&indicies);
+
+	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(Globals::phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_deformableModel->setTotalMass(20.0,true);
+	//m_deformableModel->generateClusters(1000);
+	m_deformableModel->m_cfg.kSRHR_CL=1.0;	
+	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
+	m_deformableModel->m_cfg.viterations=500;
+	m_deformableModel->m_cfg.piterations=500;
+	m_deformableModel->m_cfg.citerations=500;
+	m_deformableModel->m_cfg.diterations=500;
+	m_deformableModel->m_cfg.kPR=500;
+	m_deformableModel->translate(btVector3(0,5,0));
+	//softMonkey->setMass(0,0);
+	Globals::phyWorld->addSoftBody(m_deformableModel);
+
+	return m_deformableModel;
 }
 
 
@@ -179,6 +203,11 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->setDynamic(true);
 	m_ManualObject->setCastShadows(true);
 
+
+	//Ogre::Vector3 pos = Ogre::Vector3(0,50,0);
+	//Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	//Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+
 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	mLiquidBodyNode->attachObject(m_ManualObject);
 }
@@ -224,8 +253,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 	Globals::dbgdraw->step();
 
-	Globals::app->updateSoftBody(m_cloth);
-	//Globals::app->updateSoftBody(m_SoftBody);
+	//Globals::app->updateSoftBody(m_cloth);
+	Globals::app->updateSoftBody(m_SoftBody);
+	//Globals::app->updateSoftBody(m_deformableModel);
 	
 	return BaseApplication::frameRenderingQueued(evt);
 }
