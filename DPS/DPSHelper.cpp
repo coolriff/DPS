@@ -57,10 +57,11 @@ void DPSHelper::createGround(void)
 {
 	//Create Ogre stuff.
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+	// 10 10 cube,  500 500 tex
 	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-        plane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+        plane, 1500, 1500, 50, 50, true, 1, 50, 50, Ogre::Vector3::UNIT_Z);
 	Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
-    mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
+    
 	entGround ->setMaterialName("Examples/BumpyMetal");
 	entGround ->setCastShadows(false);
 
@@ -70,37 +71,37 @@ void DPSHelper::createGround(void)
 	//mGroundEntity->setMaterialName("Examples/Rockwall");
 	//mSceneMgr->getRootSceneNode()->createChildSceneNode("groundNode")->attachObject(mGroundEntity);
 
-	//Create the ground shape.
-	BtOgre::StaticMeshToShapeConverter converter2(entGround);
-	btBvhTriangleMeshShape* GroundShape = converter2.createTrimesh();
 
-	//Create MotionState (no need for BtOgre here, you can use it if you want to though).
-	btDefaultMotionState* groundState = new btDefaultMotionState(
-	btTransform(btQuaternion(0,0,0,1),btVector3(0,0,0)));
 
-	//Create the Body.
-	btRigidBody* GroundBody = new btRigidBody(0, groundState, GroundShape, btVector3(0,0,0));
+	btCollisionShape* shape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)));
+	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(
+		0,                  // mass
+		motionState,        // initial position
+		shape,              // collision shape of body
+		btVector3(0,0,0)    // local inertia
+	);
+	btRigidBody *GroundBody = new btRigidBody(rigidBodyCI);
 	phyWorld->addRigidBody(GroundBody);
+
+	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
 }
 
 void DPSHelper::throwSphere(void)
 {
-	Ogre::Vector3 pos = mCamera->getDerivedPosition() + mCamera->getDerivedDirection().normalisedCopy() * 10;
+	Ogre::Vector3 pos = mCamera->getDerivedPosition();
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
-	Ogre::Entity *ent = mSceneMgr->createEntity("sphere.mesh");
+	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
+	setColor(ent, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
 	//Ogre::Entity *ent = mSceneMgr->createEntity("cube.mesh");
 	ent->setCastShadows(true);
 	//ent->setMaterialName("Examples/BumpyMetal");
 
 	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
-	setColor(ent, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
-	sphereNode->attachObject(ent);
-	sphereNode->setScale(Ogre::Vector3(0.1f,0.1f,0.1f));
+	//sphereNode->setScale(Ogre::Vector3(0.01f,0.01f,0.01f));
 
-	BtOgre::StaticMeshToShapeConverter converter(ent);
-	btCollisionShape* entShape = converter.createSphere();
-	//btCollisionShape* entShape = converter.createTrimesh();
-
+	btCollisionShape* entShape = new btSphereShape(1);
 	//Calculate inertia.
 	btScalar mass = 1;
 	btVector3 inertia(0,0,0);
@@ -111,10 +112,12 @@ void DPSHelper::throwSphere(void)
 
 	//Create the Body.
 	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
-	Ogre::Vector3 thro = mCamera->getRealDirection() * 800;
-	entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
+	Ogre::Vector3 thro = mCamera->getDirection() * 200;
+	//entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
 	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
 	phyWorld->addRigidBody(entBody);
+	
+	sphereNode->attachObject(ent);
 }
 
 void DPSHelper::createOgreHead(void)

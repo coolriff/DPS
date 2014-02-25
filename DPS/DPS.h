@@ -60,11 +60,13 @@ class DPS : public BaseApplication
 		std::shared_ptr<DPSHelper> dpsHelper;
 
 		virtual void createScene(void);
-		virtual void createFrameListenerBtOgre(void);
+		
+		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
 		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
 		void throwSphere(void);
-		void createLiquidBody(const btVector3& startPos);
-		void initLiquidBody(void);
+		btSoftBody* createLiquidBody(const btVector3& startPos);
+		void initLiquidBody(btSoftBody* body);
 		//static void updateLiquidBody(void);
 		//void createGround(void);
 		//void createBoxShape(float width, float height, float depth, Ogre::Entity* entity, Ogre::Vector3 position, bool bStatic);

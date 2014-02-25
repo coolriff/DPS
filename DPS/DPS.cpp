@@ -2,29 +2,7 @@
 //#include <memory>
 //using namespace std;
 
-class BtOgreTestFrameListener : public ExampleFrameListener
-{
-    public:
-	BtOgreTestFrameListener(RenderWindow* win, Camera* cam, SceneManager *sceneMgr)
-	    : ExampleFrameListener(win, cam, false, false)
-	{
-	}
 
-	bool frameStarted(const FrameEvent &evt)
-	{
-	    //Update Bullet world
-	    Globals::phyWorld->stepSimulation(evt.timeSinceLastFrame, 10); 
-	    Globals::phyWorld->debugDrawWorld();
-
-	    //Shows debug if F3 key down.
-		Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
-		Globals::dbgdraw->step();
-
-		Globals::app->updateLiquidBody();
-		
-	    return ExampleFrameListener::frameStarted(evt);
-	}
-};
 
 DPS::DPS(void)
 {
@@ -104,7 +82,7 @@ void DPS::createScene(void)
 	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
-
+	
 	//Create Ogre stuff
 	//Ogre::Plane planes;
 	//planes.d = 100;
@@ -112,7 +90,7 @@ void DPS::createScene(void)
 	//mSceneMgr->setSkyPlane(true, planes, "Examples/CloudySky", 500, 20, true, 0.5, 150, 150);
 	//mSceneMgr->setSkyDome(true, "Examples/CloudySky", 5, 8);
 
-	createLiquidBody(btVector3(0,150,0));
+	
 
 
 	//m_LiquidBody=btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(),btVector3(10,50,10),btVector3(20,20,20),1000);
@@ -124,18 +102,14 @@ void DPS::createScene(void)
 	//Globals::phyWorld->addSoftBody(m_LiquidBody);
 
 
-	initLiquidBody();
+	initLiquidBody(createLiquidBody(btVector3(0,50,0)));
 	//updateLiquidBody();
 	//Globals::phyWorld->addSoftBody(m_LiquidBody);
 
 
 }
 
-void DPS::createFrameListenerBtOgre(void)
-{
-	mFrameListener = new BtOgreTestFrameListener(mWindow, mCamera, mSceneMgr);
-	mRoot->addFrameListener(mFrameListener);
-}
+
 
 bool DPS::keyPressed(const OIS::KeyEvent &arg)
 {
@@ -150,9 +124,9 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	return BaseApplication::keyPressed(arg);
 }
 
-void DPS::createLiquidBody(const btVector3& startPos)
+btSoftBody* DPS::createLiquidBody(const btVector3& startPos)
 {
-	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(20,20,20), 100);
+	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 500);
 
 	//set the liquid body properties
 	m_LiquidBody->m_cfg.kPR = 3500.f;
@@ -160,13 +134,16 @@ void DPS::createLiquidBody(const btVector3& startPos)
 	m_LiquidBody->m_cfg.kDF = 0.1f;
 	m_LiquidBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
 	m_LiquidBody->m_cfg.kCHR  = 1.f;
-	
-	m_LiquidBody->generateClusters(100);
+	m_LiquidBody->setTotalMass(3.0);
+	m_LiquidBody->setMass(0,0);
+	//m_LiquidBody->generateClusters(100);
 	m_LiquidBody->m_materials[0]->m_kLST = 0.1f;
 	Globals::phyWorld->addSoftBody(m_LiquidBody);
+
+	return m_LiquidBody;
 }
 
-void DPS::initLiquidBody(void)
+void DPS::initLiquidBody(btSoftBody* body)
 {
 	//manual objects are used to generate new meshes based on raw vertex data
 	//this is used for the liquid form
@@ -176,8 +153,8 @@ void DPS::initLiquidBody(void)
 		The following code needs to be run once to setup the vertex buffer with data based on
 		the bullet soft body information.
 	*/
-	btSoftBody::tNodeArray& nodes(m_LiquidBody->m_nodes);
-	btSoftBody::tFaceArray& faces(m_LiquidBody->m_faces);
+	btSoftBody::tNodeArray& nodes(body->m_nodes);
+	btSoftBody::tFaceArray& faces(body->m_faces);
 
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
@@ -249,6 +226,21 @@ void DPS::updateLiquidBody(void)
 		m_ManualObject->index(i*3+2);
 	}
 	m_ManualObject->end();
+}
+
+bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
+{
+	//Update Bullet world
+	Globals::phyWorld->stepSimulation(evt.timeSinceLastFrame, 10); 
+	Globals::phyWorld->debugDrawWorld();
+
+	//Shows debug if F3 key down.
+	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
+	Globals::dbgdraw->step();
+
+	Globals::app->updateLiquidBody();
+	
+	return BaseApplication::frameRenderingQueued(evt);
 }
 
 
