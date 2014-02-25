@@ -70,14 +70,6 @@ void DPSHelper::createGround(void)
 	entGround ->setMaterialName("Examples/Rockwall");
 	entGround ->setCastShadows(false);
 
-	//MeshManager::getSingleton().createPlane("groundPlane", "General", Plane(Vector3::UNIT_Y, 0), 100, 100, 
-	//10, 10, true, 1, 5, 5, Vector3::UNIT_Z);
-	//mGroundEntity = mSceneMgr->createEntity("groundEntity", "TestLevel_b0.mesh");
-	//mGroundEntity->setMaterialName("Examples/Rockwall");
-	//mSceneMgr->getRootSceneNode()->createChildSceneNode("groundNode")->attachObject(mGroundEntity);
-
-
-
 	btCollisionShape* shape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
 
 	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)));
