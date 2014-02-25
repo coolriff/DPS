@@ -126,15 +126,16 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 
 btSoftBody* DPS::createLiquidBody(const btVector3& startPos)
 {
-	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 500);
-
+	m_LiquidBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 200);
+	m_LiquidBody->m_cfg.viterations=50;
+	m_LiquidBody->m_cfg.piterations=50;
 	//set the liquid body properties
 	m_LiquidBody->m_cfg.kPR = 3500.f;
 	m_LiquidBody->m_cfg.kDP = 0.001f;
 	m_LiquidBody->m_cfg.kDF = 0.1f;
 	m_LiquidBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
 	m_LiquidBody->m_cfg.kCHR  = 1.f;
-	m_LiquidBody->setTotalMass(3.0);
+	m_LiquidBody->setTotalMass(50.0);
 	m_LiquidBody->setMass(0,0);
 	//m_LiquidBody->generateClusters(100);
 	m_LiquidBody->m_materials[0]->m_kLST = 0.1f;
