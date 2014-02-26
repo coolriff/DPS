@@ -62,6 +62,8 @@ class DPS : public BaseApplication
 		void initSoftBody(btSoftBody* body);
 		void updateSoftBody(btSoftBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
+
+		void load(std::string,std::vector<float>* triangles=NULL,std::vector<int>* indicies=NULL);
 };
 
 
