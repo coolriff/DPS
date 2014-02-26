@@ -81,6 +81,24 @@ void DPS::createScene(void)
 }
 
 
+bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
+{
+	//Update Bullet world
+	Globals::phyWorld->stepSimulation(evt.timeSinceLastFrame, 10); 
+	Globals::phyWorld->debugDrawWorld();
+
+	//Shows debug if F3 key down.
+	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
+	Globals::dbgdraw->step();
+
+	//Globals::app->updateSoftBody(m_cloth);
+	Globals::app->updateSoftBody(m_SoftBody);
+	//Globals::app->updateSoftBody(m_deformableModel);
+
+	return BaseApplication::frameRenderingQueued(evt);
+}
+
+
 bool DPS::keyPressed(const OIS::KeyEvent &arg)
 {
 	if (arg.key == OIS::KC_1) 
@@ -240,24 +258,6 @@ void DPS::updateSoftBody(btSoftBody* body)
 		m_ManualObject->index(i*3+2);
 	}
 	m_ManualObject->end();
-}
-
-
-bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
-{
-	//Update Bullet world
-	Globals::phyWorld->stepSimulation(evt.timeSinceLastFrame, 10); 
-	Globals::phyWorld->debugDrawWorld();
-
-	//Shows debug if F3 key down.
-	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
-	Globals::dbgdraw->step();
-
-	//Globals::app->updateSoftBody(m_cloth);
-	Globals::app->updateSoftBody(m_SoftBody);
-	//Globals::app->updateSoftBody(m_deformableModel);
-	
-	return BaseApplication::frameRenderingQueued(evt);
 }
 
 

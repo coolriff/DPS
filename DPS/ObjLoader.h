@@ -1,5 +1,5 @@
-#ifndef OBJLOADER_H
-#define OBJLOADER_H
+#ifndef __OBJLOADER_h_
+#define __OBJLOADER_h_
 
 #include <string>
 #include <iostream>
@@ -14,7 +14,7 @@ using namespace std;
 class Objloader
 {
 public:
-	void LoadModel(string name, std::vector<float>* triangles=NULL,std::vector<int>* indicies=NULL);
+	void LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies);
 };
 
 #endif

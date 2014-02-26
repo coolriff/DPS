@@ -4,7 +4,6 @@
 #include <vector>
 
 void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies) {
-	// First check to see if it's already loaded and if so, just return it
 
 	std::vector<unsigned int> vertexIndices, normalIndices, uvIndices;
 	std::vector<glm::vec3> temp_vertices; 
