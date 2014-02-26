@@ -1,4 +1,6 @@
 #include "DPS.h"
+#include <vector>
+#include <iostream>
 //#include <memory>
 //using namespace std;
 
@@ -75,9 +77,9 @@ void DPS::createScene(void)
 
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
-	initSoftBody(createSoftBody(btVector3(0,20,0)));
+	//initSoftBody(createSoftBody(btVector3(0,20,0)));
 	//initSoftBody(createCloth());
-	//initSoftBody(createDeformableModel());
+	initSoftBody(createDeformableModel());
 }
 
 
@@ -92,8 +94,8 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->step();
 
 	//Globals::app->updateSoftBody(m_cloth);
-	Globals::app->updateSoftBody(m_SoftBody);
-	//Globals::app->updateSoftBody(m_deformableModel);
+	//Globals::app->updateSoftBody(m_SoftBody);
+	Globals::app->updateSoftBody(m_deformableModel);
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -120,8 +122,9 @@ btSoftBody* DPS::createDeformableModel(void)
 {
 	std::vector<float> triangles;
 	std::vector<int> indicies;
-	Objloader* obj = new Objloader;
-	obj->LoadModel("monkey",&triangles,&indicies);
+// 	Objloader* obj = new Objloader;
+// 	obj->LoadModel("monkey",&triangles,&indicies);
+	load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(Globals::phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
 	m_deformableModel->setTotalMass(20.0,true);
@@ -222,11 +225,11 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->setCastShadows(true);
 
 
-	//Ogre::Vector3 pos = Ogre::Vector3(0,50,0);
-	//Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
-	//Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+	Ogre::Vector3 pos = Ogre::Vector3(0,50,0);
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
 
-	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	//Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	mLiquidBodyNode->attachObject(m_ManualObject);
 }
 
@@ -260,6 +263,97 @@ void DPS::updateSoftBody(btSoftBody* body)
 	m_ManualObject->end();
 }
 
+void DPS::load(std::string filename,std::vector<float>* triangles,std::vector<int>* indicies)
+{
+	std::vector<std::string*> coord;
+
+	std::ifstream in(filename.c_str());
+	if(!in.is_open())
+	{
+		std::cout << "Nor oepened" << std::endl;
+	}
+	std::string path=filename.substr(0,(filename.find_last_of('/')!=std::string::npos ? filename.find_last_of('/')+1 : 0));
+	char buf[256] = {0};
+	int curmat=0;
+	bool coll=false;
+	while(!in.eof())
+	{
+		in.getline(buf,255);
+		coord.push_back(new std::string(buf));
+	}
+	for(int i=0;i<coord.size();i++)
+	{
+		if((*coord[i])[0]=='#')
+			continue;
+		else if((*coord[i])[0]=='v' && (*coord[i])[1]==' ')
+		{
+			float tmpx,tmpy,tmpz;
+			sscanf(coord[i]->c_str(),"v %f %f %f",&tmpx,&tmpy,&tmpz);
+			//vertex.push_back(new vector3d(tmpx,tmpy,tmpz));
+			if(triangles)
+			{
+				triangles->push_back(tmpx);
+				triangles->push_back(tmpy);
+				triangles->push_back(tmpz);
+			}
+		}
+		else if((*coord[i])[0]=='v' && (*coord[i])[1]=='n')
+		{
+			float tmpx,tmpy,tmpz;
+			sscanf(coord[i]->c_str(),"vn %f %f %f",&tmpx,&tmpy,&tmpz);
+			//normals.push_back(new vector3d(tmpx,tmpy,tmpz));	
+		}
+		else if((*coord[i])[0]=='f')
+		{
+			int a,b,c,d,e;
+			if(coll)
+			{
+				sscanf(coord[i]->c_str(),"f %d//%d %d//%d %d//%d %d//%d",&a,&b,&c,&b,&d,&b,&e,&b);
+			}
+			else
+			{
+				if(count(coord[i]->begin(),coord[i]->end(),' ')==4)
+				{
+					if(coord[i]->find("//")!=std::string::npos)
+					{
+						sscanf(coord[i]->c_str(),"f %d//%d %d//%d %d//%d %d//%d",&a,&b,&c,&b,&d,&b,&e,&b);
+					}
+					else if(coord[i]->find("/")!=std::string::npos)
+					{
+						int t[4];
+						sscanf(coord[i]->c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",&a,&t[0],&b,&c,&t[1],&b,&d,&t[2],&b,&e,&t[3],&b);
+					}
+					else
+					{
+						sscanf(coord[i]->c_str(),"f %d %d %d %d",&a,&b,&c,&d);				
+					}
+				}
+				else
+				{
+					if(coord[i]->find("//")!=std::string::npos)
+					{
+						sscanf(coord[i]->c_str(),"f %d//%d %d//%d %d//%d",&a,&b,&c,&b,&d,&b);
+						if(indicies)
+						{
+							indicies->push_back(a-1);
+							indicies->push_back(c-1);
+							indicies->push_back(d-1);
+						}
+					}
+					else if(coord[i]->find("/")!=std::string::npos)
+					{
+						int t[3];
+						sscanf(coord[i]->c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d",&a,&t[0],&b,&c,&t[1],&b,&d,&t[2],&b);
+					}
+					else
+					{
+						sscanf(coord[i]->c_str(),"f %d %d %d",&a,&b,&c);				
+					}
+				}
+			}
+		}
+	}
+}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
