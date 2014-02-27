@@ -2,9 +2,19 @@
 #include <string>
 #include <glm.hpp>
 #include <vector>
+#include <fstream>
 
-void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies) {
+Objloader::Objloader(void)
+{
+}
 
+
+Objloader::~Objloader(void)
+{
+}
+
+void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies) 
+{
 	std::vector<unsigned int> vertexIndices, normalIndices, uvIndices;
 	std::vector<glm::vec3> temp_vertices; 
 	std::vector<glm::vec3> tempColours;
@@ -12,7 +22,7 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 	std::vector<glm::vec3> temp_normals;
 	bool hasUVs = false;
 
-	string objFileName = "Content/" + name + ".objm";	
+	string objFileName = name + ".obj";	
 	std::ifstream is;
 
 	is.open(objFileName, ios::in);

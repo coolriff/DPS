@@ -3,10 +3,8 @@
 
 #include <string>
 #include <iostream>
-#include <fstream>
 #include <string>
 #include <sstream>
-#include <map>
 #include <vector>
 
 using namespace std;
@@ -14,6 +12,8 @@ using namespace std;
 class Objloader
 {
 public:
+	Objloader(void);
+	~Objloader(void);
 	void LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies);
 };
 
