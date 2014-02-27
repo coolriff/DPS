@@ -124,9 +124,9 @@ btSoftBody* DPS::createDeformableModel(void)
 {
 	std::vector<float> triangles;
 	std::vector<int> indicies;
-	//Objloader* obj = new Objloader;
-	//obj->LoadModel("monkey",&triangles,&indicies);
-	load("monkey.obj",&triangles,&indicies);
+	Objloader* obj = new Objloader;
+	obj->LoadModel("monkey",&triangles,&indicies);
+	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(Globals::phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
 	m_deformableModel->setTotalMass(20.0,true);
@@ -227,11 +227,11 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->setCastShadows(true);
 
 
-	Ogre::Vector3 pos = Ogre::Vector3(0,50,0);
-	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
-	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+	//Ogre::Vector3 pos = Ogre::Vector3(0,50,0);
+	//Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	//Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
 
-	//Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	mLiquidBodyNode->attachObject(m_ManualObject);
 }
 
