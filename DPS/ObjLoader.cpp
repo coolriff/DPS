@@ -22,7 +22,7 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 	std::vector<glm::vec3> temp_normals;
 	bool hasUVs = false;
 
-	string objFileName = name + ".obj";	
+	string objFileName = "C:\\DPS\\DPS\\DPS\\" + name + ".objm";	
 	std::ifstream is;
 
 	is.open(objFileName, ios::in);
@@ -49,6 +49,12 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 				glm::vec3 vertex;
 				ss >> junk >> vertex.x >> vertex.y >> vertex.z;
 				temp_vertices.push_back(vertex);
+				if(triangles)
+				{
+					triangles->push_back(vertex.x);
+					triangles->push_back(vertex.y);
+					triangles->push_back(vertex.z);
+				}
 			}			
 			else if (s.find("vt ") == 0)
 			{
@@ -104,24 +110,12 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 					,&vertexIndex[2]
 					,&normalIndex[2] 
 					);
-					if (matches != 6){
-						//cout << "" << endl;
-						//throw ("Model file could not be loaded");
+					if(indicies)
+					{
+						indicies->push_back(vertexIndex[0]-1);
+						indicies->push_back(vertexIndex[1]-1);
+						indicies->push_back(vertexIndex[2]-1);
 					}
-				}
-
-				if(triangles)
-				{
-					triangles->push_back(vertexIndex[0]);
-					triangles->push_back(vertexIndex[1]);
-					triangles->push_back(vertexIndex[2]);
-				}
-
-				if(indicies)
-				{
-					indicies->push_back(normalIndex[0]);
-					indicies->push_back(normalIndex[1]);
-					indicies->push_back(normalIndex[2]);
 				}
 
 				vertexIndices.push_back(vertexIndex[0]);

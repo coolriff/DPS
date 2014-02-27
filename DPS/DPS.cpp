@@ -124,9 +124,9 @@ btSoftBody* DPS::createDeformableModel(void)
 {
 	std::vector<float> triangles;
 	std::vector<int> indicies;
-	Objloader* obj = new Objloader;
-	obj->LoadModel("monkey",&triangles,&indicies);
-	//load("monkey.obj",&triangles,&indicies);
+	//Objloader* obj = new Objloader;
+	//obj->LoadModel("monkey",&triangles,&indicies);
+	load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(Globals::phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
 	m_deformableModel->setTotalMass(20.0,true);
@@ -265,11 +265,12 @@ void DPS::updateSoftBody(btSoftBody* body)
 	m_ManualObject->end();
 }
 
-void DPS::load(std::string filename,std::vector<float>* triangles,std::vector<int>* indicies)
+void DPS::load(std::string filenames,std::vector<float>* triangles,std::vector<int>* indicies)
 {
 	std::vector<std::string*> coord;
-
+	string filename = "C:\\DPS\\DPS\\DPS\\" + filenames;
 	std::ifstream in(filename.c_str());
+
 	if(!in.is_open())
 	{
 		std::cout << "Not oepened" << std::endl;
