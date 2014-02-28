@@ -69,9 +69,11 @@ void DPSHelper::createGround(void)
 	entGround ->setMaterialName("Examples/Rockwall");
 	entGround ->setCastShadows(false);
 
-	btCollisionShape* shape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+	btCollisionShape* shape = new btBoxShape (btVector3(500,1,500));
 
-	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(0,0,0)));
+	//btCollisionShape* shape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(0,-1,0)));
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(
 		0,                  // mass
 		motionState,        // initial position

@@ -71,5 +71,8 @@
     <ClInclude Include="DPSSoftBodyHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh\barrel.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

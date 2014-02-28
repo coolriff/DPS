@@ -26,6 +26,7 @@
     <ClInclude Include="DPS.h" />
     <ClInclude Include="DPSHelper.h" />
     <ClInclude Include="DPSSoftBodyHelper.h" />
+    <ClInclude Include="Mesh\barrel.h" />
     <ClInclude Include="Mesh\BunnyMesh.h" />
     <ClInclude Include="Mesh\TorusMesh.h" />
     <ClInclude Include="ObjLoader.h" />

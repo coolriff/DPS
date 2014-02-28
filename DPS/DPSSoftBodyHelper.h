@@ -17,10 +17,11 @@ public:
 	btSoftBody* createDeformableModel(void);
 	btSoftBody* createSoftBody(const btVector3& startPos);
 	btSoftBody* createCloth(void);
-
+	btSoftBody* createBunny(void);
+	btSoftBody* m_deformableModel;
 	btSoftBody* m_SoftBody;
 	btSoftBody* m_cloth;
-	btSoftBody* m_deformableModel;
+	btSoftBody* m_bunny;
 	
 	btSoftRigidDynamicsWorld* phyWorld;
 	Ogre::Camera* mCamera;

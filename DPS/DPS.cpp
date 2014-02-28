@@ -113,8 +113,9 @@ void DPS::createScene(void)
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
 	//initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
-	initSoftBody(dpsSoftbodyHelper->createCloth());
+	//initSoftBody(dpsSoftbodyHelper->createCloth());
 	//initSoftBody(dpsSoftbodyHelper->createDeformableModel());
+	initSoftBody(dpsSoftbodyHelper->createBunny());
 }
 
 
@@ -128,9 +129,10 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 	Globals::dbgdraw->step();
 
-	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
+	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -167,41 +169,40 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	//http://www.ogre3d.org/tikiwiki/ManualObject
 	m_ManualObject->begin("ClothMaterial", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+
+	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+
+	//http://www.ogre3d.org/tikiwiki/ManualObject
 	for (int i = 0; i < faces.size(); ++i)
 	{
-		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 		node0 = faces[i].m_n[0];
 		node1 = faces[i].m_n[1];
 		node2 = faces[i].m_n[2];
 				
 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+		//m_ManualObject->textureCoord(1,0);
 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 				
 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+		//m_ManualObject->textureCoord(0,1);
 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 				
 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+		//m_ManualObject->textureCoord(1,1);
 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-
-	
 
 		m_ManualObject->index(i*3);
 		m_ManualObject->index(i*3+1);
 		m_ManualObject->index(i*3+2);
 	}
+// 	m_ManualObject->textureCoord(1,0);
+// 	m_ManualObject->textureCoord(0,0);
+// 	m_ManualObject->textureCoord(0,1);
+// 	m_ManualObject->textureCoord(1,1);
 	m_ManualObject->end();
 	m_ManualObject->setDynamic(true);
 	m_ManualObject->setCastShadows(true);
-
-
-	//Ogre::Vector3 pos = Ogre::Vector3(0,50,0);
-	//Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
-	//Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
 
 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	mLiquidBodyNode->attachObject(m_ManualObject);
@@ -215,9 +216,9 @@ void DPS::updateSoftBody(btSoftBody* body)
 	btSoftBody::tFaceArray& faces(body->m_faces);
 
 	m_ManualObject->beginUpdate(0);
+	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 	for (int i = 0; i < faces.size(); i++)
 	{
-		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 		node0 = faces[i].m_n[0];
 		node1 = faces[i].m_n[1];
 		node2 = faces[i].m_n[2];
@@ -230,6 +231,7 @@ void DPS::updateSoftBody(btSoftBody* body)
 				
 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+
 		m_ManualObject->index(i*3);
 		m_ManualObject->index(i*3+1);
 		m_ManualObject->index(i*3+2);

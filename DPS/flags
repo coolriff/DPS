@@ -1,0 +1,53 @@
+		eAeroModel::_			aeromodel;		// Aerodynamic model (default: V_Point)	   				气动模型（默认：V_Point） 
+		btScalar				kVCF;			// Velocities correction factor (Baumgarte) 			速度修正系数（Baumgarte）
+		btScalar				kDP;			// Damping coefficient [0,1]  							阻尼系数[0,1] 
+		btScalar				kDG;			// Drag coefficient [0,+inf]							风阻系数[0，+ INF] 
+		btScalar				kLF;			// Lift coefficient [0,+inf]  							升力系数[0，+ INF] 
+		btScalar				kPR;			// Pressure coefficient [-inf,+inf]						压力系数[-INF，INF+] 
+		btScalar				kVC;			// Volume conversation coefficient [0,+inf]				体积谈话系数[0，+ INF] 
+		btScalar				kDF;			// Dynamic friction coefficient [0,1]					动摩擦系数[0,1] 
+		btScalar				kMT;			// Pose matching coefficient [0,1]						构成匹配系数[0,1] 
+		btScalar				kCHR;			// Rigid contacts hardness [0,1]						刚性接触硬度[0,1] 
+		btScalar				kKHR;			// Kinetic contacts hardness [0,1]						动触点硬度[0,1] 
+		btScalar				kSHR;			// Soft contacts hardness [0,1]							软接触硬度[0,1] 
+		btScalar				kAHR;			// Anchors hardness [0,1]								锚硬度[0,1] 
+		btScalar				kSRHR_CL;		// Soft vs rigid hardness [0,1] (cluster only)			软与硬质硬度[0,1]（集群只） 
+		btScalar				kSKHR_CL;		// Soft vs kinetic hardness [0,1] (cluster only)		软与硬动力学[0,1]（集群只） 
+		btScalar				kSSHR_CL;		// Soft vs soft hardness [0,1] (cluster only)			软与硬软[0,1]（集群只） 
+		btScalar				kSR_SPLT_CL;	// Soft vs rigid impulse split [0,1] (cluster only)		软与硬质冲动分裂[0,1]（集群只） 
+		btScalar				kSK_SPLT_CL;	// Soft vs rigid impulse split [0,1] (cluster only)		软与硬质冲动分裂[0,1]（集群只） 
+		btScalar				kSS_SPLT_CL;	// Soft vs rigid impulse split [0,1] (cluster only)		软与硬质冲动分裂[0,1]（集群只） 
+		btScalar				maxvolume;		// Maximum volume ratio for Pose 						最大体积比为姿势 
+		btScalar				timescale;		// Time scale											时标 
+		int						viterations;	// Velocities solver iterations 						速度迭代求解器 
+		int						piterations;	// Positions solver iterations 							职位迭代求解器 
+		int						diterations;	// Drift solver iterations 								漂移迭代求解器 
+		int						citerations;	// Cluster solver iterations 							集群迭代求解器 
+		int						collisions;		// Collisions flags 									碰撞标志 
+		tVSolverArray			m_vsequence;	// Velocity solvers sequence 							速度求解序列 
+		tPSolverArray			m_psequence;	// Position solvers sequence 							位置解算器序列 
+		tPSolverArray			m_dsequence;	// Drift solvers sequence 								漂移求解序列
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

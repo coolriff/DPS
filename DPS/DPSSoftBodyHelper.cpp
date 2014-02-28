@@ -1,11 +1,13 @@
 #include "DPSSoftBodyHelper.h"
 #include "objloader.h"
+#include "Mesh/BunnyMesh.h"
+#include "Mesh/TorusMesh.h"
+#include "Mesh/barrel.h"
 #include <btBulletDynamicsCommon.h>
 #include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
 #include <BulletSoftBody/btSoftBodyHelpers.h>
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
-
 
 DPSSoftBodyHelper::DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr)
 {
@@ -57,17 +59,29 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-	m_deformableModel->setTotalMass(20.0,true);
-	//m_deformableModel->generateClusters(1000);
-	m_deformableModel->m_cfg.kSRHR_CL=1.0;	
-	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
-	m_deformableModel->m_cfg.viterations=500;
-	m_deformableModel->m_cfg.piterations=500;
-	m_deformableModel->m_cfg.citerations=500;
-	m_deformableModel->m_cfg.diterations=500;
-	m_deformableModel->m_cfg.kPR=500;
+// 	m_deformableModel->setTotalMass(20.0,true);
+// 	//m_deformableModel->generateClusters(1000);
+// 	m_deformableModel->m_cfg.kSRHR_CL=1.0;	
+// 	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
+// 	m_deformableModel->m_cfg.viterations=500;
+// 	m_deformableModel->m_cfg.piterations=500;
+// 	m_deformableModel->m_cfg.citerations=500;
+// 	m_deformableModel->m_cfg.diterations=500;
+// 	m_deformableModel->m_cfg.kPR=500;
+// 	m_deformableModel->translate(btVector3(0,5,0));
+// 	//softMonkey->setMass(0,0);
+
+
+	btSoftBody::Material* pm = m_deformableModel->appendMaterial();
+	pm->m_kLST				=	0.5;
+	pm->m_flags				-=	btSoftBody::fMaterial::DebugDraw;
+	m_deformableModel->generateBendingConstraints(2,pm);
+	m_deformableModel->m_cfg.piterations	=	2;
+	m_deformableModel->m_cfg.kDF			=	0.5;
+	m_deformableModel->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
 	m_deformableModel->translate(btVector3(0,5,0));
-	//softMonkey->setMass(0,0);
+	m_deformableModel->scale(btVector3(3,3,3));
+	m_deformableModel->setTotalMass(1,true);
 	phyWorld->addSoftBody(m_deformableModel);
 
 	return m_deformableModel;
@@ -87,3 +101,36 @@ btSoftBody* DPSSoftBodyHelper::createCloth(void)
 
 	return m_cloth;
 }
+
+
+btSoftBody* DPSSoftBodyHelper::createBunny(void)
+{
+	m_bunny = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),gVerticesBunny,&gIndicesBunny[0][0],BUNNY_NUM_TRIANGLES);
+// 	btSoftBody::Material* pm = m_bunny->appendMaterial();
+// 	pm->m_kLST				=	0.5;
+// 	pm->m_flags				-=	btSoftBody::fMaterial::DebugDraw;
+// 	m_bunny->generateBendingConstraints(2,pm);
+// 	m_bunny->m_cfg.piterations	=	2;
+// 	m_bunny->m_cfg.kDF			=	0.5;
+// 	m_bunny->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
+// 	m_bunny->translate(btVector3(0,5,0));
+// 	m_bunny->scale(btVector3(3,3,3));
+// 	m_bunny->setTotalMass(1,true);
+
+
+	m_bunny->m_cfg.kSRHR_CL=1.0;	
+	m_bunny->m_cfg.kCHR=1.0;
+	m_bunny->m_cfg.kSHR=1.0;
+	m_bunny->m_cfg.kAHR=1.0;
+	m_bunny->m_cfg.kPR=500;
+	m_bunny->m_cfg.piterations=500;
+
+	m_bunny->translate(btVector3(0,5,0));
+	m_bunny->setTotalMass(20.0,true);
+	m_bunny->scale(btVector3(3,3,3));
+
+	phyWorld->addSoftBody(m_bunny);
+	return(m_bunny);
+}
+
+
