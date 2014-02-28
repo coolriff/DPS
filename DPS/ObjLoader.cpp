@@ -22,7 +22,7 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 	std::vector<glm::vec3> temp_normals;
 	bool hasUVs = false;
 
-	string objFileName = "C:\\DPS\\DPS\\DPS\\" + name + ".objm";	
+	string objFileName = "C:\\DPS\\DPS\\DPS\\Mesh\\" + name + ".objm";	
 	std::ifstream is;
 
 	is.open(objFileName, ios::in);
@@ -89,9 +89,11 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 					,&uvIndex[2]
 					,&normalIndex[2] 
 					);
-					if (matches != 9){
-						//throw ("Model file could not be loaded");
-
+					if(indicies)
+					{
+						indicies->push_back(vertexIndex[0]-1);
+						indicies->push_back(vertexIndex[1]-1);
+						indicies->push_back(vertexIndex[2]-1);
 					}
 					uvIndices.push_back(uvIndex[0]);
 					uvIndices.push_back(uvIndex[1]);

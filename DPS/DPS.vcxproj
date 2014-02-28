@@ -15,6 +15,7 @@
     <ClCompile Include="BtOgre.cpp" />
     <ClCompile Include="DPS.cpp" />
     <ClCompile Include="DPSHelper.cpp" />
+    <ClCompile Include="DPSSoftBodyHelper.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -24,6 +25,9 @@
     <ClInclude Include="BtOgrePG.h" />
     <ClInclude Include="DPS.h" />
     <ClInclude Include="DPSHelper.h" />
+    <ClInclude Include="DPSSoftBodyHelper.h" />
+    <ClInclude Include="Mesh\BunnyMesh.h" />
+    <ClInclude Include="Mesh\TorusMesh.h" />
     <ClInclude Include="ObjLoader.h" />
   </ItemGroup>
   <ItemGroup>

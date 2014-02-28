@@ -3,6 +3,7 @@
 
 #include "BaseApplication.h"
 #include "DPSHelper.h"
+#include "DPSSoftBodyHelper.h"
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
@@ -12,10 +13,23 @@
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
 #include <BulletSoftBody/btSoftBodyHelpers.h>
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
-#include "objloader.h"
-
 
 class DPS;
+class btBroadphaseInterface;
+class btCollisionShape;
+class btOverlappingPairCache;
+class btCollisionDispatcher;
+class btConstraintSolver;
+struct btCollisionAlgorithmCreateFunc;
+class btDefaultCollisionConfiguration;
+
+///collisions between two btSoftBody's
+class btSoftSoftCollisionAlgorithm;
+
+///collisions between a btSoftBody and a btRigidBody
+class btSoftRididCollisionAlgorithm;
+class btSoftRigidDynamicsWorld;
+
 
 namespace Globals
 {
@@ -27,43 +41,45 @@ namespace Globals
 class DPS : public BaseApplication
 {
 	public:
-		DPS(void);
-		~DPS(void);
+
+		void initPhysics();
+		void exitPhysics();
+
+		DPS(void)
+		{
+			initPhysics();
+		}
+
+		~DPS(void)
+		{
+			exitPhysics();
+		}
+
+		btAlignedObjectArray<btSoftSoftCollisionAlgorithm*> m_SoftSoftCollisionAlgorithms;
+		btAlignedObjectArray<btSoftRididCollisionAlgorithm*> m_SoftRigidCollisionAlgorithms;
+		btSoftBodyWorldInfo	m_softBodyWorldInfo;
+		//keep the collision shapes, for deletion/cleanup
+		btAlignedObjectArray<btCollisionShape*>		m_collisionShapes;
+		btBroadphaseInterface*	m_broadphase;
+		btCollisionDispatcher*	m_dispatcher;
+		btConstraintSolver*	m_solver;
+		btCollisionAlgorithmCreateFunc*	m_boxBoxCF;
+		btDefaultCollisionConfiguration* m_collisionConfiguration;
 
 	protected:
 
-		btDispatcher* dispatcher;
-		btCollisionConfiguration* collisionConfig;
-		btBroadphaseInterface* broadphase;
-		btConstraintSolver* solver;
-		btSoftBodySolver* softbodySolver;
-
-
-		btSoftBodyWorldInfo* m_SoftBodyWorldInfo;
-		btSoftBody* m_SoftBody;
-		btSoftBody* m_cloth;
-		btSoftBody* m_deformableModel;
-
-		//manual object replaces the liquid body's entity
-		//Ogre::Entity* m_BlobEntity;
 		Ogre::ManualObject* m_ManualObject;
 
-		//DPSHelper* dpsHelper;
 		std::shared_ptr<DPSHelper> dpsHelper;
+		std::shared_ptr<DPSSoftBodyHelper> dpsSoftbodyHelper;
 
 		virtual void createScene(void);
 		
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 
-		void setColor(Ogre::Entity* ent ,Ogre::Vector3 v);
-		btSoftBody* createDeformableModel(void);
-		btSoftBody* createSoftBody(const btVector3& startPos);
-		btSoftBody* createCloth(void);
 		void initSoftBody(btSoftBody* body);
 		void updateSoftBody(btSoftBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
-
-		void load(std::string filename,std::vector<float>* triangles=NULL,std::vector<int>* indicies=NULL);
 };
 
 

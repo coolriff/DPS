@@ -4,32 +4,64 @@
 #include <fstream> 
 #include <string> 
 //#include <memory>
-//using namespace std;
 
+const int maxProxies = 32766;
 
-DPS::DPS(void)
+void DPS::initPhysics(void)
 {
 	//Bullet initialisation.
-	collisionConfig = new btSoftBodyRigidBodyCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collisionConfig);
-	broadphase = new btDbvtBroadphase();
-	solver = new btSequentialImpulseConstraintSolver();
-	softbodySolver = new btDefaultSoftBodySolver();
-	Globals::phyWorld = new btSoftRigidDynamicsWorld(dispatcher,broadphase,solver,collisionConfig,softbodySolver);
+	m_dispatcher=0;
+	///register some softbody collision algorithms on top of the default btDefaultCollisionConfiguration
+	m_collisionConfiguration = new btSoftBodyRigidBodyCollisionConfiguration();
+	m_dispatcher = new	btCollisionDispatcher(m_collisionConfiguration);
+	m_softBodyWorldInfo.m_dispatcher = m_dispatcher;
+	btVector3 worldAabbMin(-1000,-1000,-1000);
+	btVector3 worldAabbMax(1000,1000,1000);
+	m_broadphase = new btAxisSweep3(worldAabbMin,worldAabbMax,maxProxies);
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver();
+	m_solver = solver;
+	btSoftBodySolver* softBodySolver = 0;
+	Globals::phyWorld = new btSoftRigidDynamicsWorld(m_dispatcher,m_broadphase,m_solver,m_collisionConfiguration,softBodySolver);
+
+	//phyWorld->setInternalTickCallback(pickingPreTickCallback,this,true);
+	Globals::phyWorld->getDispatchInfo().m_enableSPU = true;
 	Globals::phyWorld->setGravity(btVector3(0,-10,0));
+	m_softBodyWorldInfo.m_gravity.setValue(0,-10,0);
+	//	clientResetScene();
+	m_softBodyWorldInfo.m_sparsesdf.Initialize();
 }
 
-
-DPS::~DPS(void)
+void DPS::exitPhysics(void)
 {
-	//Free Bullet stuff
-	/*delete mSolver;
-	delete mDispatcher;
-	delete mCollisionConfig;
-	delete mBroadphase;*/
+	//cleanup in the reverse order of creation/initialization
+	//remove the rigidbodies from the dynamics world and delete them
+	int i;
+	for (i=Globals::phyWorld->getNumCollisionObjects()-1; i>=0 ;i--)
+	{
+		btCollisionObject* obj = Globals::phyWorld->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		Globals::phyWorld->removeCollisionObject( obj );
+		delete obj;
+	}
 
-	delete Globals::dbgdraw;
+	//delete collision shapes
+	for (int j=0;j<m_collisionShapes.size();j++)
+	{
+		btCollisionShape* shape = m_collisionShapes[j];
+		m_collisionShapes[j] = 0;
+		delete shape;
+	}
+
 	delete Globals::phyWorld;
+	delete m_solver;
+	delete m_broadphase;
+	delete m_dispatcher;
+	delete m_collisionConfiguration;
+	delete Globals::dbgdraw;
 }
 
 
@@ -65,8 +97,9 @@ void DPS::createScene(void)
 	mCamera->setNearClipDistance(0.05f);
 	//LogManager::getSingleton().setLogDetail(LL_BOREME);
 
-	// create ground
 	dpsHelper = std::make_shared<DPSHelper>(Globals::phyWorld, mCamera, mSceneMgr);
+	dpsSoftbodyHelper = std::make_shared<DPSSoftBodyHelper>(Globals::phyWorld, mCamera, mSceneMgr);
+
 	dpsHelper->createGround();
 
 	// Main light in scene
@@ -79,9 +112,9 @@ void DPS::createScene(void)
 
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
-	//initSoftBody(createSoftBody(btVector3(0,20,0)));
-	//initSoftBody(createCloth());
-	initSoftBody(createDeformableModel());
+	//initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
+	initSoftBody(dpsSoftbodyHelper->createCloth());
+	//initSoftBody(dpsSoftbodyHelper->createDeformableModel());
 }
 
 
@@ -95,9 +128,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 	Globals::dbgdraw->step();
 
-	//Globals::app->updateSoftBody(m_cloth);
-	//Globals::app->updateSoftBody(m_SoftBody);
-	Globals::app->updateSoftBody(m_deformableModel);
+	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -118,67 +151,6 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 		dpsHelper->createOgreHead();
 	}
 	return BaseApplication::keyPressed(arg);
-}
-
-btSoftBody* DPS::createDeformableModel(void)
-{
-	std::vector<float> triangles;
-	std::vector<int> indicies;
-	Objloader* obj = new Objloader;
-	obj->LoadModel("monkey",&triangles,&indicies);
-	//load("monkey.obj",&triangles,&indicies);
-
-	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(Globals::phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-	m_deformableModel->setTotalMass(20.0,true);
-	//m_deformableModel->generateClusters(1000);
-	m_deformableModel->m_cfg.kSRHR_CL=1.0;	
-	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
-	m_deformableModel->m_cfg.viterations=500;
-	m_deformableModel->m_cfg.piterations=500;
-	m_deformableModel->m_cfg.citerations=500;
-	m_deformableModel->m_cfg.diterations=500;
-	m_deformableModel->m_cfg.kPR=500;
-	m_deformableModel->translate(btVector3(0,5,0));
-	//softMonkey->setMass(0,0);
-	Globals::phyWorld->addSoftBody(m_deformableModel);
-
-	return m_deformableModel;
-}
-
-
-btSoftBody* DPS::createSoftBody(const btVector3& startPos)
-{
-	m_SoftBody = btSoftBodyHelpers::CreateEllipsoid(Globals::phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 200);
-	//m_SoftBody->m_cfg.viterations=50;
-	//m_SoftBody->m_cfg.piterations=50;
-	//set the liquid body properties
-	m_SoftBody->m_cfg.kPR = 3500.f;
-	m_SoftBody->m_cfg.kDP = 0.001f;
-	m_SoftBody->m_cfg.kDF = 0.1f;
-	m_SoftBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
-	m_SoftBody->m_cfg.kCHR  = 1.f;
-	m_SoftBody->setTotalMass(50.0);
-	m_SoftBody->setMass(0,0);
-	//m_LiquidBody->generateClusters(100);
-	m_SoftBody->m_materials[0]->m_kLST = 0.1f;
-	Globals::phyWorld->addSoftBody(m_SoftBody);
-
-	return m_SoftBody;
-}
-
-
-btSoftBody* DPS::createCloth(void)
-{
-	float s=4;
-	float h=20;
-	m_cloth = btSoftBodyHelpers::CreatePatch(Globals::phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),50,50,4+8,true);
-	m_cloth->m_cfg.viterations=50;
-	m_cloth->m_cfg.piterations=50;
-	m_cloth->setTotalMass(3.0);
-	//m_cloth->setMass(100,100);
-	Globals::phyWorld->addSoftBody(m_cloth);
-
-	return m_cloth;
 }
 
 
@@ -265,98 +237,6 @@ void DPS::updateSoftBody(btSoftBody* body)
 	m_ManualObject->end();
 }
 
-void DPS::load(std::string filenames,std::vector<float>* triangles,std::vector<int>* indicies)
-{
-	std::vector<std::string*> coord;
-	string filename = "C:\\DPS\\DPS\\DPS\\" + filenames;
-	std::ifstream in(filename.c_str());
-
-	if(!in.is_open())
-	{
-		std::cout << "Not oepened" << std::endl;
-	}
-	std::string path=filename.substr(0,(filename.find_last_of('/')!=std::string::npos ? filename.find_last_of('/')+1 : 0));
-	char buf[256] = {0};
-	int curmat=0;
-	bool coll=false;
-	while(!in.eof())
-	{
-		in.getline(buf,255);
-		coord.push_back(new std::string(buf));
-	}
-	for(int i=0;i<coord.size();i++)
-	{
-		if((*coord[i])[0]=='#')
-			continue;
-		else if((*coord[i])[0]=='v' && (*coord[i])[1]==' ')
-		{
-			float tmpx,tmpy,tmpz;
-			sscanf(coord[i]->c_str(),"v %f %f %f",&tmpx,&tmpy,&tmpz);
-			//vertex.push_back(new vector3d(tmpx,tmpy,tmpz));
-			if(triangles)
-			{
-				triangles->push_back(tmpx);
-				triangles->push_back(tmpy);
-				triangles->push_back(tmpz);
-			}
-		}
-		else if((*coord[i])[0]=='v' && (*coord[i])[1]=='n')
-		{
-			float tmpx,tmpy,tmpz;
-			sscanf(coord[i]->c_str(),"vn %f %f %f",&tmpx,&tmpy,&tmpz);
-			//normals.push_back(new vector3d(tmpx,tmpy,tmpz));	
-		}
-		else if((*coord[i])[0]=='f')
-		{
-			int a,b,c,d,e;
-			if(coll)
-			{
-				sscanf(coord[i]->c_str(),"f %d//%d %d//%d %d//%d %d//%d",&a,&b,&c,&b,&d,&b,&e,&b);
-			}
-			else
-			{
-				if(count(coord[i]->begin(),coord[i]->end(),' ')==4)
-				{
-					if(coord[i]->find("//")!=std::string::npos)
-					{
-						sscanf(coord[i]->c_str(),"f %d//%d %d//%d %d//%d %d//%d",&a,&b,&c,&b,&d,&b,&e,&b);
-					}
-					else if(coord[i]->find("/")!=std::string::npos)
-					{
-						int t[4];
-						sscanf(coord[i]->c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",&a,&t[0],&b,&c,&t[1],&b,&d,&t[2],&b,&e,&t[3],&b);
-					}
-					else
-					{
-						sscanf(coord[i]->c_str(),"f %d %d %d %d",&a,&b,&c,&d);				
-					}
-				}
-				else
-				{
-					if(coord[i]->find("//")!=std::string::npos)
-					{
-						sscanf(coord[i]->c_str(),"f %d//%d %d//%d %d//%d",&a,&b,&c,&b,&d,&b);
-						if(indicies)
-						{
-							indicies->push_back(a-1);
-							indicies->push_back(c-1);
-							indicies->push_back(d-1);
-						}
-					}
-					else if(coord[i]->find("/")!=std::string::npos)
-					{
-						int t[3];
-						sscanf(coord[i]->c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d",&a,&t[0],&b,&c,&t[1],&b,&d,&t[2],&b);
-					}
-					else
-					{
-						sscanf(coord[i]->c_str(),"f %d %d %d",&a,&b,&c);				
-					}
-				}
-			}
-		}
-	}
-}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN

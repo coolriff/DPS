@@ -57,16 +57,15 @@ void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
-
 void DPSHelper::createGround(void)
 {
 	//Create Ogre stuff.
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
 	// 10 10 cube,  500 500 tex
 	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-        plane, 1500, 1500, 50, 50, true, 1, 50, 50, Ogre::Vector3::UNIT_Z);
+		plane, 1500, 1500, 50, 50, true, 1, 50, 50, Ogre::Vector3::UNIT_Z);
 	Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
-    
+
 	entGround ->setMaterialName("Examples/Rockwall");
 	entGround ->setCastShadows(false);
 
@@ -78,7 +77,7 @@ void DPSHelper::createGround(void)
 		motionState,        // initial position
 		shape,              // collision shape of body
 		btVector3(0,0,0)    // local inertia
-	);
+		);
 	btRigidBody *GroundBody = new btRigidBody(rigidBodyCI);
 	phyWorld->addRigidBody(GroundBody);
 
@@ -160,7 +159,7 @@ void DPSHelper::createOgreHead(void)
 	//Create Ogre stuff.
 	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity("ogrehead.mesh");
 	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos, rot);
-	ogreHeadNode->setScale(Ogre::Vector3(0.1f,0.1f,0.1f));
+	//ogreHeadNode->setScale(Ogre::Vector3(0.1f,0.1f,0.1f));
 	ogreHeadEntity->setCastShadows(true);
 	//setColor(mNinjaEntity, Ogre::Vector3(0.3021,0.3308,0.3671));
 	//mNinjaEntity->setMaterialName("Examples/Rockwall");

@@ -15,6 +15,7 @@ class DPSHelper
 		void createPointLight(std::string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction);
 		void createDirectionLight(std::string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction);
 		void createSpotLight(std::string LightName, Ogre::Vector3 position ,Ogre::Vector3 direction);
+		void createSoft(void);
 		void createGround(void);
 		void throwSphere(void);
 		void throwCube(void);
