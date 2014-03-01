@@ -169,7 +169,7 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	m_ManualObject->begin("ClothMaterial", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 
@@ -192,9 +192,9 @@ void DPS::initSoftBody(btSoftBody* body)
 		//m_ManualObject->textureCoord(1,1);
 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 
-		m_ManualObject->index(i*3);
-		m_ManualObject->index(i*3+1);
-		m_ManualObject->index(i*3+2);
+		m_ManualObject->triangle(i*3,i*3+1,i*3+2);
+		//m_ManualObject->triangle(i*3+1);
+		//m_ManualObject->triangle(i*3+2);
 	}
 // 	m_ManualObject->textureCoord(1,0);
 // 	m_ManualObject->textureCoord(0,0);
@@ -202,7 +202,6 @@ void DPS::initSoftBody(btSoftBody* body)
 // 	m_ManualObject->textureCoord(1,1);
 	m_ManualObject->end();
 	m_ManualObject->setDynamic(true);
-	m_ManualObject->setCastShadows(true);
 
 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	mLiquidBodyNode->attachObject(m_ManualObject);
@@ -236,6 +235,7 @@ void DPS::updateSoftBody(btSoftBody* body)
 		m_ManualObject->index(i*3+1);
 		m_ManualObject->index(i*3+2);
 	}
+	m_ManualObject->setCastShadows(true);
 	m_ManualObject->end();
 }
 

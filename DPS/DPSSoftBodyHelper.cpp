@@ -24,7 +24,7 @@ DPSSoftBodyHelper::~DPSSoftBodyHelper(void)
 
 btSoftBody* DPSSoftBodyHelper::createSoftBody(const btVector3& startPos)
 {
-	m_SoftBody = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(1,1,1)*3, 512);
+	m_SoftBody = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 100);
 	//m_SoftBody->m_cfg.viterations=50;
 	//m_SoftBody->m_cfg.piterations=50;
 	//set the liquid body properties
@@ -38,12 +38,22 @@ btSoftBody* DPSSoftBodyHelper::createSoftBody(const btVector3& startPos)
 	//m_LiquidBody->generateClusters(100);
 	//m_SoftBody->m_materials[0]->m_kLST = 0.1f;
 
-	m_SoftBody->m_materials[0]->m_kLST	=	0.1;
-	m_SoftBody->m_cfg.kDF				=	1;
-	m_SoftBody->m_cfg.kDP				=	0.001;
-	m_SoftBody->m_cfg.kPR				=	2500;
-	m_SoftBody->setTotalMass(30,true);
-	m_SoftBody->setMass(0,0);
+// 	m_SoftBody->m_materials[0]->m_kLST	=	0.1;
+// 	m_SoftBody->m_cfg.kDF				=	1;
+// 	m_SoftBody->m_cfg.kDP				=	0.001;
+// 	m_SoftBody->m_cfg.kPR				=	2500;
+// 	m_SoftBody->setTotalMass(30,true);
+// 	m_SoftBody->setMass(0,0);
+
+	m_SoftBody->m_cfg.kPR = 3500.f;
+	m_SoftBody->m_cfg.kDP = 0.001f;
+	m_SoftBody->m_cfg.kDF = 0.1f;
+	m_SoftBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
+	m_SoftBody->m_cfg.kCHR  = 1.f;
+
+	m_SoftBody->generateClusters(100);
+	m_SoftBody->m_materials[0]->m_kLST = 0.1f;
+
 	phyWorld->addSoftBody(m_SoftBody);
 
 	return m_SoftBody;
@@ -92,11 +102,12 @@ btSoftBody* DPSSoftBodyHelper::createCloth(void)
 {
 	float s=4;
 	float h=20;
-	m_cloth = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),50,50,4+8,true);
-	m_cloth->m_cfg.viterations=50;
-	m_cloth->m_cfg.piterations=50;
+	m_cloth = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
+	m_cloth->m_cfg.viterations=500;
+	m_cloth->m_cfg.piterations=500;
 	m_cloth->setTotalMass(3.0);
 	//m_cloth->setMass(100,100);
+	//m_cloth->setCollisionFlags(m_cloth->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	phyWorld->addSoftBody(m_cloth);
 
 	return m_cloth;
@@ -122,8 +133,8 @@ btSoftBody* DPSSoftBodyHelper::createBunny(void)
 	m_bunny->m_cfg.kCHR=1.0;
 	m_bunny->m_cfg.kSHR=1.0;
 	m_bunny->m_cfg.kAHR=1.0;
-	m_bunny->m_cfg.kPR=500;
-	m_bunny->m_cfg.piterations=500;
+	m_bunny->m_cfg.kPR=50;
+	m_bunny->m_cfg.piterations=50;
 
 	m_bunny->translate(btVector3(0,5,0));
 	m_bunny->setTotalMass(20.0,true);
