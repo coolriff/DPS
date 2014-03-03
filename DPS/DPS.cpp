@@ -91,7 +91,8 @@ void DPS::createViewports(void)
 void DPS::createScene(void)
 {
 	// Basic Ogre stuff.
-	mSceneMgr->setAmbientLight(ColourValue(0.9f,0.9f,0.9f));
+	mSceneMgr->setAmbientLight(ColourValue(0.3, 0.3, 0.3));
+	mSceneMgr->createLight()->setPosition(20, 80, 50);
 	mCamera->setPosition(Vector3(0,20,20));
 	mCamera->lookAt(Vector3(0,20,0));
 	mCamera->setNearClipDistance(0.05f);
@@ -103,19 +104,43 @@ void DPS::createScene(void)
 	dpsHelper->createGround();
 
 	// Main light in scene
-	dpsHelper->createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
-	dpsHelper->createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
+	//dpsHelper->createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
+	//dpsHelper->createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
 
 	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 
-	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
+	//mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
+	mSceneMgr->setSkyPlane(true, Plane(0, -1, 0, 5000), "Examples/SpaceSkyPlane", 10000, 3);
 
-	//initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
-	//initSoftBody(dpsSoftbodyHelper->createCloth());
-	initSoftBody(dpsSoftbodyHelper->createDeformableModel());
-	//initSoftBody(dpsSoftbodyHelper->createBunny());
+
+	//mSceneMgr->getRootSceneNode()->attachObject(mSceneMgr->createEntity("Dragon", "dragon.mesh"));
+
+	Ogre::Vector3 pos = Ogre::Vector3(0,150,0);
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *entDrangon = mSceneMgr->createEntity("Dragon","dragon.mesh");
+	entDrangon->setCastShadows(true);
+	Ogre::SceneNode* dragon = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+	dragon->attachObject(entDrangon);
+	//dragon->attachObject(mSceneMgr->createParticleSystem("Smoke", "Examples/Smoke"));
+
+	Ogre::Entity *entFire1 = mSceneMgr->createEntity("defCube.mesh");
+	Ogre::SceneNode* fire1 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(0,0,20));
+	//dpsHelper->setColor(entFire1, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
+	fire1->attachObject(entFire1);
+	fire1->setPosition(Ogre::Vector3(0,0,20));
+	fireOnCube_1 = mSceneMgr->createParticleSystem("Smoke", "Examples/Smoke");
+	fire1->attachObject(fireOnCube_1);
+
+// 	Ogre::Entity *entFire2 = mSceneMgr->createEntity("defCube.mesh");
+// 	Ogre::SceneNode* fire2 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+// 	//dpsHelper->setColor(entFire2, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
+// 	fire2->attachObject(entFire2);
+// 	fire2->setPosition(Ogre::Vector3(0,0,-20));
+// 	fireOnCube_2 = mSceneMgr->createParticleSystem("Smoke", "Examples/Smoke");
+// 	fire2->attachObject(fireOnCube_2);
+
 }
 
 
@@ -131,7 +156,7 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
-	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
 
 	return BaseApplication::frameRenderingQueued(evt);
@@ -238,6 +263,7 @@ void DPS::updateSoftBody(btSoftBody* body)
 	m_ManualObject->setCastShadows(true);
 	m_ManualObject->end();
 }
+
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

@@ -66,6 +66,9 @@ class DPS : public BaseApplication
 		btCollisionAlgorithmCreateFunc*	m_boxBoxCF;
 		btDefaultCollisionConfiguration* m_collisionConfiguration;
 
+		ParticleSystem* fireOnCube_1;
+		ParticleSystem* fireOnCube_2;
+
 	protected:
 
 		Ogre::ManualObject* m_ManualObject;
