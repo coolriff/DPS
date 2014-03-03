@@ -69,16 +69,16 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-// 	m_deformableModel->setTotalMass(20.0,true);
-// 	//m_deformableModel->generateClusters(1000);
-// 	m_deformableModel->m_cfg.kSRHR_CL=1.0;	
-// 	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
-// 	m_deformableModel->m_cfg.viterations=500;
-// 	m_deformableModel->m_cfg.piterations=500;
-// 	m_deformableModel->m_cfg.citerations=500;
-// 	m_deformableModel->m_cfg.diterations=500;
-// 	m_deformableModel->m_cfg.kPR=500;
-// 	m_deformableModel->translate(btVector3(0,5,0));
+	m_deformableModel->setTotalMass(20.0,true);
+	//m_deformableModel->generateClusters(1000);
+	m_deformableModel->m_cfg.kSRHR_CL=1.0;	
+	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
+	m_deformableModel->m_cfg.viterations=500;
+	m_deformableModel->m_cfg.piterations=500;
+	m_deformableModel->m_cfg.citerations=500;
+	m_deformableModel->m_cfg.diterations=500;
+	m_deformableModel->m_cfg.kPR=500;
+	//m_deformableModel->translate(btVector3(0,5,0));
 // 	//softMonkey->setMass(0,0);
 
 
@@ -91,7 +91,7 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	m_deformableModel->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
 	m_deformableModel->translate(btVector3(0,5,0));
 	m_deformableModel->scale(btVector3(3,3,3));
-	m_deformableModel->setTotalMass(1,true);
+	//m_deformableModel->setTotalMass(1,true);
 	phyWorld->addSoftBody(m_deformableModel);
 
 	return m_deformableModel;

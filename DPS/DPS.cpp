@@ -114,8 +114,8 @@ void DPS::createScene(void)
 
 	//initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
 	//initSoftBody(dpsSoftbodyHelper->createCloth());
-	//initSoftBody(dpsSoftbodyHelper->createDeformableModel());
-	initSoftBody(dpsSoftbodyHelper->createBunny());
+	initSoftBody(dpsSoftbodyHelper->createDeformableModel());
+	//initSoftBody(dpsSoftbodyHelper->createBunny());
 }
 
 
@@ -131,8 +131,8 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
-	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
+	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
