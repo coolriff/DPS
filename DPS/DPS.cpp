@@ -65,35 +65,42 @@ void DPS::exitPhysics(void)
 
 	OGRE_DELETE mTerrainGroup;
 	OGRE_DELETE mTerrainGlobals;
+
+	ControllerManager::getSingleton().destroyController(mLightController);
+	MeshManager::getSingleton().remove("ground");
+	MeshManager::getSingleton().remove("grass");
 }
 
 
 
-/*
-void DPS::createCamera(void)
-{
-    // create the camera
-    mCamera = mSceneMgr->createCamera("PlayerCam");
-    // set its position, direction  
-    mCamera->setPosition(Ogre::Vector3(0,10,500));
-    mCamera->lookAt(Ogre::Vector3(0,0,0));
-    // set the near clip distance
-    mCamera->setNearClipDistance(5);
- 
-    mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
-}
-//-------------------------------------------------------------------------------------
-void DPS::createViewports(void)
-{
-    // Create one viewport, entire window
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-    vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-    // Alter the camera aspect ratio to match the viewport
-    mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));    
-}
-*/
+
+// void DPS::createCamera(void)
+// {
+//     // create the camera
+//     mCamera = mSceneMgr->createCamera("PlayerCam");
+//     // set its position, direction  
+//     mCamera->setPosition(Ogre::Vector3(0,10,500));
+//     mCamera->lookAt(Ogre::Vector3(0,0,0));
+//     // set the near clip distance
+//     mCamera->setNearClipDistance(5);
+//  
+//     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
+// }
+// 
+// 
+// void DPS::createViewports(void)
+// {
+//     // Create one viewport, entire window
+//     Ogre::Viewport* vp = mWindow->addViewport(mCamera);
+//     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
+//     // Alter the camera aspect ratio to match the viewport
+//     mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));    
+// }
+
+
 void DPS::createScene(void)
 {
+	ParticleSystem::setDefaultNonVisibleUpdateTimeout(5);
 	// Basic Ogre stuff.
 	//mSceneMgr->setAmbientLight(ColourValue(0.3, 0.3, 0.3));
 	//mSceneMgr->createLight()->setPosition(20, 80, 50);
@@ -148,10 +155,10 @@ void DPS::createScene(void)
 	//dragon->attachObject(mSceneMgr->createParticleSystem("Smoke", "Examples/Smoke"));
 
 	Ogre::Entity *entFire1 = mSceneMgr->createEntity("defCube.mesh");
-	Ogre::SceneNode* fire1 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1500,0,1520));
+	Ogre::SceneNode* fire1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	//dpsHelper->setColor(entFire1, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
 	fire1->attachObject(entFire1);
-	fire1->setPosition(Ogre::Vector3(1500,0,1520));
+	fire1->setPosition(Ogre::Vector3(1500,30,1920));
 	fireOnCube_1 = mSceneMgr->createParticleSystem("Smoke", "Examples/Smoke");
 	fire1->attachObject(fireOnCube_1);
 
@@ -189,6 +196,15 @@ void DPS::createScene(void)
 	Ogre::Entity* razor1 = mSceneMgr->createEntity("Razor", "razor.mesh");
 	Ogre::SceneNode* entRazor1 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1500,200,1420), rot);
 	entRazor1->attachObject(razor1);
+
+	Ogre::Entity* RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
+	Ogre::SceneNode* entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
+	entRZR_001->attachObject(RZR_001);
+
+	Ogre::Entity* RZR_002 = mSceneMgr->createEntity("RZR-002", "RZR-002.mesh");
+	Ogre::SceneNode* entRZR_002 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2000,200,1420), rot);
+	entRZR_002->attachObject(RZR_002);
+	entRZR_002->scale(Ogre::Vector3(5.0f,5.0f,5.0f));
 
 	// create a particle system with 200 quota, then set its material and dimensions
 	ParticleSystem* thrusters = mSceneMgr->createParticleSystem(25);
@@ -262,6 +278,49 @@ void DPS::createScene(void)
 	//Ogre::ColourValue fadeColour(0.9, 0.9, 0.9);
 	//mSceneMgr->setFog(Ogre::FOG_LINEAR, fadeColour, 0.0, 10, 1200);
 	//mWindow->getViewport(0)->setBackgroundColour(fadeColour);
+
+	createGrassMesh();
+	Entity* grass = mSceneMgr->createEntity("Grass", "grass");
+
+	// create a static geometry field, which we will populate with grass
+	mField = mSceneMgr->createStaticGeometry("Field");
+	mField->setRegionDimensions(Vector3(140, 140, 140));
+	//mField->setOrigin(Vector3(70, 70, 70));
+	mField->setOrigin(Vector3(-70, -70, -70) + Vector3(2043,65,1715));
+
+	// add grass uniformly throughout the field, with some random variations
+	for (int x = -280; x < 280; x += 20)
+	{
+		for (int z = -280; z < 280; z += 20)
+		{
+			Vector3 pos(x + Math::RangeRandom(-7, 7), 0, z + Math::RangeRandom(-7, 7));
+			Quaternion ori(Degree(Math::RangeRandom(0, 359)), Vector3::UNIT_Y);
+			Vector3 scale(1, Math::RangeRandom(0.85, 1.15), 1);
+
+			mField->addEntity(grass, pos, ori, scale);
+		}
+	}
+
+	mField->build();  // build our static geometry (bake the grass into it)
+
+	ps = mSceneMgr->createParticleSystem("Rain", "Examples/Rain");  // create a rainstorm
+	ps->fastForward(5);   // fast-forward the rain so it looks more natural
+	mSceneMgr->getRootSceneNode()->createChildSceneNode(Vector3(2000, 1000, 1500))->attachObject(ps);
+
+	ps2 = mSceneMgr->createParticleSystem("Aureola", "Examples/Aureola");
+	mSceneMgr->getRootSceneNode()->createChildSceneNode(Vector3(1600,200,2200))->attachObject(ps2);
+
+	ps3 = mSceneMgr->createParticleSystem("Nimbus", "Examples/GreenyNimbus");
+	//mSceneMgr->getRootSceneNode()->createChildSceneNode(Vector3(2000,200,1420))->attachObject(ps3);
+// 
+// 	ParticleEmitter* emitterNodePs3 = ps3->addEmitter("rear");  // add a point emitter
+// 	// set the emitter properties
+// 	emitterNodePs3->setAngle(Degree(3));
+// 	emitterNodePs3->setDirection(Vector3::NEGATIVE_UNIT_Z);
+
+	Ogre::SceneNode* nodePs3 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2000,200,1420), rot);
+	nodePs3->attachObject(ps3);
+
 }
 
 void DPS::configureTerrainDefaults(Ogre::Light* light)
@@ -336,6 +395,8 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 			mTerrainsImported = false;
 		}
 	}
+
+	waveGrass(evt.timeSinceLastFrame); 
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -510,7 +571,124 @@ void DPS::getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
 		img.flipAroundY();
 	if (flipY)
 		img.flipAroundX();
+}
 
+
+void DPS::waveGrass(Real timeElapsed)
+{
+	static Real xinc = Math::PI * 0.3;
+	static Real zinc = Math::PI * 0.44;
+	static Real xpos = Math::RangeRandom(-Math::PI, Math::PI);
+	static Real zpos = Math::RangeRandom(-Math::PI, Math::PI);
+	static Vector4 offset(0, 0, 0, 0);
+
+	xpos += xinc * timeElapsed;
+	zpos += zinc * timeElapsed;
+
+	// update vertex program parameters by binding a value to each renderable
+	StaticGeometry::RegionIterator regs =  mField->getRegionIterator();
+	while (regs.hasMoreElements())
+	{
+		StaticGeometry::Region* reg = regs.getNext();
+
+		// a little randomness
+		xpos += reg->getCentre().x * 0.001;
+		zpos += reg->getCentre().z * 0.001;
+		offset.x = Math::Sin(xpos) * 4;
+		offset.z = Math::Sin(zpos) * 4;
+
+		StaticGeometry::Region::LODIterator lods = reg->getLODIterator();
+		while (lods.hasMoreElements())
+		{
+			StaticGeometry::LODBucket::MaterialIterator mats = lods.getNext()->getMaterialIterator();
+			while (mats.hasMoreElements())
+			{
+				StaticGeometry::MaterialBucket::GeometryIterator geoms = mats.getNext()->getGeometryIterator();
+				while (geoms.hasMoreElements()) geoms.getNext()->setCustomParameter(999, offset);
+			}
+		}
+	}
+}
+
+void DPS::createGrassMesh()
+{
+	MeshPtr mesh = MeshManager::getSingleton().createManual("grass", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+
+	// create a submesh with the grass material
+	SubMesh* sm = mesh->createSubMesh();
+	sm->setMaterialName("Examples/GrassBlades");
+	sm->useSharedVertices = false;
+	sm->vertexData = OGRE_NEW VertexData();
+	sm->vertexData->vertexStart = 0;
+	sm->vertexData->vertexCount = 12;
+	sm->indexData->indexCount = 18;
+
+#if defined(INCLUDE_RTSHADER_SYSTEM)
+	MaterialPtr grassMat = MaterialManager::getSingleton().getByName("Examples/GrassBlades");
+	grassMat->getTechnique(0)->setSchemeName(Ogre::RTShader::ShaderGenerator::DEFAULT_SCHEME_NAME);
+#endif
+
+	// specify a vertex format declaration for our mesh: 3 floats for position, 3 floats for normal, 2 floats for UV
+	VertexDeclaration* decl = sm->vertexData->vertexDeclaration;
+	decl->addElement(0, 0, VET_FLOAT3, VES_POSITION);
+	decl->addElement(0, sizeof(float) * 3, VET_FLOAT3, VES_NORMAL);
+	decl->addElement(0, sizeof(float) * 6, VET_FLOAT2, VES_TEXTURE_COORDINATES, 0);
+
+	// create a vertex buffer
+	HardwareVertexBufferSharedPtr vb = HardwareBufferManager::getSingleton().createVertexBuffer
+		(decl->getVertexSize(0), sm->vertexData->vertexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+
+	GrassVertex* verts = (GrassVertex*)vb->lock(HardwareBuffer::HBL_DISCARD);  // start filling in vertex data
+
+	for (unsigned int i = 0; i < 3; i++)  // each grass mesh consists of 3 planes
+	{
+		// planes intersect along the Y axis with 60 degrees between them
+		Real x = Math::Cos(Degree(i * 60)) * GRASS_WIDTH / 2;
+		Real z = Math::Sin(Degree(i * 60)) * GRASS_WIDTH / 2;
+
+		for (unsigned int j = 0; j < 4; j++)  // each plane has 4 vertices
+		{
+			GrassVertex& vert = verts[i * 4 + j];
+
+			vert.x = j < 2 ? -x : x;
+			vert.y = j % 2 ? 0 : GRASS_HEIGHT;
+			vert.z = j < 2 ? -z : z;
+
+			// all normals point straight up
+			vert.nx = 0;
+			vert.ny = 1;
+			vert.nz = 0;
+
+			vert.u = j < 2 ? 0 : 1;
+			vert.v = j % 2;
+		}
+	}
+
+	vb->unlock();  // commit vertex changes
+
+	sm->vertexData->vertexBufferBinding->setBinding(0, vb);  // bind vertex buffer to our submesh
+
+	// create an index buffer
+	sm->indexData->indexBuffer = HardwareBufferManager::getSingleton().createIndexBuffer
+		(HardwareIndexBuffer::IT_16BIT, sm->indexData->indexCount, HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+
+	// start filling in index data
+	Ogre::uint16* indices = (Ogre::uint16*)sm->indexData->indexBuffer->lock(HardwareBuffer::HBL_DISCARD);
+
+	for (unsigned int i = 0; i < 3; i++)  // each grass mesh consists of 3 planes
+	{
+		unsigned int off = i * 4;  // each plane consists of 2 triangles
+
+		*indices++ = 0 + off;
+		*indices++ = 3 + off;
+		*indices++ = 1 + off;
+
+		*indices++ = 0 + off;
+		*indices++ = 2 + off;
+		*indices++ = 3 + off;
+	}
+
+	sm->indexData->indexBuffer->unlock();  // commit index changes
 }
 
 

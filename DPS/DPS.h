@@ -51,7 +51,9 @@ class DPS : public BaseApplication
 			mTerrainGlobals(0),
 			mTerrainGroup(0),
 			mTerrainsImported(false),
-			mInfoLabel(0)
+			mInfoLabel(0),
+			GRASS_WIDTH(40),
+			GRASS_HEIGHT(40)
 		{
 			initPhysics();
 		}
@@ -74,16 +76,35 @@ class DPS : public BaseApplication
 
 		ParticleSystem* fireOnCube_1;
 		ParticleSystem* fireOnCube_2;
+		ParticleSystem* ps;
+		ParticleSystem* ps2;
+		ParticleSystem* ps3;
 
 		Ogre::TerrainGlobalOptions* mTerrainGlobals;
 		Ogre::TerrainGroup* mTerrainGroup;
 		bool mTerrainsImported;
 		OgreBites::Label* mInfoLabel;
 
+		const Real GRASS_WIDTH;
+		const Real GRASS_HEIGHT;
+		StaticGeometry* mField;
+		AnimationState* mLightAnimState;
+		Controller<Real>* mLightController;
+
 		void defineTerrain(long x, long y);
 		void initBlendMaps(Ogre::Terrain* terrain);
 		void configureTerrainDefaults(Ogre::Light* light);
 		void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img);
+
+		void waveGrass(Real timeElapsed);
+		void createGrassMesh();
+
+		struct GrassVertex
+		{
+			float x, y, z;
+			float nx, ny, nz;
+			float u, v;
+		};
 
 	protected:
 
