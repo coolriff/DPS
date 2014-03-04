@@ -1,6 +1,8 @@
-#ifndef __DPS_h_
+﻿#ifndef __DPS_h_
 #define __DPS_h_
 
+#include <Terrain/OgreTerrain.h>
+#include <Terrain/OgreTerrainGroup.h>
 #include "BaseApplication.h"
 #include "DPSHelper.h"
 #include "DPSSoftBodyHelper.h"
@@ -45,7 +47,11 @@ class DPS : public BaseApplication
 		void initPhysics();
 		void exitPhysics();
 
-		DPS(void)
+		DPS(void) :
+			mTerrainGlobals(0),
+			mTerrainGroup(0),
+			mTerrainsImported(false),
+			mInfoLabel(0)
 		{
 			initPhysics();
 		}
@@ -69,6 +75,16 @@ class DPS : public BaseApplication
 		ParticleSystem* fireOnCube_1;
 		ParticleSystem* fireOnCube_2;
 
+		Ogre::TerrainGlobalOptions* mTerrainGlobals;
+		Ogre::TerrainGroup* mTerrainGroup;
+		bool mTerrainsImported;
+		OgreBites::Label* mInfoLabel;
+
+		void defineTerrain(long x, long y);
+		void initBlendMaps(Ogre::Terrain* terrain);
+		void configureTerrainDefaults(Ogre::Light* light);
+		void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img);
+
 	protected:
 
 		Ogre::ManualObject* m_ManualObject;
@@ -77,7 +93,8 @@ class DPS : public BaseApplication
 		std::shared_ptr<DPSSoftBodyHelper> dpsSoftbodyHelper;
 
 		virtual void createScene(void);
-		
+		virtual void createFrameListener(void);
+		virtual void destroyScene(void);
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 
 		void initSoftBody(btSoftBody* body);
