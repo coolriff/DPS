@@ -321,6 +321,23 @@ void DPS::createScene(void)
 	Ogre::SceneNode* nodePs3 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2000,200,1420), rot);
 	nodePs3->attachObject(ps3);
 
+
+	Ogre::Entity* char_1 = mSceneMgr->createEntity("char_1", "jaiqua.mesh");
+	Ogre::SceneNode* entChar_1 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2000,2,1420), rot);
+	entChar_1->attachObject(char_1);
+
+	Ogre::Entity* char_2 = mSceneMgr->createEntity("char_2", "jaiqua.mesh");
+	Ogre::SceneNode* entChar_2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2020,2,1420), rot);
+	entChar_2->attachObject(char_2);
+
+	Ogre::Entity* char_3 = mSceneMgr->createEntity("char_3", "Sinbad.mesh");
+	Ogre::SceneNode* entChar_3 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2040,5,1420), rot);
+	entChar_3->attachObject(char_3);
+
+	Ogre::Entity* char_4 = mSceneMgr->createEntity("char_4", "Sinbad.mesh");
+	Ogre::SceneNode* entChar_4 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(2060,5,1420), rot);
+	entChar_4->attachObject(char_4);
+
 }
 
 void DPS::configureTerrainDefaults(Ogre::Light* light)
@@ -353,6 +370,8 @@ void DPS::configureTerrainDefaults(Ogre::Light* light)
 	defaultimp.layerList[2].worldSize = 200;
 	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_diffusespecular.dds");
 	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
+
+	initSoftBody(dpsSoftbodyHelper->createCloth());
 }
 
 
@@ -366,7 +385,7 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 	Globals::dbgdraw->step();
 
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
+	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
@@ -433,7 +452,8 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	//m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("ClothMaterial", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 

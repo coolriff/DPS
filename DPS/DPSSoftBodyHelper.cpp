@@ -102,10 +102,16 @@ btSoftBody* DPSSoftBodyHelper::createCloth(void)
 {
 	float s=4;
 	float h=20;
-	m_cloth = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
-	m_cloth->m_cfg.viterations=500;
-	m_cloth->m_cfg.piterations=500;
+	m_cloth = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,8,true);
+	//m_cloth->m_cfg.viterations=5;
+	m_cloth->m_cfg.piterations=2;
+	m_cloth->m_cfg.aeromodel	=	btSoftBody::eAeroModel::V_TwoSided;
+
+
+	m_cloth->setWindVelocity(btVector3(2060,10,1400));
+
 	m_cloth->setTotalMass(3.0);
+	m_cloth->translate(btVector3(2060,5,1420));
 	//m_cloth->setMass(100,100);
 	//m_cloth->setCollisionFlags(m_cloth->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 	phyWorld->addSoftBody(m_cloth);
