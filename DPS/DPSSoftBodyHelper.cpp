@@ -65,7 +65,7 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	std::vector<float> triangles;
 	std::vector<int> indicies;
 	Objloader* obj = new Objloader;
-	obj->LoadModel("softcube8",&triangles,&indicies);
+	obj->LoadModel("monkey",&triangles,&indicies);
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
