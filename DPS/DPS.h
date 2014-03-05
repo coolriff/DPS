@@ -79,6 +79,8 @@ class DPS : public BaseApplication
 
 		void initSoftBody(btSoftBody* body);
 		void updateSoftBody(btSoftBody* body);
+// 		void initRigidBody(btRigidBody* body);
+// 		void updateRigidBody(btRigidBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
 };
 

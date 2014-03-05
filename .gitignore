@@ -13,7 +13,6 @@
 *.a
 
 # All the rest
-*.obj
 *.pch
 *.exe
 *.user
@@ -32,7 +31,6 @@ stdout.txt
 *.suo
 *.opensdf
 *.cache
-*.obj
 bin/
 Debug/
 ipch/

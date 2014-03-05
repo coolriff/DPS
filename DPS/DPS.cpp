@@ -171,26 +171,34 @@ void DPS::initSoftBody(btSoftBody* body)
 
 	m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
-	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 
 	//http://www.ogre3d.org/tikiwiki/ManualObject
 	for (int i = 0; i < faces.size(); ++i)
 	{
-		node0 = faces[i].m_n[0];
-		node1 = faces[i].m_n[1];
-		node2 = faces[i].m_n[2];
-				
-		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		//node0 = faces[i].m_n[0];
+		//node1 = faces[i].m_n[1];
+		//node2 = faces[i].m_n[2];
+		
+		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
+		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
+		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
+
+		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
+		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
+		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
+
+		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
 		//m_ManualObject->textureCoord(1,0);
-		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 				
-		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
 		//m_ManualObject->textureCoord(0,1);
-		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 				
-		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
 		//m_ManualObject->textureCoord(1,1);
-		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 
 		m_ManualObject->triangle(i*3,i*3+1,i*3+2);
 		//m_ManualObject->triangle(i*3+1);
@@ -215,21 +223,29 @@ void DPS::updateSoftBody(btSoftBody* body)
 	btSoftBody::tFaceArray& faces(body->m_faces);
 
 	m_ManualObject->beginUpdate(0);
-	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+/*	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;*/
 	for (int i = 0; i < faces.size(); i++)
 	{
-		node0 = faces[i].m_n[0];
-		node1 = faces[i].m_n[1];
-		node2 = faces[i].m_n[2];
+		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
+		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
+		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
+
+		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
+		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
+		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
+
+// 		node0 = faces[i].m_n[0];
+// 		node1 = faces[i].m_n[1];
+// 		node2 = faces[i].m_n[2];
 				
-		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-				
-		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-				
-		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+// 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+// 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+// 				
+// 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+// 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+// 				
+// 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+// 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 
 		m_ManualObject->index(i*3);
 		m_ManualObject->index(i*3+1);
@@ -238,6 +254,16 @@ void DPS::updateSoftBody(btSoftBody* body)
 	m_ManualObject->setCastShadows(true);
 	m_ManualObject->end();
 }
+
+// void DPS::initRigidBody(btRigidBody* body)
+// {
+// 
+// }
+// 
+// void DPS::updateRigidBody(btRigidBody* body)
+// {
+// 
+// }
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32

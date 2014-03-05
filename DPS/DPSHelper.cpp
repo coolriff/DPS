@@ -87,7 +87,7 @@ void DPSHelper::createGround(void)
 }
 
 
-void DPSHelper::throwSphere(void)
+btRigidBody* DPSHelper::throwSphere(void)
 {
 // 	Ogre::Vector3 pos = mCamera->getDerivedPosition();
 // 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
@@ -132,6 +132,8 @@ void DPSHelper::throwSphere(void)
 	btRigidBody* body=new btRigidBody(info);
 	body->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
 	phyWorld->addRigidBody(body);
+
+	return body;
 }
 
 
@@ -146,7 +148,7 @@ void DPSHelper::throwCube(void)
 	//ent->setMaterialName("Examples/BumpyMetal");
 
 	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
-	//sphereNode->setScale(Ogre::Vector3(0.01f,0.01f,0.01f));
+	sphereNode->setScale(Ogre::Vector3(2.0f,2.0f,2.0f));
 
 	btCollisionShape* entShape = new btBoxShape(btVector3(1,1,1));
 	//Calculate inertia.
