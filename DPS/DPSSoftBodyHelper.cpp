@@ -65,7 +65,7 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	std::vector<float> triangles;
 	std::vector<int> indicies;
 	Objloader* obj = new Objloader;
-	obj->LoadModel("monkey",&triangles,&indicies);
+	obj->LoadModel("softcube8",&triangles,&indicies);
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
@@ -82,16 +82,16 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 // 	//softMonkey->setMass(0,0);
 
 
-	btSoftBody::Material* pm = m_deformableModel->appendMaterial();
-	pm->m_kLST				=	0.5;
-	pm->m_flags				-=	btSoftBody::fMaterial::DebugDraw;
-	m_deformableModel->generateBendingConstraints(2,pm);
-	m_deformableModel->m_cfg.piterations	=	2;
-	m_deformableModel->m_cfg.kDF			=	0.5;
-	m_deformableModel->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
-	m_deformableModel->translate(btVector3(0,5,0));
-	m_deformableModel->scale(btVector3(3,3,3));
-	//m_deformableModel->setTotalMass(1,true);
+// 	btSoftBody::Material* pm = m_deformableModel->appendMaterial();
+// 	pm->m_kLST				=	0.5;
+// 	pm->m_flags				-=	btSoftBody::fMaterial::DebugDraw;
+// 	m_deformableModel->generateBendingConstraints(2,pm);
+// 	m_deformableModel->m_cfg.piterations	=	2;
+// 	m_deformableModel->m_cfg.kDF			=	0.5;
+// 	m_deformableModel->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
+// 	m_deformableModel->translate(btVector3(0,5,0));
+// 	//m_deformableModel->scale(btVector3(3,3,3));
+// 	//m_deformableModel->setTotalMass(1,true);
 	phyWorld->addSoftBody(m_deformableModel);
 
 	return m_deformableModel;

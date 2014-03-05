@@ -22,7 +22,7 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 	std::vector<glm::vec3> temp_normals;
 	bool hasUVs = false;
 
-	string objFileName = "C:\\DPS\\DPS\\DPS\\Content\\" + name + ".objm";	
+	string objFileName = "C:\\DPS\\DPS\\DPS\\Content\\" + name + ".obj";	
 	std::ifstream is;
 
 	is.open(objFileName, ios::in);
