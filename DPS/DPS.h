@@ -1,4 +1,4 @@
-#ifndef __DPS_h_
+﻿#ifndef __DPS_h_
 #define __DPS_h_
 
 #include "BaseApplication.h"
@@ -54,6 +54,41 @@ class DPS : public BaseApplication
 		{
 			exitPhysics();
 		}
+
+		struct MyClosestRayResultCallback : public btCollisionWorld::ClosestRayResultCallback
+		{
+			const btCollisionShape * m_hitTriangleShape;
+			int					  m_hitTriangleIndex;
+			int					  m_hitShapePart;
+
+			MyClosestRayResultCallback (const btVector3 & rayFrom,const btVector3 & rayTo)
+				: btCollisionWorld::ClosestRayResultCallback(rayFrom, rayTo),
+				m_hitTriangleShape(NULL),
+				m_hitTriangleIndex(0),
+				m_hitShapePart(0)
+			{
+			}
+
+			virtual ~MyClosestRayResultCallback()
+			{
+			}
+
+			virtual btScalar addSingleResult(btCollisionWorld::LocalRayResult & rayResult, bool normalInWorldSpace)
+			{
+				if (rayResult.m_localShapeInfo)
+				{
+					m_hitTriangleShape = rayResult.m_collisionObject->getCollisionShape();
+					m_hitTriangleIndex = rayResult.m_localShapeInfo->m_triangleIndex;
+					m_hitShapePart = rayResult.m_localShapeInfo->m_shapePart;
+				} else 
+				{
+					m_hitTriangleShape = NULL;
+					m_hitTriangleIndex = 0;
+					m_hitShapePart = 0;
+				}
+				return ClosestRayResultCallback::addSingleResult(rayResult,normalInWorldSpace);
+			}
+		};
 
 		btAlignedObjectArray<btSoftSoftCollisionAlgorithm*> m_SoftSoftCollisionAlgorithms;
 		btAlignedObjectArray<btSoftRididCollisionAlgorithm*> m_SoftRigidCollisionAlgorithms;

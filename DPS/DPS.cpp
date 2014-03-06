@@ -3,6 +3,10 @@
 #include <iostream>
 #include <fstream> 
 #include <string> 
+#include "BulletCollision/Gimpact/btGImpactShape.h"
+#include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
+#include "Mesh/barrel.h"
+#include "Mesh/BunnyMesh.h"
 //#include <memory>
 
 const int maxProxies = 32766;
@@ -114,8 +118,98 @@ void DPS::createScene(void)
 
 	//initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
 	//initSoftBody(dpsSoftbodyHelper->createCloth());
-	initSoftBody(dpsSoftbodyHelper->createDeformableModel());
+	//initSoftBody(dpsSoftbodyHelper->createDeformableModel());
 	//initSoftBody(dpsSoftbodyHelper->createBunny());
+
+	btTransform tr;
+	tr.setIdentity();
+	tr.setOrigin(btVector3(0,1.0f,20.0f));
+
+	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
+		faces_size,
+		barrel_ia,
+		3*sizeof(int),
+		vertices_size,
+		(btScalar *) &barrel_va[0][0],
+		sizeof(btVector3));
+
+	// 	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
+	// 		BUNNY_NUM_TRIANGLES,
+	// 		&gIndicesBunny[0][0],
+	// 		3*sizeof(int),
+	// 		BUNNY_NUM_VERTICES,
+	// 		(btScalar *) &gVerticesBunny[0],
+	// 		sizeof(btScalar)*3);
+
+	btGImpactMeshShape * shape = new btGImpactMeshShape(mesh_interface);
+	shape->setMargin(btScalar(0.1));
+	shape->updateBound();
+	m_collisionShapes.push_back(shape);
+	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
+	btVector3 localInertia(0,0,0);
+	//btScalar m_defaultContactProcessingThreshold;
+	shape->calculateLocalInertia(btScalar(20.0),localInertia);
+	btDefaultMotionState* myMotionState = new btDefaultMotionState(tr);
+	btRigidBody::btRigidBodyConstructionInfo cInfo(btScalar(20.0),myMotionState,shape,localInertia);
+	btRigidBody* body = new btRigidBody(cInfo);
+	body->setContactProcessingThreshold(btScalar(BT_LARGE_FLOAT));
+	//body->translate(btVector3(0,0,-50));
+	Globals::phyWorld->addRigidBody(body);
+
+
+
+// 	m_ManualObject = mSceneMgr->createManualObject("barrel");
+// 
+// 
+// 	//btSoftBody::tNodeArray& nodes(body->m_nodes);
+// 	//btSoftBody::tFaceArray& faces(body->m_faces);
+// 
+// 	m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
+// 	m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
+// 
+// 	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+// 
+// 	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+// 	int count = 0;
+// 	for (int i = 0; i < BUNNY_NUM_TRIANGLES; i+=9)
+// 	{
+// 		//node0 = faces[i].m_n[0];
+// 		//node1 = faces[i].m_n[1];
+// 		//node2 = faces[i].m_n[2];
+// 
+// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
+// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
+// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
+// 
+// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
+// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
+// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
+// 
+// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+// 		//m_ManualObject->textureCoord(1,0);
+// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+// 
+// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+// 		//m_ManualObject->textureCoord(0,1);
+// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+// 
+// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+// 		//m_ManualObject->textureCoord(1,1);
+// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+// 
+// 		m_ManualObject->index(i*3);
+// 		m_ManualObject->index(i*3+1);
+// 		m_ManualObject->index(i*3+2);
+// 	}
+// 	// 	m_ManualObject->textureCoord(1,0);
+// 	// 	m_ManualObject->textureCoord(0,0);
+// 	// 	m_ManualObject->textureCoord(0,1);
+// 	// 	m_ManualObject->textureCoord(1,1);
+// 	m_ManualObject->end();
+// 	m_ManualObject->setDynamic(true);
+// 
+// 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+// 	mLiquidBodyNode->attachObject(m_ManualObject);
 }
 
 
@@ -131,7 +225,7 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
-	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
 
 	return BaseApplication::frameRenderingQueued(evt);

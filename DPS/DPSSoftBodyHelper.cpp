@@ -2,7 +2,7 @@
 #include "objloader.h"
 #include "Mesh/BunnyMesh.h"
 #include "Mesh/TorusMesh.h"
-#include "Mesh/barrel.h"
+/*#include "Mesh/barrel.h"*/
 #include <btBulletDynamicsCommon.h>
 #include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
