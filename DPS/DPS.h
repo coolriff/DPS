@@ -55,6 +55,7 @@ class DPS : public BaseApplication
 			exitPhysics();
 		}
 
+		// No CCD (continuous collision detection) for Gimpact shapes
 		struct MyClosestRayResultCallback : public btCollisionWorld::ClosestRayResultCallback
 		{
 			const btCollisionShape * m_hitTriangleShape;
@@ -100,6 +101,10 @@ class DPS : public BaseApplication
 		btConstraintSolver*	m_solver;
 		btCollisionAlgorithmCreateFunc*	m_boxBoxCF;
 		btDefaultCollisionConfiguration* m_collisionConfiguration;
+
+		
+
+		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex, float * triangle);
 
 	protected:
 

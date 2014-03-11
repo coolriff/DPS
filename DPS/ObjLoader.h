@@ -14,7 +14,7 @@ class Objloader
 public:
 	Objloader(void);
 	~Objloader(void);
-	void LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies);
+	void LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies, std::vector<float>* texCoord);
 };
 
 #endif

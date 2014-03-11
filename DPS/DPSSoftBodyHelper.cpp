@@ -62,10 +62,8 @@ btSoftBody* DPSSoftBodyHelper::createSoftBody(const btVector3& startPos)
 
 btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 {
-	std::vector<float> triangles;
-	std::vector<int> indicies;
 	Objloader* obj = new Objloader;
-	obj->LoadModel("softcube8",&triangles,&indicies);
+	obj->LoadModel("suzanne",&triangles,&indicies,&texCoord);
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformableModel = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
@@ -90,6 +88,7 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	m_deformableModel->m_cfg.kDF			=	0.5;
 	m_deformableModel->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
 	m_deformableModel->translate(btVector3(0,5,0));
+	//m_deformableModel->scale(btVector3(0.1,0.1,0.1));
 // 	//m_deformableModel->scale(btVector3(3,3,3));
 // 	//m_deformableModel->setTotalMass(1,true);
 	phyWorld->addSoftBody(m_deformableModel);
@@ -97,12 +96,25 @@ btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 	return m_deformableModel;
 }
 
+btSoftBody* DPSSoftBodyHelper::createMesh(void)
+{
+	Objloader* obj = new Objloader;
+	obj->LoadModel("mycloth",&triangles,&indicies,&texCoord);
+	//load("monkey.obj",&triangles,&indicies);
+
+	m_mesh = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_mesh->setTotalMass(30.0,true);
+	phyWorld->addSoftBody(m_mesh);
+
+	return m_mesh;
+}
+
 
 btSoftBody* DPSSoftBodyHelper::createCloth(void)
 {
 	float s=4;
 	float h=20;
-	m_cloth = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
+	m_cloth = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),5,5,4+8,true);
 	m_cloth->m_cfg.viterations=500;
 	m_cloth->m_cfg.piterations=500;
 	m_cloth->setTotalMass(3.0);

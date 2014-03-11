@@ -13,7 +13,7 @@ Objloader::~Objloader(void)
 {
 }
 
-void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies) 
+void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector<int>* indicies, std::vector<float>* texCoord) 
 {
 	std::vector<unsigned int> vertexIndices, normalIndices, uvIndices;
 	std::vector<glm::vec3> temp_vertices; 
@@ -22,7 +22,7 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 	std::vector<glm::vec3> temp_normals;
 	bool hasUVs = false;
 
-	string objFileName = "C:\\DPS\\DPS\\DPS\\Content\\" + name + ".obj";	
+	string objFileName = "C:\\DPS\\DPS\\DPS\\Content\\" + name + ".objm";	
 	std::ifstream is;
 
 	is.open(objFileName, ios::in);
@@ -62,6 +62,11 @@ void Objloader::LoadModel(string name, std::vector<float>* triangles,std::vector
 				glm::vec2 uv;
 				ss >> junk >> uv.x >> uv.y;
 				tempUVs.push_back(uv);
+				if(texCoord)
+				{
+					texCoord->push_back(uv.x);
+					texCoord->push_back(uv.y);
+				}
 			}			
 
 			else if (s.find(materialPrefix) == 0)

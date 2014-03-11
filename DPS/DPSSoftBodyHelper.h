@@ -15,17 +15,31 @@ public:
 	~DPSSoftBodyHelper(void);
 
 	btSoftBody* createDeformableModel(void);
+	btSoftBody* createMesh(void);
 	btSoftBody* createSoftBody(const btVector3& startPos);
 	btSoftBody* createCloth(void);
 	btSoftBody* createBunny(void);
 	btSoftBody* m_deformableModel;
+	btSoftBody* m_mesh;
 	btSoftBody* m_SoftBody;
 	btSoftBody* m_cloth;
 	btSoftBody* m_bunny;
 	
+// 	struct RenderBufferVertexElement
+// 	{
+// 		std::vector<float> triangles;
+// 		std::vector<int> indicies;
+// 		std::vector<float> texture;
+// 	};
+
 	btSoftRigidDynamicsWorld* phyWorld;
 	Ogre::Camera* mCamera;
 	Ogre::SceneManager* mSceneMgr;
+
+	std::vector<float> triangles;
+	std::vector<int> indicies;
+	std::vector<float> texCoord;
+
 };
 
 #endif
