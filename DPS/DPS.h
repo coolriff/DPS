@@ -102,9 +102,13 @@ class DPS : public BaseApplication
 		btCollisionAlgorithmCreateFunc*	m_boxBoxCF;
 		btDefaultCollisionConfiguration* m_collisionConfiguration;
 
-		
-
-		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex, float * triangle);
+		void deleteOgreEntities(void);
+		void deletePhysicsShapes(void);
+		void GimpactRayCallBack(void);
+		void createGimpactBarrel(void);
+		void createGimpactBuuny(void);
+		void createGimpactTorus(void);
+		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
 
 	protected:
 

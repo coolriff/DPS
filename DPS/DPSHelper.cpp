@@ -57,7 +57,7 @@ void DPSHelper::createSpotLight(string LightName, Ogre::Vector3 position ,Ogre::
 	pLight->setSpecularColour(0.0, 0.0, 1.0);
 }
 
-void DPSHelper::createGround(void)
+void DPSHelper::createWorld(void)
 {
 	//Create Ogre stuff.
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
@@ -84,6 +84,11 @@ void DPSHelper::createGround(void)
 	phyWorld->addRigidBody(GroundBody);
 
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
+
+	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
+
+	createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
+	createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
 }
 
 
