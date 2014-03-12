@@ -10,6 +10,9 @@
 //#include <memory>
 
 const int maxProxies = 32766;
+btRigidBody * hit_body = 0;
+btVector3 hit_rel_pos;
+btVector3 shot_imp = btVector3(0,0,0);
 
 void DPS::initPhysics(void)
 {
@@ -250,21 +253,21 @@ void DPS::createScene(void)
 	tr.setIdentity();
 	tr.setOrigin(btVector3(0,1.0f,20.0f));
 
-	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
-		faces_size,
-		barrel_ia,
-		3*sizeof(int),
-		vertices_size,
-		(btScalar *) &barrel_va[0][0],
-		sizeof(btVector3));
+// 	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
+// 		faces_size,
+// 		barrel_ia,
+// 		3*sizeof(int),
+// 		vertices_size,
+// 		(btScalar *) &barrel_va[0][0],
+// 		sizeof(btVector3));
 
-	// 	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
-	// 		BUNNY_NUM_TRIANGLES,
-	// 		&gIndicesBunny[0][0],
-	// 		3*sizeof(int),
-	// 		BUNNY_NUM_VERTICES,
-	// 		(btScalar *) &gVerticesBunny[0],
-	// 		sizeof(btScalar)*3);
+	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
+		BUNNY_NUM_TRIANGLES,
+		&gIndicesBunny[0][0],
+		3*sizeof(int),
+		BUNNY_NUM_VERTICES,
+		(btScalar *) &gVerticesBunny[0],
+		sizeof(btScalar)*3);
 
 	btGImpactMeshShape * shape = new btGImpactMeshShape(mesh_interface);
 	shape->setMargin(btScalar(0.1));
@@ -283,58 +286,59 @@ void DPS::createScene(void)
 
 
 
-	// 	m_ManualObject = mSceneMgr->createManualObject("barrel");
-	// 
-	// 
-	// 	//btSoftBody::tNodeArray& nodes(body->m_nodes);
-	// 	//btSoftBody::tFaceArray& faces(body->m_faces);
-	// 
-	// 	m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
-	// 	m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
-	// 
-	// 	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-	// 
-	// 	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
-	// 	int count = 0;
-	// 	for (int i = 0; i < BUNNY_NUM_TRIANGLES; i+=9)
-	// 	{
-	// 		//node0 = faces[i].m_n[0];
-	// 		//node1 = faces[i].m_n[1];
-	// 		//node2 = faces[i].m_n[2];
-	// 
-	// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
-	// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
-	// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
-	// 
-	// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
-	// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
-	// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
-	// 
-	// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-	// 		//m_ManualObject->textureCoord(1,0);
-	// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-	// 
-	// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-	// 		//m_ManualObject->textureCoord(0,1);
-	// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-	// 
-	// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-	// 		//m_ManualObject->textureCoord(1,1);
-	// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-	// 
-	// 		m_ManualObject->index(i*3);
-	// 		m_ManualObject->index(i*3+1);
-	// 		m_ManualObject->index(i*3+2);
-	// 	}
-	// 	// 	m_ManualObject->textureCoord(1,0);
-	// 	// 	m_ManualObject->textureCoord(0,0);
-	// 	// 	m_ManualObject->textureCoord(0,1);
-	// 	// 	m_ManualObject->textureCoord(1,1);
-	// 	m_ManualObject->end();
-	// 	m_ManualObject->setDynamic(true);
-	// 
-	// 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	// 	mLiquidBodyNode->attachObject(m_ManualObject);
+	m_ManualObject = mSceneMgr->createManualObject("barrel");
+
+
+	//btSoftBody::tNodeArray& nodes(body->m_nodes);
+	//btSoftBody::tFaceArray& faces(body->m_faces);
+
+	m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
+	m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
+
+	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+
+	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+/*	int count = 0;*/
+	for (int i = 0; i < (BUNNY_NUM_VERTICES * 3); i+=9)
+	{
+		//node0 = faces[i].m_n[0];
+		//node1 = faces[i].m_n[1];
+		//node2 = faces[i].m_n[2];
+
+		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[count],gVerticesBunny[count+1],gVerticesBunny[count+2]));
+		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[count+3],gVerticesBunny[count+4],gVerticesBunny[count+5]));
+		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[count+6],gVerticesBunny[count+7],gVerticesBunny[count+8]));
+
+
+// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
+// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
+// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
+
+		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		//m_ManualObject->textureCoord(1,0);
+		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+
+		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		//m_ManualObject->textureCoord(0,1);
+		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+
+		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		//m_ManualObject->textureCoord(1,1);
+		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+
+// 		m_ManualObject->index(i*3);
+// 		m_ManualObject->index(i*3+1);
+// 		m_ManualObject->index(i*3+2);
+	}
+	// 	m_ManualObject->textureCoord(1,0);
+	// 	m_ManualObject->textureCoord(0,0);
+	// 	m_ManualObject->textureCoord(0,1);
+	// 	m_ManualObject->textureCoord(1,1);
+	m_ManualObject->end();
+	m_ManualObject->setDynamic(true);
+
+	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	mLiquidBodyNode->attachObject(m_ManualObject);
 }
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -385,38 +389,40 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 		{
 			btVector3 hit = rayCallback.m_hitPointWorld;
 			//downcast
-			btRigidBody* body = btRigidBody::upcast(rayCallback.m_collisionObject);
-// 			if (body)
-// 			{
-// 				hit_body = body;
-// 				hit_rel_pos = body->getWorldTransform().inverse()(hit);
-// 				shot_imp = rayTo;
-// 				shot_imp.normalize();
-// 				shot_imp *= 20;
-// 
-// 				float p[3] = {hit_rel_pos.getX(),
-// 					hit_rel_pos.getY(),
-// 					hit_rel_pos.getZ()};
-// 				HitTrack * ht = new HitTrack();
-// 				ht->set_rigid_body(hit_body);
-// 				ht->set_position(p);
-// 				ht->set_distance( (float)(hit - m_cameraPosition).length() );
+			btCollisionObject obj = *rayCallback.m_collisionObject;
+		
+			btRigidBody* body = btRigidBody::upcast(&obj);
+			if (body)
+			{
+				hit_body = body;
+				hit_rel_pos = body->getWorldTransform().inverse()(hit);
+				shot_imp = to;
+				shot_imp.normalize();
+				shot_imp *= 20;
+				
+				float p[3] = {hit_rel_pos.getX(),hit_rel_pos.getY(),hit_rel_pos.getZ()};
+
+				//HitTrack * ht = new HitTrack();
+
+// 				set_rigid_body(hit_body);
+// 				set_position(p);
+// 				set_distance( (float)(hit - m_cameraPosition).length() );
 				//printf("distance=%f\n", ht->get_distance());
 				if (rayCallback.m_hitTriangleShape)
 				{
 					float triangle[9]; 
-					bool triangle_ok = process_triangle(rayCallback.m_collisionObject,
+					bool triangle_ok = process_triangle(hit_body->getCollisionShape(),
 						rayCallback.m_hitTriangleIndex,
 						triangle);
-					if (triangle_ok)
-					{
-						ht->triangle_exists = 1;
-						ht->set_triangle(triangle);
-						ht->set_subpart(rayCallback.m_hitShapePart);
-					}
+// 					if (triangle_ok)
+// 					{
+// 						ht->triangle_exists = 1;
+// 						ht->set_triangle(triangle);
+// 						ht->set_subpart(rayCallback.m_hitShapePart);
+// 					}
 				}
-// 				hit_tracks.push_back(ht);
-//  			}
+/*				hit_tracks.push_back(ht);*/
+ 			}
 		}
 	}
 	return BaseApplication::keyPressed(arg);
