@@ -112,9 +112,9 @@ void DPS::createScene(void)
 
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
 
-	//initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
+	initSoftBody(dpsSoftbodyHelper->createSoftBody(btVector3(0,20,0)));
 	//initSoftBody(dpsSoftbodyHelper->createCloth());
-	initSoftBody(dpsSoftbodyHelper->createDeformableModel());
+	//initSoftBody(dpsSoftbodyHelper->createDeformableModel());
 	//initSoftBody(dpsSoftbodyHelper->createBunny());
 }
 
@@ -130,8 +130,8 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->step();
 
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
-	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
+	Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
+	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
 
 	return BaseApplication::frameRenderingQueued(evt);
@@ -169,7 +169,7 @@ void DPS::initSoftBody(btSoftBody* body)
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 
 	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
 
@@ -181,8 +181,11 @@ void DPS::initSoftBody(btSoftBody* body)
 		//node2 = faces[i].m_n[2];
 		
 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
 
 		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
 		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
