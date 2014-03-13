@@ -113,6 +113,8 @@ class DPS : public BaseApplication
 	protected:
 
 		Ogre::ManualObject* m_ManualObject;
+// 		Ogre;;ManualObject* barrelManualObject;
+// 		Ogre;;ManualObject* bunnyManualObject;
 
 		std::shared_ptr<DPSHelper> dpsHelper;
 		std::shared_ptr<DPSSoftBodyHelper> dpsSoftbodyHelper;
