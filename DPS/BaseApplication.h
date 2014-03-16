@@ -10,7 +10,7 @@ This source file is part of the
 / \_// (_| | | |  __/  \  /\  /| |   <| |
 \___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
       |___/                              
-      Tutorial Framework, fixed for Ogre 1.9
+      Tutorial Framework
       http://www.ogre3d.org/tikiwiki/
 -----------------------------------------------------------------------------
 */
@@ -33,7 +33,6 @@ This source file is part of the
 
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
-#include <ExampleFrameListener.h>
 
 class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
 {
@@ -49,7 +48,6 @@ protected:
     virtual void chooseSceneManager(void);
     virtual void createCamera(void);
     virtual void createFrameListener(void);
-
     virtual void createScene(void) = 0; // Override me!
     virtual void destroyScene(void);
     virtual void createViewports(void);
@@ -81,20 +79,11 @@ protected:
     Ogre::String mResourcesCfg;
     Ogre::String mPluginsCfg;
 
-	ExampleFrameListener* mFrameListener;
-
-	//Fix for 1.9
-	Ogre::OverlaySystem *mOverlaySystem;
-
     // OgreBites
     OgreBites::SdkTrayManager* mTrayMgr;
     OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
     OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
-   
-	//Fix for 1.9:
-	OgreBites::InputContext mInputContext;
-	
-	bool mCursorWasVisible;                    // was cursor visible before dialog appeared
+    bool mCursorWasVisible;                    // was cursor visible before dialog appeared
     bool mShutDown;
 
     //OIS Input devices

@@ -7,6 +7,8 @@
 #include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
 #include "Mesh/barrel.h"
 #include "Mesh/BunnyMesh.h"
+#include "MyGUI.h"
+#include "MyGUI_OgrePlatform.h"
 //#include <memory>
 
 const int maxProxies = 32766;
@@ -128,6 +130,14 @@ void DPS::createViewports(void)
 
 void DPS::createScene(void)
 {
+
+	MyGUI::Gui* mGUI;
+	MyGUI::OgrePlatform* mPlatform= new MyGUI::OgrePlatform();
+	mPlatform->initialise(mWindow, mSceneMgr);
+	mGUI = new MyGUI::Gui();mGUI->initialise();
+	MyGUI::ButtonPtr button= mGUI->createWidget<MyGUI::Button>("Button",10,10,300,26, MyGUI::Align::Default,"Main");
+	button->setCaption("Hao");
+
 	// Basic Ogre stuff.
 	mSceneMgr->setAmbientLight(ColourValue(0.9f,0.9f,0.9f));
 	mCamera->setPosition(Vector3(0,5,20));
@@ -152,6 +162,8 @@ void DPS::createScene(void)
 
 	createGimpactBarrel();
 	createGimpactBuuny();
+
+
 }
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
