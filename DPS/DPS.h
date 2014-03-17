@@ -102,6 +102,7 @@ class DPS : public BaseApplication
 		btCollisionAlgorithmCreateFunc*	m_boxBoxCF;
 		btDefaultCollisionConfiguration* m_collisionConfiguration;
 
+		void resetCamera(void);
 		void deleteOgreEntities(void);
 		void deletePhysicsShapes(void);
 		void GimpactRayCallBack(void);
@@ -120,8 +121,12 @@ class DPS : public BaseApplication
 		std::shared_ptr<DPSSoftBodyHelper> dpsSoftbodyHelper;
 
 		virtual void createScene(void);
-		
 		virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
+
+		// OIS::MouseListener
+		virtual bool mouseMoved(const OIS::MouseEvent &arg);
+		virtual bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
+		virtual bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
 		void initSoftBody(btSoftBody* body);
 		void updateSoftBody(btSoftBody* body);

@@ -7,8 +7,7 @@
 #include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
 #include "Mesh/barrel.h"
 #include "Mesh/BunnyMesh.h"
-#include "MyGUI.h"
-#include "MyGUI_OgrePlatform.h"
+#include "GUI.h"
 //#include <memory>
 
 const int maxProxies = 32766;
@@ -130,13 +129,7 @@ void DPS::createViewports(void)
 
 void DPS::createScene(void)
 {
-
-	MyGUI::Gui* mGUI;
-	MyGUI::OgrePlatform* mPlatform= new MyGUI::OgrePlatform();
-	mPlatform->initialise(mWindow, mSceneMgr);
-	mGUI = new MyGUI::Gui();mGUI->initialise();
-	MyGUI::ButtonPtr button= mGUI->createWidget<MyGUI::Button>("Button",10,10,300,26, MyGUI::Align::Default,"Main");
-	button->setCaption("Hao");
+	mGUI->createGUI();
 
 	// Basic Ogre stuff.
 	mSceneMgr->setAmbientLight(ColourValue(0.9f,0.9f,0.9f));
@@ -612,6 +605,33 @@ void DPS::deleteOgreEntities(void)
 	mSceneMgr->destroyAllLights();
 
 	dpsHelper->createWorld();
+}
+
+bool DPS::mouseMoved(const OIS::MouseEvent &arg)
+{
+	//mouse move on screen
+	bool mouseOnWidget = MyGUI::InputManager::getInstance().injectMouseMove(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.abs);
+
+	//MyGUI::IntPoint mousePos = MyGUI::InputManager::getInstance().getMousePosition();
+
+	return BaseApplication::mouseMoved(arg);
+}
+
+bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+	return BaseApplication::mousePressed(arg, id);
+}
+
+bool DPS::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+	return BaseApplication::mouseReleased(arg, id);
+}
+
+void DPS::resetCamera(void)
+{
+	mCamera->setPosition(0,16,20);
+	mCamera->lookAt(0,5,0);
+	vp->setCamera(mCamera);
 }
 
 

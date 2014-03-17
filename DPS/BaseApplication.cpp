@@ -146,7 +146,7 @@ void BaseApplication::destroyScene(void)
 void BaseApplication::createViewports(void)
 {
     // Create one viewport, entire window
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
+    vp = mWindow->addViewport(mCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
 
     // Alter the camera aspect ratio to match the viewport
@@ -220,6 +220,9 @@ bool BaseApplication::setup(void)
     chooseSceneManager();
     createCamera();
     createViewports();
+
+	//create GUI
+	mGUI = new GUI(vp, mSceneMgr, mWindow);
 
     // Set default mipmap level (NB some APIs ignore this)
     Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
@@ -371,8 +374,10 @@ bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )
 
 bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
 {
-    if (mTrayMgr->injectMouseMove(arg)) return true;
-    mCameraMan->injectMouseMove(arg);
+	if (arg.state.buttonDown(OIS::MB_Right))
+	{
+		mCameraMan->injectMouseMove(arg);
+	}
     return true;
 }
 
