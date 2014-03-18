@@ -110,6 +110,7 @@ class DPS : public BaseApplication
 		void createGimpactBuuny(void);
 		void createGimpactTorus(void);
 		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
+		void GUIeventHandler(void);
 
 	protected:
 

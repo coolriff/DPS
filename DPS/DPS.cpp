@@ -161,6 +161,7 @@ void DPS::createScene(void)
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+	GUIeventHandler();
 	//Update Bullet world
 	Globals::phyWorld->stepSimulation(evt.timeSinceLastFrame, 10); 
 	Globals::phyWorld->debugDrawWorld();
@@ -199,11 +200,10 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	{
 		dpsHelper->createOgreHead();
 	}
-	if (arg.key == OIS::KC_4) 
-	{
-		deletePhysicsShapes();
-		deleteOgreEntities();
-	}
+// 	if (arg.key == OIS::KC_4) 
+// 	{
+// 
+// 	}
 	if (arg.key == OIS::KC_SPACE) 
 	{
 		GimpactRayCallBack();
@@ -614,16 +614,25 @@ bool DPS::mouseMoved(const OIS::MouseEvent &arg)
 
 	//MyGUI::IntPoint mousePos = MyGUI::InputManager::getInstance().getMousePosition();
 
+	if (arg.state.buttonDown(OIS::MB_Right))
+	{
+		mCameraMan->injectMouseMove(arg);
+	}
+
 	return BaseApplication::mouseMoved(arg);
 }
 
 bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+	bool mouseOnWidget = MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
+
 	return BaseApplication::mousePressed(arg, id);
 }
 
 bool DPS::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
+	MyGUI::InputManager::getInstance().injectMouseRelease(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
+
 	return BaseApplication::mouseReleased(arg, id);
 }
 
@@ -631,7 +640,18 @@ void DPS::resetCamera(void)
 {
 	mCamera->setPosition(0,16,20);
 	mCamera->lookAt(0,5,0);
+
 	vp->setCamera(mCamera);
+}
+
+void DPS::GUIeventHandler(void)
+{
+	if(mGUI->Command_Clear_Screen)
+	{
+		deletePhysicsShapes();
+		deleteOgreEntities();
+		mGUI->Command_Clear_Screen = false;
+	}
 }
 
 

@@ -374,10 +374,10 @@ bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )
 
 bool BaseApplication::mouseMoved( const OIS::MouseEvent &arg )
 {
-	if (arg.state.buttonDown(OIS::MB_Right))
-	{
-		mCameraMan->injectMouseMove(arg);
-	}
+// 	if (arg.state.buttonDown(OIS::MB_Right))
+// 	{
+// 		mCameraMan->injectMouseMove(arg);
+// 	}
     return true;
 }
 
