@@ -32,6 +32,8 @@
     <ClInclude Include="Mesh\BunnyMesh.h" />
     <ClInclude Include="Mesh\TorusMesh.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="RenderBox.h" />
+    <ClInclude Include="RenderBoxScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

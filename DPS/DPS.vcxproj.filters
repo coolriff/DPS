@@ -80,5 +80,11 @@
     <ClInclude Include="GUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderBox.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderBoxScene.h">
+      <Filter>External</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -42,18 +42,8 @@ class DPS : public BaseApplication
 {
 	public:
 
-		void initPhysics();
-		void exitPhysics();
-
-		DPS(void)
-		{
-			initPhysics();
-		}
-
-		~DPS(void)
-		{
-			exitPhysics();
-		}
+		DPS(void);
+		~DPS(void);
 
 		// No CCD (continuous collision detection) for Gimpact shapes
 		struct MyClosestRayResultCallback : public btCollisionWorld::ClosestRayResultCallback
@@ -102,6 +92,8 @@ class DPS : public BaseApplication
 		btCollisionAlgorithmCreateFunc*	m_boxBoxCF;
 		btDefaultCollisionConfiguration* m_collisionConfiguration;
 
+		void initPhysics(void);
+		void exitPhysics(void);
 		void resetCamera(void);
 		void deleteOgreEntities(void);
 		void deletePhysicsShapes(void);
@@ -111,6 +103,7 @@ class DPS : public BaseApplication
 		void createGimpactTorus(void);
 		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
 		void GUIeventHandler(void);
+		void miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir);
 
 	protected:
 
@@ -134,6 +127,7 @@ class DPS : public BaseApplication
 // 		void initRigidBody(btRigidBody* body);
 // 		void updateRigidBody(btRigidBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
+
 };
 
 

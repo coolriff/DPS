@@ -78,12 +78,14 @@ protected:
 	Ogre::Viewport* vp;
     Ogre::Root *mRoot;
     Ogre::Camera* mCamera;
+	Ogre::Camera* miniCam;
+
     Ogre::SceneManager* mSceneMgr;
     Ogre::RenderWindow* mWindow;
     Ogre::String mResourcesCfg;
     Ogre::String mPluginsCfg;
 
-    // OgreBites
+    // OgreBites SdkTrayManager::showLogo and SdkTrayManager::hideLogo
     OgreBites::SdkTrayManager* mTrayMgr;
     OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
     OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel

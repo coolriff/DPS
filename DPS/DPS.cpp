@@ -15,6 +15,16 @@ btRigidBody * hit_body = 0;
 btVector3 hit_rel_pos;
 btVector3 shot_imp = btVector3(0,0,0);
 
+DPS::DPS(void)
+{
+	initPhysics();
+}
+
+DPS::~DPS(void)
+{
+	exitPhysics();
+}
+
 void DPS::initPhysics(void)
 {
 	//Bullet initialisation.
@@ -176,11 +186,16 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_mesh);
 
-	Ogre::Vector3 camPos = mCamera->getPosition();
+	Ogre::Vector3 camPos = mCamera->getDerivedPosition();
+// 	Ogre::Vector3 camPos = mCamera->get
+ 	Ogre::Vector3 camDir = mCamera->getDerivedDirection();
+
 	if (camPos.y<0.5)
 	{
 		mCamera->setPosition(camPos.x, 0.5, camPos.z);
 	}
+
+	miniCamPos(camPos,camDir);
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -626,6 +641,18 @@ bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
 	bool mouseOnWidget = MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
 
+	if(!mouseOnWidget)
+	{
+		if (id == OIS::MB_Left)
+		{
+			MyGUI::IntPoint mousePos = MyGUI::InputManager::getInstance().getMousePosition();
+
+			//do the raycast
+			Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.left/float(arg.state.width),mousePos.top/float(arg.state.height));
+			Ogre::RaySceneQuery* rayQuery=mSceneMgr->createRayQuery(Ogre::Ray());
+		}
+	}
+
 	return BaseApplication::mousePressed(arg, id);
 }
 
@@ -652,6 +679,33 @@ void DPS::GUIeventHandler(void)
 		deleteOgreEntities();
 		mGUI->Command_Clear_Screen = false;
 	}
+	if(mGUI->Command_Enable_FPS)
+	{
+		mGUI->Command_Enable_FPS = false;
+		mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
+	}
+	if(mGUI->Command_Disable_FPS)
+	{
+		mGUI->Command_Disable_FPS = false;
+		mTrayMgr->hideFrameStats();
+	}
+	if(mGUI->Command_Quit)
+	{
+		mGUI->Command_Quit = false;
+		mShutDown = true;
+	}
+	if(mGUI->Command_ScreenShot)
+	{
+		mGUI->Command_ScreenShot = false;
+		mWindow->writeContentsToTimestampedFile("screenshot", ".jpg");
+	}
+}
+
+void DPS::miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir)
+{
+	miniCam->setPosition(Ogre::Vector3(-(camPos.x),camDir.y,-(camPos.z)));
+	miniCam->setDirection(camPos);
+	miniCam->setNearClipDistance(5);
 }
 
 

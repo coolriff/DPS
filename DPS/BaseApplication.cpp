@@ -85,6 +85,8 @@ void BaseApplication::createCamera(void)
     mCamera->setNearClipDistance(5);
 
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
+
+	miniCam = mSceneMgr->createCamera("miniCam");
 }
 //-------------------------------------------------------------------------------------
 void BaseApplication::createFrameListener(void)
@@ -113,8 +115,8 @@ void BaseApplication::createFrameListener(void)
     Ogre::WindowEventUtilities::addWindowEventListener(mWindow, this);
 
     mTrayMgr = new OgreBites::SdkTrayManager("InterfaceName", mWindow, mMouse, this);
-    mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);
-    mTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);
+/*    mTrayMgr->showFrameStats(OgreBites::TL_BOTTOMLEFT);*/
+/*    mTrayMgr->showLogo(OgreBites::TL_BOTTOMRIGHT);*/
     mTrayMgr->hideCursor();
 
     // create a params panel for displaying sample details
