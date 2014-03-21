@@ -242,7 +242,14 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 			Simulation_Stop = false;
 			Simulation_Default = true;
 			demoDt = lastNum;
-			mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
+			if (Command_Enable_Slow)
+			{
+				mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(false);
+			}
+			else
+			{
+				mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
+			}
 		}
 		else
 		{
@@ -258,12 +265,14 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		Command_Enable_Slow = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(false);
 	}
 	if(name == "Command_Disable_Slow")
 	{
 		Command_Disable_Slow = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
 	}
 
 }
