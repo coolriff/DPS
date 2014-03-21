@@ -351,10 +351,10 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
         mCamera->setPolygonMode(pm);
         mDetailsPanel->setParamValue(10, newVal);
     }
-    else if(arg.key == OIS::KC_F5)   // refresh all textures
-    {
-        Ogre::TextureManager::getSingleton().reloadAll();
-    }
+//     else if(arg.key == OIS::KC_F5)   // refresh all textures
+//     {
+//         Ogre::TextureManager::getSingleton().reloadAll();
+//     }
     else if (arg.key == OIS::KC_SYSRQ)   // take a screenshot
     {
         mWindow->writeContentsToTimestampedFile("screenshot", ".jpg");

@@ -47,6 +47,8 @@ public:
 	bool Command_Quit;
 	bool Simulation_Default;
 	bool Simulation_Stop;
+	double demoDt;
+	double lastNum;
 
 	MyGUI::Gui* mGuiSystem;
 	MyGUI::OgrePlatform* mGUIPlatform;
@@ -66,6 +68,7 @@ public:
 	void createMiniCamera(Ogre::Camera* miniCam);
 	void createSimulationSpeedWindow(void);
 	void modifySimulationSpeed(MyGUI::ScrollBar* sender, size_t pos);
+	double demoSpeed(double dt);
 /*	void createFPSWindow(void);*/
 
 };

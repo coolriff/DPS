@@ -34,6 +34,8 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Quit = false;
 	Simulation_Default = true;
 	Simulation_Stop = false;
+	demoDt = 0;
+	lastNum = 0;
 
 	mGUIPlatform = new MyGUI::OgrePlatform();
 	mGUIPlatform->initialise(mWindow, mSceneMgr);
@@ -132,6 +134,7 @@ void GUI::menuListener(void)
 
 void GUI::selectedMenuItem(MyGUI::Widget* sender)
 {
+
 	std::string name = sender->getName();
 	if (name == "Command_Quit")
 	{
@@ -201,20 +204,23 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Slow_Motion")
 	{
-		Command_Slow_Motion = true;
-	}
-	if(name == "Simulation_Default")
-	{
-		if(Simulation_Default)
+		if(simulationWindow->isVisible())
 		{
-			Simulation_Default = false;
-			Simulation_Stop = true;
+			simulationWindow->setVisible(false);
 		}
 		else
 		{
-			Simulation_Default = true;
-			Simulation_Stop = false;
+			simulationWindow->setVisible(true);
 		}
+
+	}
+	if(name == "Simulation_Default")
+	{
+		Simulation_Stop = false;
+		mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: " + MyGUI::utility::toString(0)+"%");
+		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setScrollPosition(50);
+		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
+		demoDt = 0;
 	}
 	if(name == "Simulation_Stop")
 	{
@@ -222,11 +228,16 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		{
 			Simulation_Stop = false;
 			Simulation_Default = true;
+			demoDt = lastNum;
+			mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
 		}
 		else
 		{
 			Simulation_Stop = true;
 			Simulation_Default = false;
+			lastNum = demoDt;
+			demoDt = 0;
+			mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(false);
 		}
 	}
 
@@ -256,7 +267,7 @@ void GUI::createSimulationSpeedWindow(void)
 
 	simulationWindow = mGuiSystem->findWidget<MyGUI::Window>("Simulation_Window");
 	simulationWindow->eventWindowButtonPressed += MyGUI::newDelegate(this, &GUI::selectedWindowItem);
-	simulationWindow->setVisible(true);
+	simulationWindow->setVisible(false);
 	simulationWindow->setPosition(size.width - 360, size.height - (size.height - 26));
 
 	MyGUI::Button* button = mGuiSystem->findWidget<MyGUI::Button>("Simulation_Default");
@@ -274,7 +285,7 @@ void GUI::selectedWindowItem(MyGUI::Window* widget, const std::string& name)
 	MyGUI::Window* window = widget->castType<MyGUI::Window>(); 
 	if (name == "close")
 	{
-		window->destroySmooth();
+		simulationWindow->setVisible(false);
 	}
 	else if (name == "minimized") 
 	{ 
@@ -288,7 +299,27 @@ void GUI::selectedWindowItem(MyGUI::Window* widget, const std::string& name)
 
 void GUI::modifySimulationSpeed(MyGUI::ScrollBar* sender, size_t pos)
 {
-	mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: " + MyGUI::utility::toString(pos)+"%");
+	if(pos > 50)
+	{
+		mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: " + MyGUI::utility::toString(pos - 50)+"%");
+		if(!Simulation_Stop)
+		{
+			demoDt = (double)(pos - 50)/1000;
+		}
+	}
+	if(pos < 50)
+	{
+		mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: -" + MyGUI::utility::toString(50 - pos)+"%");
+		if(!Simulation_Stop)
+		{
+			demoDt = (double)(-((50 - pos)/51));
+		}
+	}
+}
+
+double GUI::demoSpeed(double dt)
+{
+	return dt += demoDt;
 }
 
 // void GUI::createFPSWindow(void)

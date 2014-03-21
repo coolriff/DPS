@@ -177,9 +177,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	{
 		dt = 0;
 	}
-	else if(mGUI->Simulation_Default)
-	{
-		dt = evt.timeSinceLastFrame;
+	else
+	{	
+		dt = evt.timeSinceLastFrame + mGUI->demoDt;
 	}
 
 	GUIeventHandler();
