@@ -6,8 +6,8 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	this->mSceneMgr = mSceneMgr;
 	this->mWindow = mWindow;
 
-	Command_Play = false;
-	Command_Pause = false;
+	Command_Enable_Slow = false;
+	Command_Disable_Slow = false;
 	Command_Slow_Motion = false;
 	Command_Clear_Screen = false;
 	Command_Cloth_Demo_1 = false;
@@ -129,6 +129,14 @@ void GUI::menuListener(void)
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
 	
 }
 
@@ -221,6 +229,11 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setScrollPosition(50);
 		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
 		demoDt = 0;
+
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(false);
+		Command_Enable_Slow = false;
+		Command_Disable_Slow = false;
 	}
 	if(name == "Simulation_Stop")
 	{
@@ -239,6 +252,18 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 			demoDt = 0;
 			mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(false);
 		}
+	}
+	if(name == "Command_Enable_Slow")
+	{
+		Command_Enable_Slow = true;
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(true);
+	}
+	if(name == "Command_Disable_Slow")
+	{
+		Command_Disable_Slow = true;
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(false);
 	}
 
 }

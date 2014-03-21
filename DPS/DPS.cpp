@@ -179,7 +179,14 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	}
 	else
 	{	
-		dt = evt.timeSinceLastFrame + mGUI->demoDt;
+		if(mGUI->Command_Enable_Slow)
+		{
+			dt = 0.0002;
+		}
+		else
+		{
+			dt = evt.timeSinceLastFrame + mGUI->demoDt;
+		}
 	}
 
 	GUIeventHandler();
@@ -709,6 +716,11 @@ void DPS::GUIeventHandler(void)
 	{
 		mGUI->Command_ScreenShot = false;
 		mWindow->writeContentsToTimestampedFile("screenshot", ".jpg");
+	}
+	if(mGUI->Command_Disable_Slow)
+	{
+		mGUI->Command_Disable_Slow = false;
+		mGUI->Command_Enable_Slow = false;
 	}
 }
 

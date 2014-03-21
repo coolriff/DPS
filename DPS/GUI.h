@@ -19,8 +19,8 @@ public:
 	Ogre::Viewport* vp;
 
 	//menu item
-	bool Command_Play;
-	bool Command_Pause;
+	bool Command_Enable_Slow;
+	bool Command_Disable_Slow;
 	bool Command_Slow_Motion;
 	bool Command_Clear_Screen;
 	bool Command_Cloth_Demo_1;
