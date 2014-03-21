@@ -1,3 +1,6 @@
+#ifndef __BARREL__
+#define __BARREL__
+
 #include "LinearMath/btScalar.h"
 #include "LinearMath/btVector3.h"
 int faces_size = 160;
@@ -570,3 +573,5 @@ int barrel_ia[]=
 0,
 34,
 1};
+
+#endif

@@ -8,7 +8,7 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 
 	Command_Play = false;
 	Command_Pause = false;
-	Command_Slow_Motion = 0;
+	Command_Slow_Motion = false;
 	Command_Clear_Screen = false;
 	Command_Cloth_Demo_1 = false;
 	Command_Cloth_Demo_2 = false;
@@ -32,6 +32,8 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Wireframe = false;
 	Command_Points = false;
 	Command_Quit = false;
+	Simulation_Default = true;
+	Simulation_Stop = false;
 
 	mGUIPlatform = new MyGUI::OgrePlatform();
 	mGUIPlatform->initialise(mWindow, mSceneMgr);
@@ -44,11 +46,25 @@ GUI::~GUI(void)
 {
 }
 
-void GUI::createGUI(void)
+void GUI::createGUI(size_t _index)
 {
+	if (_index == 0)
+	{
+		MyGUI::ResourceManager::getInstance().load("MyGUI_BlueWhiteTheme.xml");
+	}
+	else if (_index == 1)
+	{
+		MyGUI::ResourceManager::getInstance().load("MyGUI_BlackBlueTheme.xml");
+	}
+	else if (_index == 2)
+	{
+		MyGUI::ResourceManager::getInstance().load("MyGUI_BlackOrangeTheme.xml");
+	}
+
 	menuPtr = MyGUI::LayoutManager::getInstance().loadLayout("DPS.layout");
 	menuListener();
 	createMiniCamera(mSceneMgr->getCamera("miniCam"));
+	createSimulationSpeedWindow();
 /*	createFPSWindow();*/
 // 	MyGUI::ButtonPtr button= mGuiSystem->createWidget<MyGUI::Button>("Button",10,10,300,26, MyGUI::Align::Default,"Main");
 // 	button->setCaption("Hao");
@@ -104,6 +120,10 @@ void GUI::menuListener(void)
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_ScreenShot"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Slow_Motion"))
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
@@ -179,12 +199,42 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	{
 		Command_ScreenShot = true;
 	}
+	if(name == "Command_Slow_Motion")
+	{
+		Command_Slow_Motion = true;
+	}
+	if(name == "Simulation_Default")
+	{
+		if(Simulation_Default)
+		{
+			Simulation_Default = false;
+			Simulation_Stop = true;
+		}
+		else
+		{
+			Simulation_Default = true;
+			Simulation_Stop = false;
+		}
+	}
+	if(name == "Simulation_Stop")
+	{
+		if(Simulation_Stop)
+		{
+			Simulation_Stop = false;
+			Simulation_Default = true;
+		}
+		else
+		{
+			Simulation_Stop = true;
+			Simulation_Default = false;
+		}
+	}
+
 }
 
 void GUI::createMiniCamera(Ogre::Camera* miniCam)
 {
 	const MyGUI::IntSize& size = MyGUI::RenderManager::getInstance().getViewSize();
-
 	miniCameraWindow = MyGUI::Gui::getInstance().createWidget<MyGUI::Window>("WindowCS", MyGUI::IntCoord(size.width - 360, size.height - 270, 360, 270), MyGUI::Align::Right|MyGUI::Align::Bottom, "Overlapped");
 	miniCameraWindow->setCaption("Camera View");
 	miniCameraWindow->setMinSize(MyGUI::IntSize(100, 100));
@@ -196,6 +246,49 @@ void GUI::createMiniCamera(Ogre::Camera* miniCam)
 	gRenderBox->setCanvas(canvas);
 	gRenderBox->setViewport(miniCam);
 	gRenderBox->setBackgroundColour(MyGUI::Colour::Black);
+}
+
+void GUI::createSimulationSpeedWindow(void)
+{
+	const MyGUI::IntSize& size = MyGUI::RenderManager::getInstance().getViewSize();
+
+	simulationPtr = MyGUI::LayoutManager::getInstance().loadLayout("Simulation.layout");
+
+	simulationWindow = mGuiSystem->findWidget<MyGUI::Window>("Simulation_Window");
+	simulationWindow->eventWindowButtonPressed += MyGUI::newDelegate(this, &GUI::selectedWindowItem);
+	simulationWindow->setVisible(true);
+	simulationWindow->setPosition(size.width - 360, size.height - (size.height - 26));
+
+	MyGUI::Button* button = mGuiSystem->findWidget<MyGUI::Button>("Simulation_Default");
+	button->eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+
+	button = mGuiSystem->findWidget<MyGUI::Button>("Simulation_Stop");
+	button->eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+
+	mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->eventScrollChangePosition += newDelegate(this, &GUI::modifySimulationSpeed);
+}
+
+
+void GUI::selectedWindowItem(MyGUI::Window* widget, const std::string& name)
+{
+	MyGUI::Window* window = widget->castType<MyGUI::Window>(); 
+	if (name == "close")
+	{
+		window->destroySmooth();
+	}
+	else if (name == "minimized") 
+	{ 
+		// hide window and show button in your taskbar 
+	} 
+	else if (name == "maximized") 
+	{ 
+		// maximized window 
+	} 
+}
+
+void GUI::modifySimulationSpeed(MyGUI::ScrollBar* sender, size_t pos)
+{
+	mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: " + MyGUI::utility::toString(pos)+"%");
 }
 
 // void GUI::createFPSWindow(void)

@@ -49,6 +49,8 @@ void DPS::initPhysics(void)
 	//	clientResetScene();
 	m_softBodyWorldInfo.m_sparsesdf.Initialize();
 
+	dt = evt.timeSinceLastFrame;
+	//mGUI->Simulation_Default = true;
 	//std::vector<float> texCoords = dpsSoftbodyHelper->texCoord;
 }
 
@@ -139,7 +141,7 @@ void DPS::createViewports(void)
 
 void DPS::createScene(void)
 {
-	mGUI->createGUI();
+	mGUI->createGUI(1);
 
 	// Basic Ogre stuff.
 	mSceneMgr->setAmbientLight(ColourValue(0.9f,0.9f,0.9f));
@@ -171,9 +173,18 @@ void DPS::createScene(void)
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+	if(mGUI->Simulation_Stop)
+	{
+		dt = 0;
+	}
+	else if(mGUI->Simulation_Default)
+	{
+		dt = evt.timeSinceLastFrame;
+	}
+
 	GUIeventHandler();
 	//Update Bullet world
-	Globals::phyWorld->stepSimulation(evt.timeSinceLastFrame, 10); 
+	Globals::phyWorld->stepSimulation(dt,0); 
 	Globals::phyWorld->debugDrawWorld();
 
 	//Shows debug if F3 key down.

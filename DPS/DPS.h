@@ -105,6 +105,9 @@ class DPS : public BaseApplication
 		void GUIeventHandler(void);
 		void miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir);
 
+		Ogre::FrameEvent evt;
+		double dt;
+
 	protected:
 
 		Ogre::ManualObject* m_ManualObject;
