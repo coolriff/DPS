@@ -196,7 +196,8 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::phyWorld->debugDrawWorld();
 
 	//Shows debug if F3 key down.
-	Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
+	//Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
+	Globals::dbgdraw->setDebugMode(mGUI->Command_Bullet_Debug_Mode);
 	Globals::dbgdraw->step();
 
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);

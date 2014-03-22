@@ -44,6 +44,7 @@ public:
 	bool Command_Solid;
 	bool Command_Wireframe;
 	bool Command_Points;
+	bool Command_Bullet_Debug_Mode;
 	bool Command_Quit;
 	bool Simulation_Default;
 	bool Simulation_Stop;

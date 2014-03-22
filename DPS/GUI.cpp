@@ -31,6 +31,7 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Solid = false;
 	Command_Wireframe = false;
 	Command_Points = false;
+	Command_Bullet_Debug_Mode  = false;
 	Command_Quit = false;
 	Simulation_Default = true;
 	Simulation_Stop = false;
@@ -137,6 +138,10 @@ void GUI::menuListener(void)
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
 	
 }
 
@@ -184,27 +189,41 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Solid")
 	{
+		Command_Bullet_Debug_Mode = false;
 		vp->getCamera()->setPolygonMode(Ogre::PM_SOLID);
 
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Points")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode")->setEnabled(true);
 	}
 	if(name == "Command_Wireframe")
 	{
+		Command_Bullet_Debug_Mode = false;
 		vp->getCamera()->setPolygonMode(Ogre::PM_WIREFRAME);
 
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Points")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode")->setEnabled(true);
 	}
 	if(name == "Command_Points")
 	{
+		Command_Bullet_Debug_Mode = false;
 		vp->getCamera()->setPolygonMode(Ogre::PM_POINTS);
 
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Points")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode")->setEnabled(true);
+	}
+	if(name == "Command_Bullet_Debug_Mode")
+	{
+		Command_Bullet_Debug_Mode = true;
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Points")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode")->setEnabled(false);
 	}
 	if(name == "Command_ScreenShot")
 	{
