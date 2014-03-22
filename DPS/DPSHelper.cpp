@@ -94,51 +94,52 @@ void DPSHelper::createWorld(void)
 
 btRigidBody* DPSHelper::throwSphere(void)
 {
-// 	Ogre::Vector3 pos = mCamera->getDerivedPosition();
-// 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
-// 	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
-// 	setColor(ent, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
-// 	//Ogre::Entity *ent = mSceneMgr->createEntity("cube.mesh");
-// 	ent->setCastShadows(true);
-// 	//ent->setMaterialName("Examples/BumpyMetal");
-// 
-// 	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
-// 	//sphereNode->setScale(Ogre::Vector3(0.01f,0.01f,0.01f));
-// 
-// 	btCollisionShape* entShape = new btSphereShape(1);
-// 	//Calculate inertia.
-// 	btScalar mass = 1;
-// 	btVector3 inertia(0,0,0);
-// 	entShape->calculateLocalInertia(mass, inertia);
-// 
-// 	//Create BtOgre MotionState (connects Ogre and Bullet).
-// 	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
-// 
-// 	//Create the Body.
-// 	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
-// 	Ogre::Vector3 thro = mCamera->getDirection() * 100;
-// 	//entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
-// 	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
-// 	phyWorld->addRigidBody(entBody);
-// 	
-// 	sphereNode->attachObject(ent);
 	Ogre::Vector3 pos = mCamera->getDerivedPosition();
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
+	setColor(ent, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
+	//Ogre::Entity *ent = mSceneMgr->createEntity("cube.mesh");
+	ent->setCastShadows(true);
+	//ent->setMaterialName("Examples/BumpyMetal");
 
-	btTransform transform;
-	transform.setIdentity();
-	transform.setOrigin(btVector3(pos.x,pos.y,pos.z));
-	btDefaultMotionState* motionState=new btDefaultMotionState(transform);
-	btSphereShape* sphereShape=new btSphereShape(1);
-	btVector3 inertia(0,0,0);
+	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(pos,rot);
+	//sphereNode->setScale(Ogre::Vector3(0.01f,0.01f,0.01f));
+
+	btCollisionShape* entShape = new btSphereShape(1);
+	//Calculate inertia.
 	btScalar mass = 1;
-	sphereShape->calculateLocalInertia(mass,inertia);
-	Ogre::Vector3 thro = mCamera->getDirection() * 100;
-	btRigidBody::btRigidBodyConstructionInfo info(mass,motionState,sphereShape,inertia);
-	btRigidBody* body=new btRigidBody(info);
-	body->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
-	phyWorld->addRigidBody(body);
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
 
-	return body;
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	Ogre::Vector3 thro = mCamera->getDirection() * 100;
+	//entBody->applyCentralForce(btVector3(pos.x,pos.y,pos.z) * 50000);
+	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
+	phyWorld->addRigidBody(entBody);
+	
+	sphereNode->attachObject(ent);
+
+// 	Ogre::Vector3 pos = mCamera->getDerivedPosition();
+// 
+// 	btTransform transform;
+// 	transform.setIdentity();
+// 	transform.setOrigin(btVector3(pos.x,pos.y,pos.z));
+// 	btDefaultMotionState* motionState=new btDefaultMotionState(transform);
+// 	btSphereShape* sphereShape=new btSphereShape(1);
+// 	btVector3 inertia(0,0,0);
+// 	btScalar mass = 1;
+// 	sphereShape->calculateLocalInertia(mass,inertia);
+// 	Ogre::Vector3 thro = mCamera->getDirection() * 100;
+// 	btRigidBody::btRigidBodyConstructionInfo info(mass,motionState,sphereShape,inertia);
+// 	btRigidBody* body=new btRigidBody(info);
+// 	body->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
+// 	phyWorld->addRigidBody(body);
+
+	return entBody;
 }
 
 
