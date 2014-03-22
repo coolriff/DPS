@@ -13,6 +13,8 @@
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
 #include <BulletSoftBody/btSoftBodyHelpers.h>
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
+#include "Leap.h"
+#include "LeapListener.h"
 
 class DPS;
 class btBroadphaseInterface;
@@ -107,6 +109,13 @@ class DPS : public BaseApplication
 
 		Ogre::FrameEvent evt;
 		double dt;
+
+		LeapListener leapMotionListener;
+		Leap::Controller leapMotionController;
+
+		bool leapMotionInit(void);
+		void leapMotionUpdate(void);
+		void leapMotionCleanup(void);
 
 	protected:
 

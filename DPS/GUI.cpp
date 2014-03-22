@@ -346,7 +346,7 @@ void GUI::modifySimulationSpeed(MyGUI::ScrollBar* sender, size_t pos)
 		mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: -" + MyGUI::utility::toString(50 - pos)+"%");
 		if(!Simulation_Stop)
 		{
-			demoDt = (double)(-((50 - pos)/51));
+			demoDt = (double)(-((50 - pos)/100));
 		}
 	}
 }

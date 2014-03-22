@@ -23,6 +23,7 @@ DPS::DPS(void)
 DPS::~DPS(void)
 {
 	exitPhysics();
+	leapMotionCleanup();
 }
 
 void DPS::initPhysics(void)
@@ -168,7 +169,7 @@ void DPS::createScene(void)
 	createGimpactBarrel();
 	createGimpactBuuny();
 
-
+	leapMotionInit();
 }
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -216,6 +217,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	miniCamPos(camPos,camDir);
 
 	return BaseApplication::frameRenderingQueued(evt);
+
+	leapMotionUpdate();
+
 }
 
 
@@ -729,6 +733,26 @@ void DPS::miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir)
 	miniCam->setPosition(Ogre::Vector3(-(camPos.x),camDir.y,-(camPos.z)));
 	miniCam->setDirection(camPos);
 	miniCam->setNearClipDistance(5);
+}
+
+bool DPS::leapMotionInit(void)
+{
+	leapMotionController.addListener(leapMotionListener);
+
+	return true;
+}
+
+void DPS::leapMotionUpdate(void)
+{
+	if(leapMotionListener.debugInfo.size() > 0)
+	{
+		printf("leapMotionListener.debugInfo");
+	}
+}
+
+void DPS::leapMotionCleanup(void)
+{
+	leapMotionController.removeListener(leapMotionListener);
 }
 
 
