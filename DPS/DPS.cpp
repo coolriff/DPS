@@ -169,7 +169,7 @@ void DPS::createScene(void)
 	createGimpactBarrel();
 	createGimpactBuuny();
 
-	leapMotionInit();
+	//leapMotionInit();
 }
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -189,8 +189,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 			dt = evt.timeSinceLastFrame + mGUI->demoDt;
 		}
 	}
-
+	//leapMotionUpdate();
 	GUIeventHandler();
+
 	//Update Bullet world
 	Globals::phyWorld->stepSimulation(dt,0); 
 	Globals::phyWorld->debugDrawWorld();
@@ -217,10 +218,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	miniCamPos(camPos,camDir);
 
+	
+
 	return BaseApplication::frameRenderingQueued(evt);
-
-	leapMotionUpdate();
-
 }
 
 
@@ -636,6 +636,7 @@ void DPS::createGimpactBuuny(void)
 	mLiquidBodyNode->attachObject(m_ManualObject);
 }
 
+
 void DPS::deleteOgreEntities(void)
 {
 	mSceneMgr->destroyAllManualObjects();
@@ -644,6 +645,7 @@ void DPS::deleteOgreEntities(void)
 
 	dpsHelper->createWorld();
 }
+
 
 bool DPS::mouseMoved(const OIS::MouseEvent &arg)
 {
@@ -659,6 +661,7 @@ bool DPS::mouseMoved(const OIS::MouseEvent &arg)
 
 	return BaseApplication::mouseMoved(arg);
 }
+
 
 bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
@@ -679,12 +682,14 @@ bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 	return BaseApplication::mousePressed(arg, id);
 }
 
+
 bool DPS::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
 	MyGUI::InputManager::getInstance().injectMouseRelease(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
 
 	return BaseApplication::mouseReleased(arg, id);
 }
+
 
 void DPS::resetCamera(void)
 {
@@ -694,13 +699,20 @@ void DPS::resetCamera(void)
 	vp->setCamera(mCamera);
 }
 
+
 void DPS::GUIeventHandler(void)
 {
 	if(mGUI->Command_Clear_Screen)
 	{
+		mGUI->Command_Clear_Screen = false;
 		deletePhysicsShapes();
 		deleteOgreEntities();
-		mGUI->Command_Clear_Screen = false;
+		
+
+/*		leapMotionCleanup();*/
+
+// 		dpsHelper->createLeapMotionSphere_0("finger_0",Ogre::Vector3(-12.f,100.0f,0.0f));
+// 		dpsHelper->createLeapMotionSphere_1("finger_1",Ogre::Vector3(-9.f,100.0f,0.0f));
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -729,27 +741,87 @@ void DPS::GUIeventHandler(void)
 	}
 }
 
+
 void DPS::miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir)
 {
+// 	Ogre::Vector3 absPos = mSceneMgr->getCamera("PlayerCam")->getDerivedPosition();
+// 	Ogre::Quaternion absOrient = mSceneMgr->getCamera("PlayerCam")->getDerivedOrientation();
+
 	miniCam->setPosition(Ogre::Vector3(-(camPos.x),camDir.y,-(camPos.z)));
 	miniCam->setDirection(camPos);
 	miniCam->setNearClipDistance(5);
 }
 
+
 bool DPS::leapMotionInit(void)
 {
 	leapMotionController.addListener(leapMotionListener);
+	leapFrameData = leapMotionController.frame();
+	leapHand = leapFrameData.hands().frontmost();
+
+	dpsHelper->createLeapMotionSphere_0("finger_0",Ogre::Vector3(-12.f,100.0f,0.0f));
+ 	dpsHelper->createLeapMotionSphere_1("finger_1",Ogre::Vector3(-9.f,100.0f,0.0f));
 
 	return true;
 }
 
+
 void DPS::leapMotionUpdate(void)
 {
-	if(leapMotionListener.debugInfo.size() > 0)
+	if(leapMotionController.isConnected())
 	{
-		printf("leapMotionListener.debugInfo");
+		if (leapFrameData.hands().isEmpty())
+		{
+			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(-12.f,100.0f,0.0f));
+ 			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
+
+			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
+			tr0.setOrigin(btVector3(-12.f,100.0f,0.0f));
+			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->setWorldTransform(tr0);
+
+			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
+			tr1.setOrigin(btVector3(-9.f,100.0f,0.0f));
+			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->setWorldTransform(tr1);
+		}
+		else
+		{
+			Leap::Finger finger0 = leapHand.fingers()[0];
+			Leap::Vector fp0 = finger0.tipPosition();
+			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(fp0.x * 0.5,(fp0.y-100) * 0.5,fp0.z * 0.5));
+			Ogre::Vector3 absPos0 = dpsHelper->sphereNode_0->_getDerivedPosition();
+			Ogre::Quaternion absQuat0 = dpsHelper->sphereNode_0->_getDerivedOrientation();
+
+			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
+			tr0.setOrigin(btVector3(absPos0.x,absPos0.y,absPos0.z));
+			tr0.setRotation(btQuaternion(absQuat0.x, absQuat0.y, absQuat0.z, absQuat0.w));
+			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->activate(true);
+			dpsHelper->sphereBody_0->setWorldTransform(tr0);
+
+
+
+			Leap::Finger finger1 = leapHand.fingers()[1];
+			Leap::Vector fp1 = finger1.tipPosition();
+			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(fp1.x * 0.5,(fp1.y-100) * 0.5,fp1.z * 0.5));
+			Ogre::Vector3 absPos1 = dpsHelper->sphereNode_1->_getDerivedPosition();
+			Ogre::Quaternion absQuat1 = dpsHelper->sphereNode_1->_getDerivedOrientation();
+
+			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
+			tr1.setOrigin(btVector3(absPos1.x,absPos1.y,absPos1.z));
+			tr1.setRotation(btQuaternion(absQuat1.x, absQuat1.y, absQuat1.z, absQuat1.w));
+			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->activate(true);
+			dpsHelper->sphereBody_1->setWorldTransform(tr1);
+		}
 	}
 }
+
 
 void DPS::leapMotionCleanup(void)
 {

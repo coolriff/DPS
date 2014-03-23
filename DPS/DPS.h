@@ -109,9 +109,12 @@ class DPS : public BaseApplication
 
 		Ogre::FrameEvent evt;
 		double dt;
+		int leapMotionCounter;
 
 		LeapListener leapMotionListener;
 		Leap::Controller leapMotionController;
+		Leap::Frame leapFrameData;
+		Leap::Hand leapHand;
 
 		bool leapMotionInit(void);
 		void leapMotionUpdate(void);
