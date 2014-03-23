@@ -169,7 +169,7 @@ void DPS::createScene(void)
 	createGimpactBarrel();
 	createGimpactBuuny();
 
-	//leapMotionInit();
+	leapMotionInit();
 }
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -189,7 +189,7 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 			dt = evt.timeSinceLastFrame + mGUI->demoDt;
 		}
 	}
-	//leapMotionUpdate();
+
 	GUIeventHandler();
 
 	//Update Bullet world
@@ -218,7 +218,7 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	miniCamPos(camPos,camDir);
 
-	
+	leapMotionUpdate();
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -756,8 +756,7 @@ void DPS::miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir)
 bool DPS::leapMotionInit(void)
 {
 	leapMotionController.addListener(leapMotionListener);
-	leapFrameData = leapMotionController.frame();
-	leapHand = leapFrameData.hands().frontmost();
+
 
 	dpsHelper->createLeapMotionSphere_0("finger_0",Ogre::Vector3(-12.f,100.0f,0.0f));
  	dpsHelper->createLeapMotionSphere_1("finger_1",Ogre::Vector3(-9.f,100.0f,0.0f));
@@ -768,8 +767,12 @@ bool DPS::leapMotionInit(void)
 
 void DPS::leapMotionUpdate(void)
 {
+
 	if(leapMotionController.isConnected())
 	{
+		Leap::Frame leapFrameData = leapMotionController.frame();
+		Leap::Hand leapHand = leapFrameData.hands().rightmost();
+
 		if (leapFrameData.hands().isEmpty())
 		{
 			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(-12.f,100.0f,0.0f));

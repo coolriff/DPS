@@ -113,8 +113,8 @@ class DPS : public BaseApplication
 
 		LeapListener leapMotionListener;
 		Leap::Controller leapMotionController;
-		Leap::Frame leapFrameData;
-		Leap::Hand leapHand;
+// 		Leap::Frame leapFrameData;
+// 		Leap::Hand leapHand;
 
 		bool leapMotionInit(void);
 		void leapMotionUpdate(void);
