@@ -709,14 +709,10 @@ void DPS::GUIeventHandler(void)
 	if(mGUI->Command_Clear_Screen)
 	{
 		mGUI->Command_Clear_Screen = false;
+
 		deletePhysicsShapes();
 		deleteOgreEntities();
-		
-
-/*		leapMotionCleanup();*/
-
-// 		dpsHelper->createLeapMotionSphere_0("finger_0",Ogre::Vector3(-12.f,100.0f,0.0f));
-// 		dpsHelper->createLeapMotionSphere_1("finger_1",Ogre::Vector3(-9.f,100.0f,0.0f));
+		leapMotionRunning = false;
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -760,7 +756,6 @@ void DPS::miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir)
 bool DPS::leapMotionInit(void)
 {
 	leapMotionController.addListener(leapMotionListener);
-
 
 	dpsHelper->createLeapMotionSphere_0("finger_0",Ogre::Vector3(-12.f,100.0f,0.0f));
  	dpsHelper->createLeapMotionSphere_1("finger_1",Ogre::Vector3(-9.f,100.0f,0.0f));
