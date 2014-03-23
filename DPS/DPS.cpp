@@ -218,7 +218,10 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	miniCamPos(camPos,camDir);
 
-	leapMotionUpdate();
+	if(leapMotionRunning)
+	{
+		leapMotionUpdate();
+	}
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -693,6 +696,7 @@ bool DPS::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 
 void DPS::resetCamera(void)
 {
+
 	mCamera->setPosition(0,16,20);
 	mCamera->lookAt(0,5,0);
 
@@ -761,6 +765,8 @@ bool DPS::leapMotionInit(void)
 	dpsHelper->createLeapMotionSphere_0("finger_0",Ogre::Vector3(-12.f,100.0f,0.0f));
  	dpsHelper->createLeapMotionSphere_1("finger_1",Ogre::Vector3(-9.f,100.0f,0.0f));
 
+	leapMotionRunning = true;
+
 	return true;
 }
 
@@ -773,10 +779,96 @@ void DPS::leapMotionUpdate(void)
 		Leap::Frame leapFrameData = leapMotionController.frame();
 		Leap::Hand leapHand = leapFrameData.hands().rightmost();
 
-		if (leapFrameData.hands().isEmpty())
+		Leap::FingerList fingerListNow = leapFrameData.hands()[0].fingers();
+		std::vector<Ogre::Vector3> fingerPositions;
+
+		for(int i = 0; i < fingerListNow.count(); i++)
+		{
+			Leap::Vector fp = fingerListNow[i].tipPosition();
+			fingerPositions.push_back(Ogre::Vector3(fp.x, fp.y, fp.z));
+		}
+
+		if(fingerPositions.size() == 1)
+		{
+			//finger 1
+			Leap::Finger finger0 = leapHand.fingers()[0];
+			Leap::Vector fp0 = finger0.tipPosition();
+
+			if (fp0.y < 105)
+			{
+				fp0.y = 105;
+			}
+
+			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(fp0.x * 0.2,(fp0.y-100) * 0.2,fp0.z * 0.2));
+			Ogre::Vector3 absPos0 = dpsHelper->sphereNode_0->_getDerivedPosition();
+			Ogre::Quaternion absQuat0 = dpsHelper->sphereNode_0->_getDerivedOrientation();
+
+			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
+			tr0.setOrigin(btVector3(absPos0.x,absPos0.y,absPos0.z));
+			tr0.setRotation(btQuaternion(absQuat0.x, absQuat0.y, absQuat0.z, absQuat0.w));
+			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->activate(true);
+			dpsHelper->sphereBody_0->setWorldTransform(tr0);
+
+			//finger 2
+			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
+			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
+			tr1.setOrigin(btVector3(-9.f,100.0f,0.0f));
+			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->setWorldTransform(tr1);
+		}
+
+		if(fingerPositions.size() == 2)
+		{
+			//finger 1
+			Leap::Finger finger0 = leapHand.fingers()[0];
+			Leap::Vector fp0 = finger0.tipPosition();
+
+			if (fp0.y < 105)
+			{
+				fp0.y = 105;
+			}
+
+			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(fp0.x * 0.2,(fp0.y-100) * 0.2,fp0.z * 0.2));
+			Ogre::Vector3 absPos0 = dpsHelper->sphereNode_0->_getDerivedPosition();
+			Ogre::Quaternion absQuat0 = dpsHelper->sphereNode_0->_getDerivedOrientation();
+
+			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
+			tr0.setOrigin(btVector3(absPos0.x,absPos0.y,absPos0.z));
+			tr0.setRotation(btQuaternion(absQuat0.x, absQuat0.y, absQuat0.z, absQuat0.w));
+			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_0->activate(true);
+			dpsHelper->sphereBody_0->setWorldTransform(tr0);
+
+			//finger 2
+			Leap::Finger finger1 = leapHand.fingers()[1];
+			Leap::Vector fp1 = finger1.tipPosition();
+
+			if (fp1.y < 105)
+			{
+				fp1.y = 105;
+			}
+
+			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(fp1.x * 0.2,(fp1.y-100) * 0.2,fp1.z * 0.2));
+			Ogre::Vector3 absPos1 = dpsHelper->sphereNode_1->_getDerivedPosition();
+			Ogre::Quaternion absQuat1 = dpsHelper->sphereNode_1->_getDerivedOrientation();
+
+			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
+			tr1.setOrigin(btVector3(absPos1.x,absPos1.y,absPos1.z));
+			tr1.setRotation(btQuaternion(absQuat1.x, absQuat1.y, absQuat1.z, absQuat1.w));
+			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
+			dpsHelper->sphereBody_1->activate(true);
+			dpsHelper->sphereBody_1->setWorldTransform(tr1);
+		}
+
+		if(leapFrameData.hands().isEmpty() || fingerPositions.size() > 2)
 		{
 			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(-12.f,100.0f,0.0f));
- 			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
+			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
 
 			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
 			tr0.setOrigin(btVector3(-12.f,100.0f,0.0f));
@@ -790,38 +882,6 @@ void DPS::leapMotionUpdate(void)
 			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
 			dpsHelper->sphereBody_1->setWorldTransform(tr1);
 		}
-		else
-		{
-			Leap::Finger finger0 = leapHand.fingers()[0];
-			Leap::Vector fp0 = finger0.tipPosition();
-			mSceneMgr->getSceneNode("finger_0")->setPosition(Ogre::Vector3(fp0.x * 0.5,(fp0.y-100) * 0.5,fp0.z * 0.5));
-			Ogre::Vector3 absPos0 = dpsHelper->sphereNode_0->_getDerivedPosition();
-			Ogre::Quaternion absQuat0 = dpsHelper->sphereNode_0->_getDerivedOrientation();
-
-			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
-			tr0.setOrigin(btVector3(absPos0.x,absPos0.y,absPos0.z));
-			tr0.setRotation(btQuaternion(absQuat0.x, absQuat0.y, absQuat0.z, absQuat0.w));
-			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->activate(true);
-			dpsHelper->sphereBody_0->setWorldTransform(tr0);
-
-
-
-			Leap::Finger finger1 = leapHand.fingers()[1];
-			Leap::Vector fp1 = finger1.tipPosition();
-			mSceneMgr->getSceneNode("finger_1")->setPosition(Ogre::Vector3(fp1.x * 0.5,(fp1.y-100) * 0.5,fp1.z * 0.5));
-			Ogre::Vector3 absPos1 = dpsHelper->sphereNode_1->_getDerivedPosition();
-			Ogre::Quaternion absQuat1 = dpsHelper->sphereNode_1->_getDerivedOrientation();
-
-			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
-			tr1.setOrigin(btVector3(absPos1.x,absPos1.y,absPos1.z));
-			tr1.setRotation(btQuaternion(absQuat1.x, absQuat1.y, absQuat1.z, absQuat1.w));
-			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->activate(true);
-			dpsHelper->sphereBody_1->setWorldTransform(tr1);
-		}
 	}
 }
 
@@ -829,6 +889,7 @@ void DPS::leapMotionUpdate(void)
 void DPS::leapMotionCleanup(void)
 {
 	leapMotionController.removeListener(leapMotionListener);
+	leapMotionRunning = false;
 }
 
 
