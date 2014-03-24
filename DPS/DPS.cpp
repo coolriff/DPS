@@ -749,8 +749,8 @@ void DPS::GUIeventHandler(void)
 
 void DPS::resetCamera(void)
 {
-	mCamera->setPosition(0,16,20);
-	mCamera->lookAt(0,5,0);
+	mCamera->setPosition(0,5,20);
+	mCamera->lookAt(0,5,-10);
 }
 
 

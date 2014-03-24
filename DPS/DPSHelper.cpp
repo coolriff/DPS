@@ -85,7 +85,7 @@ void DPSHelper::createWorld(void)
 
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
 
-	mSceneMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox");
+	mSceneMgr->setSkyBox(true, "Examples/MorningSkyBox");
 
 	createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
 	createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
