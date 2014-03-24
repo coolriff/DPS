@@ -48,6 +48,7 @@ public:
 	bool Command_Quit;
 	bool Simulation_Default;
 	bool Simulation_Stop;
+	bool Command_Reset_Camera;
 	double demoDt;
 	double lastNum;
 

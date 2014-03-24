@@ -33,6 +33,7 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Points = false;
 	Command_Bullet_Debug_Mode  = false;
 	Command_Quit = false;
+	Command_Reset_Camera = false;
 	Simulation_Default = true;
 	Simulation_Stop = false;
 	demoDt = 0;
@@ -138,6 +139,10 @@ void GUI::menuListener(void)
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Reset_Camera"))
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
@@ -291,6 +296,10 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
+	}
+	if(name == "Command_Reset_Camera")
+	{
+		Command_Reset_Camera = true;
 	}
 
 }

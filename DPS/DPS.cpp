@@ -739,16 +739,18 @@ void DPS::GUIeventHandler(void)
 		mGUI->Command_Disable_Slow = false;
 		mGUI->Command_Enable_Slow = false;
 	}
+	if(mGUI->Command_Reset_Camera)
+	{
+		resetCamera();
+		mGUI->Command_Reset_Camera = false;
+	}
 }
 
 
 void DPS::resetCamera(void)
 {
-
 	mCamera->setPosition(0,16,20);
 	mCamera->lookAt(0,5,0);
-
-	vp->setCamera(mCamera);
 }
 
 

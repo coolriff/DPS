@@ -63,13 +63,13 @@ void DPSHelper::createWorld(void)
 	Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
 	// 10 10 cube,  500 500 tex
 	Ogre::MeshManager::getSingleton().createPlane("ground", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-		plane, 1500, 1500, 50, 50, true, 1, 50, 50, Ogre::Vector3::UNIT_Z);
+		plane, 10000, 10000, 200, 200, true, 1, 200, 200, Ogre::Vector3::UNIT_Z);
 	Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
 
-	entGround ->setMaterialName("Examples/Rockwall");
+	entGround ->setMaterialName("Examples/Wood");
 	entGround ->setCastShadows(false);
 
-	btCollisionShape* shape = new btBoxShape (btVector3(500,1,500));
+	btCollisionShape* shape = new btBoxShape (btVector3(5000,1,5000));
 
 	//btCollisionShape* shape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
 
@@ -85,7 +85,7 @@ void DPSHelper::createWorld(void)
 
 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
 
-	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox");
+	mSceneMgr->setSkyBox(true, "Examples/CloudyNoonSkyBox");
 
 	createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
 	createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
