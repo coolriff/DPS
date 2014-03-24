@@ -18,6 +18,7 @@ btVector3 shot_imp = btVector3(0,0,0);
 DPS::DPS(void)
 {
 	initPhysics();
+	rayNode = nullptr;
 }
 
 DPS::~DPS(void)
@@ -192,6 +193,11 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	GUIeventHandler();
 
+	if(rayNode)
+	{
+		setMiniCamPosition(rayNode->getPosition());
+	}
+
 	//Update Bullet world
 	Globals::phyWorld->stepSimulation(dt,0); 
 	Globals::phyWorld->debugDrawWorld();
@@ -208,15 +214,11 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_mesh);
 
 	Ogre::Vector3 camPos = mCamera->getDerivedPosition();
-// 	Ogre::Vector3 camPos = mCamera->get
- 	Ogre::Vector3 camDir = mCamera->getDerivedDirection();
 
 	if (camPos.y<0.5)
 	{
 		mCamera->setPosition(camPos.x, 0.5, camPos.z);
 	}
-
-	miniCamPos(camPos,camDir);
 
 	if(leapMotionRunning)
 	{
@@ -379,15 +381,6 @@ void DPS::updateSoftBody(btSoftBody* body)
 }
 
 
-// void DPS::initRigidBody(btRigidBody* body)
-// {
-// 
-// }
-// 
-// void DPS::updateRigidBody(btRigidBody* body)
-// {
-// 
-// }
 void DPS::GimpactRayCallBack(void)
 {
 	Ogre::Vector3 camPos = mCamera->getPosition();
@@ -417,6 +410,7 @@ void DPS::GimpactRayCallBack(void)
 }
 
 
+// base on Bullet engine forum Example
 bool DPS::process_triangle(btCollisionShape* shape, int hitTriangleIndex)
 {
 	btStridingMeshInterface * meshInterface = NULL;
@@ -678,7 +672,20 @@ bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 
 			//do the raycast
 			Ogre::Ray mouseRay = mCamera->getCameraToViewportRay(mousePos.left/float(arg.state.width),mousePos.top/float(arg.state.height));
-			Ogre::RaySceneQuery* rayQuery=mSceneMgr->createRayQuery(Ogre::Ray());
+			Ogre::RaySceneQuery* mRayScnQuery = mSceneMgr->createRayQuery(Ogre::Ray());
+			
+			mRayScnQuery->setRay(mouseRay);
+			mRayScnQuery->setSortByDistance(true, 1);
+
+			Ogre::RaySceneQueryResult &result = mRayScnQuery->execute();
+			Ogre::RaySceneQueryResult::iterator iter = result.begin();
+
+			if (iter != result.end() && !iter->worldFragment)
+			{
+				rayObject = iter->movable;
+				rayNode = rayObject->getParentSceneNode();
+			}
+
 		}
 	}
 
@@ -694,14 +701,7 @@ bool DPS::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 }
 
 
-void DPS::resetCamera(void)
-{
 
-	mCamera->setPosition(0,16,20);
-	mCamera->lookAt(0,5,0);
-
-	vp->setCamera(mCamera);
-}
 
 
 void DPS::GUIeventHandler(void)
@@ -742,13 +742,20 @@ void DPS::GUIeventHandler(void)
 }
 
 
-void DPS::miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir)
+void DPS::resetCamera(void)
 {
-// 	Ogre::Vector3 absPos = mSceneMgr->getCamera("PlayerCam")->getDerivedPosition();
-// 	Ogre::Quaternion absOrient = mSceneMgr->getCamera("PlayerCam")->getDerivedOrientation();
 
-	miniCam->setPosition(Ogre::Vector3(-(camPos.x),camDir.y,-(camPos.z)));
-	miniCam->setDirection(camPos);
+	mCamera->setPosition(0,16,20);
+	mCamera->lookAt(0,5,0);
+
+	vp->setCamera(mCamera);
+}
+
+
+void DPS::setMiniCamPosition(Ogre::Vector3 camPos)
+{
+	miniCam->setPosition(10+camPos);
+	miniCam->lookAt(camPos);
 	miniCam->setNearClipDistance(5);
 }
 

@@ -48,6 +48,7 @@ class DPS : public BaseApplication
 		~DPS(void);
 
 		// No CCD (continuous collision detection) for Gimpact shapes
+		// base on Bullet engine forum Example
 		struct MyClosestRayResultCallback : public btCollisionWorld::ClosestRayResultCallback
 		{
 			const btCollisionShape * m_hitTriangleShape;
@@ -105,7 +106,7 @@ class DPS : public BaseApplication
 		void createGimpactTorus(void);
 		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
 		void GUIeventHandler(void);
-		void miniCamPos(Ogre::Vector3 camPos,Ogre::Vector3 camDir);
+		void setMiniCamPosition(Ogre::Vector3 camPos);
 
 		Ogre::FrameEvent evt;
 		double dt;
@@ -114,6 +115,9 @@ class DPS : public BaseApplication
 		LeapListener leapMotionListener;
 		Leap::Controller leapMotionController;
 		bool leapMotionRunning;
+
+		Ogre::MovableObject* rayObject;
+		Ogre::SceneNode* rayNode;
 
 
 		bool leapMotionInit(void);
@@ -139,9 +143,10 @@ class DPS : public BaseApplication
 
 		void initSoftBody(btSoftBody* body);
 		void updateSoftBody(btSoftBody* body);
-// 		void initRigidBody(btRigidBody* body);
-// 		void updateRigidBody(btRigidBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
+		void ClickFocus(MyGUI::IntPoint mousePos, const OIS::MouseEvent &arg);
+		bool PickEntity(Ogre::RaySceneQuery* mRaySceneQuery, Ogre::Ray &ray, Ogre::Entity **result, Ogre::Vector3 &hitpoint, bool excludeInVisible,Ogre::uint32 mask, const Ogre::String& excludeobject, Ogre::Real max_distance);
+		void GetMeshInformationEx(const Ogre::MeshPtr mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, const Ogre::Vector3 &position, const Ogre::Quaternion &orient, const Ogre::Vector3 &scale);
 
 };
 

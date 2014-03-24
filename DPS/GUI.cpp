@@ -69,8 +69,7 @@ void GUI::createGUI(size_t _index)
 	createMiniCamera(mSceneMgr->getCamera("miniCam"));
 	createSimulationSpeedWindow();
 /*	createFPSWindow();*/
-// 	MyGUI::ButtonPtr button= mGuiSystem->createWidget<MyGUI::Button>("Button",10,10,300,26, MyGUI::Align::Default,"Main");
-// 	button->setCaption("Hao");
+
 }
 
 void GUI::destroyGUI(void)
