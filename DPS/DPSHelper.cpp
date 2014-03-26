@@ -88,7 +88,7 @@ void DPSHelper::createWorld(void)
 	mSceneMgr->setSkyBox(true, "Examples/MorningSkyBox");
 
 	createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
-	createDirectionLight("mainLight1",Ogre::Vector3(0,200,0),Ogre::Vector3(0,0,0));
+	createDirectionLight("mainLight1",Ogre::Vector3(0,50,-3),Ogre::Vector3(0,0,0));
 }
 
 

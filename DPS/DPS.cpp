@@ -243,22 +243,28 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	return BaseApplication::frameRenderingQueued(evt);
 }
 
+void DPS::clearScreen(void)
+{
+	mGUI->Command_Clear_Screen = false;
+
+	leapMotionCleanup();
+
+	deletePhysicsShapes();
+	deleteOgreEntities();
+
+	leapMotionRunning = false;
+	leapMotionInit();
+
+	runClothDome_1 = false;
+	runClothDome_2 = false;
+}
+
 
 void DPS::GUIeventHandler(void)
 {
 	if(mGUI->Command_Clear_Screen)
 	{
-		mGUI->Command_Clear_Screen = false;
-
-		leapMotionCleanup();
-
-		deletePhysicsShapes();
-		deleteOgreEntities();
-
-		leapMotionRunning = false;
-		leapMotionInit();
-
-		runClothDome_1 = false;
+		clearScreen();
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -294,8 +300,29 @@ void DPS::GUIeventHandler(void)
 	if(mGUI->Command_Cloth_Demo_1)
 	{
 		mGUI->Command_Cloth_Demo_1 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		dpsSoftbodyHelper->createClothDemo_1();
+
+		//run demo after ceate
 		runClothDome_1 = true;
-		dpsSoftbodyHelper->createCloth();
+	}
+
+	if(mGUI->Command_Cloth_Demo_2)
+	{
+		mGUI->Command_Cloth_Demo_2 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		dpsSoftbodyHelper->createClothDemo_2();
+
+		//run demo after ceate
+		runClothDome_2 = true;
 	}
 }
 
@@ -303,7 +330,11 @@ void DPS::demoController(void)
 {
 	if(runClothDome_1)
 	{
-		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject, dpsSoftbodyHelper->m_cloth);
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_1, dpsSoftbodyHelper->m_clothBody_1);
+	}
+	if(runClothDome_2)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_2, dpsSoftbodyHelper->m_clothBody_2);
 	}
 }
 

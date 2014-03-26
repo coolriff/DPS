@@ -109,6 +109,7 @@ class DPS : public BaseApplication
 		std::string convertInt(int number);
 
 		void demoController(void);
+		void clearScreen(void);
 
 		Ogre::FrameEvent evt;
 		double dt;
