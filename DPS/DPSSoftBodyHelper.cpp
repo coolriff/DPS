@@ -113,10 +113,10 @@ btSoftBody* DPSSoftBodyHelper::createMesh(void)
 void DPSSoftBodyHelper::createClothDemo_1(void)
 {
 	float s=4;
-	float h=20;
-	m_clothBody_1 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),5,5,4+8,true);
-	m_clothBody_1->m_cfg.viterations=500;
-	m_clothBody_1->m_cfg.piterations=500;
+	float h=10;
+	m_clothBody_1 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
+// 	m_clothBody_1->m_cfg.viterations=500;
+// 	m_clothBody_1->m_cfg.piterations=500;
 	m_clothBody_1->setTotalMass(3.0);
 	//m_cloth->setMass(100,100);
 	//m_cloth->setCollisionFlags(m_cloth->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
@@ -132,10 +132,10 @@ void DPSSoftBodyHelper::createClothDemo_1(void)
 void DPSSoftBodyHelper::createClothDemo_2(void)
 {
 	float s=4;
-	float h=20;
-	m_clothBody_2 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),5,5,1+2+4+8,true);
-	m_clothBody_2->m_cfg.viterations=500;
-	m_clothBody_2->m_cfg.piterations=500;
+	float h=10;
+	m_clothBody_2 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,1+2+4+8,true);
+// 	m_clothBody_2->m_cfg.viterations=500;
+// 	m_clothBody_2->m_cfg.piterations=500;
 	m_clothBody_2->setTotalMass(3.0);
 	//m_cloth->setMass(100,100);
 	//m_cloth->setCollisionFlags(m_cloth->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
@@ -177,77 +177,178 @@ btSoftBody* DPSSoftBodyHelper::createBunny(void)
 	return(m_bunny);
 }
 
+// void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)
+// {
+// 	//manual objects are used to generate new meshes based on raw vertex data
+// 	//this is used for the liquid form
+// 	m_ManualObject = mSceneMgr->createManualObject("liquidBody");
+// 	m_ManualObject->setDynamic(true);
+// 	m_ManualObject->setCastShadows(true);
+// 
+// 	btSoftBody::tNodeArray& nodes(body->m_nodes);
+// 	btSoftBody::tFaceArray& faces(body->m_faces);
+// 
+// 	m_ManualObject->estimateVertexCount(faces.size()*3);
+// 	m_ManualObject->estimateIndexCount(faces.size()*3);
+// 
+// 	//m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+// 	//m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+// 	//m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+// 	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+// 
+// 	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+// 
+// 	//http://www.ogre3d.org/tikiwiki/ManualObject
+// 	for (int i = 0; i < faces.size(); ++i)
+// 	{
+// 		//node0 = faces[i].m_n[0];
+// 		//node1 = faces[i].m_n[1];
+// 		//node2 = faces[i].m_n[2];
+// 
+// 		//problem of rendering texture - DO NOT USE NORMALS IN UPDATE FUNCTION FOR NOW! 
+// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x.x(),body->m_faces[i].m_n[0]->m_x.y(),body->m_faces[i].m_n[0]->m_x.z());
+// 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
+// 		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i],dpsSoftbodyHelper->texCoord[i+1]);
+// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x.x(),body->m_faces[i].m_n[1]->m_x.y(),body->m_faces[i].m_n[1]->m_x.z());
+// 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
+// 		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i+1],dpsSoftbodyHelper->texCoord[i+2]);
+// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x.x(),body->m_faces[i].m_n[2]->m_x.y(),body->m_faces[i].m_n[2]->m_x.z());
+// 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
+// 		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i+2],dpsSoftbodyHelper->texCoord[i+3]);
+// 		// 
+// 		// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
+// 		// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
+// 		// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
+// 		// 
+// 		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
+// 		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
+// 		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
+// 
+// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+// 		//m_ManualObject->textureCoord(1,0);
+// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+// 
+// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+// 		//m_ManualObject->textureCoord(0,1);
+// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+// 
+// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+// 		//m_ManualObject->textureCoord(1,1);
+// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+// 
+// 		m_ManualObject->triangle(i*3,i*3+1,i*3+2);
+// 		// 		m_ManualObject->triangle(i*3+1);
+// 		// 		m_ManualObject->triangle(i*3+2);
+// 	}
+// 	// 	m_ManualObject->textureCoord(1,0);
+// 	// 	m_ManualObject->textureCoord(0,0);
+// 	// 	m_ManualObject->textureCoord(0,1);
+// 	// 	m_ManualObject->textureCoord(1,1);
+// 	m_ManualObject->end();
+// }
+// 
+// 
+// void DPSSoftBodyHelper::updateSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)
+// {
+// 	//grab the calculated mesh data from the physics body
+// 	btSoftBody::tNodeArray& nodes(body->m_nodes);
+// 	btSoftBody::tFaceArray& faces(body->m_faces);
+// 
+// 	m_ManualObject->beginUpdate(0);
+// 	/*	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;*/
+// 	for (int i = 0; i < faces.size(); i++)
+// 	{
+// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x.x(),body->m_faces[i].m_n[0]->m_x.y(),body->m_faces[i].m_n[0]->m_x.z());
+// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
+// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x.x(),body->m_faces[i].m_n[1]->m_x.y(),body->m_faces[i].m_n[1]->m_x.z());
+// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
+// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x.x(),body->m_faces[i].m_n[2]->m_x.y(),body->m_faces[i].m_n[2]->m_x.z());
+// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
+// 		// 
+// 		// 		m_ManualObject->textureCoord(body->m_faces[i].m_n[1]->m_x.x(), body->m_faces[i].m_n[1]->m_x.y(), body->m_faces[i].m_n[1]->m_x.z());
+// 		// 		m_ManualObject->textureCoord(body->m_faces[i].m_n[2]->m_x.x(), body->m_faces[i].m_n[2]->m_x.y(), body->m_faces[i].m_n[2]->m_x.z());
+// 
+// 		// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
+// 		// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
+// 		// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
+// 		// 
+// 		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
+// 		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
+// 		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
+// 
+// 		// 		node0 = faces[i].m_n[0];
+// 		// 		node1 = faces[i].m_n[1];
+// 		// 		node2 = faces[i].m_n[2];
+// 
+// 		// 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+// 		// 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+// 		// 				
+// 		// 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+// 		// 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+// 		// 				
+// 		// 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+// 		// 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+// 
+// 		m_ManualObject->index(i*3);
+// 		m_ManualObject->index(i*3+1);
+// 		m_ManualObject->index(i*3+2);
+// 	}
+// 
+// 	m_ManualObject->end();
+// }
+
+
 void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)
 {
-	//manual objects are used to generate new meshes based on raw vertex data
+		//manual objects are used to generate new meshes based on raw vertex data
 	//this is used for the liquid form
-	m_ManualObject = mSceneMgr->createManualObject("liquidBody");
-	m_ManualObject->setDynamic(true);
-	m_ManualObject->setCastShadows(true);
+	m_ManualObject = mSceneMgr->createManualObject();
 
+	/*
+		The following code needs to be run once to setup the vertex buffer with data based on
+		the bullet soft body information.
+	*/
 	btSoftBody::tNodeArray& nodes(body->m_nodes);
 	btSoftBody::tFaceArray& faces(body->m_faces);
 
 	m_ManualObject->estimateVertexCount(faces.size()*3);
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
-	//m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-	//m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-	//m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
-	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
-
 	//http://www.ogre3d.org/tikiwiki/ManualObject
+	m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	//m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	for (int i = 0; i < faces.size(); ++i)
 	{
-		//node0 = faces[i].m_n[0];
-		//node1 = faces[i].m_n[1];
-		//node2 = faces[i].m_n[2];
+		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+		node0 = faces[i].m_n[0];
+		node1 = faces[i].m_n[1];
+		node2 = faces[i].m_n[2];
 
-		//problem of rendering texture - DO NOT USE NORMALS IN UPDATE FUNCTION FOR NOW! 
-		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x.x(),body->m_faces[i].m_n[0]->m_x.y(),body->m_faces[i].m_n[0]->m_x.z());
+		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
-		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i],dpsSoftbodyHelper->texCoord[i+1]);
-		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x.x(),body->m_faces[i].m_n[1]->m_x.y(),body->m_faces[i].m_n[1]->m_x.z());
+		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+
+		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
-		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i+1],dpsSoftbodyHelper->texCoord[i+2]);
-		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x.x(),body->m_faces[i].m_n[2]->m_x.y(),body->m_faces[i].m_n[2]->m_x.z());
+		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+
+		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
-		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i+2],dpsSoftbodyHelper->texCoord[i+3]);
-		// 
-		// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
-		// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
-		// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
-		// 
-		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
-		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
-		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
+		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 
-		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		//m_ManualObject->textureCoord(1,0);
-		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 
-		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		//m_ManualObject->textureCoord(0,1);
-		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 
-		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		//m_ManualObject->textureCoord(1,1);
-		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-
-		m_ManualObject->triangle(i*3,i*3+1,i*3+2);
-		// 		m_ManualObject->triangle(i*3+1);
-		// 		m_ManualObject->triangle(i*3+2);
+		m_ManualObject->index(i*3);
+		m_ManualObject->index(i*3+1);
+		m_ManualObject->index(i*3+2);
 	}
-	// 	m_ManualObject->textureCoord(1,0);
-	// 	m_ManualObject->textureCoord(0,0);
-	// 	m_ManualObject->textureCoord(0,1);
-	// 	m_ManualObject->textureCoord(1,1);
 	m_ManualObject->end();
+
+	m_ManualObject->setDynamic(true);
+	m_ManualObject->setCastShadows(true);
 }
 
 
@@ -257,47 +358,31 @@ void DPSSoftBodyHelper::updateSoftBody(Ogre::ManualObject*& m_ManualObject, btSo
 	btSoftBody::tNodeArray& nodes(body->m_nodes);
 	btSoftBody::tFaceArray& faces(body->m_faces);
 
+	float minx, miny, minz, maxx, maxy, maxz;
+	minx = maxx = nodes[0].m_x[0];
+	miny = maxy = nodes[0].m_x[1];
+	minz = maxz = nodes[0].m_x[2];
+
 	m_ManualObject->beginUpdate(0);
-	/*	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;*/
 	for (int i = 0; i < faces.size(); i++)
 	{
-		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x.x(),body->m_faces[i].m_n[0]->m_x.y(),body->m_faces[i].m_n[0]->m_x.z());
-		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x.x(),body->m_faces[i].m_n[1]->m_x.y(),body->m_faces[i].m_n[1]->m_x.z());
-		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x.x(),body->m_faces[i].m_n[2]->m_x.y(),body->m_faces[i].m_n[2]->m_x.z());
-		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-		// 
-		// 		m_ManualObject->textureCoord(body->m_faces[i].m_n[1]->m_x.x(), body->m_faces[i].m_n[1]->m_x.y(), body->m_faces[i].m_n[1]->m_x.z());
-		// 		m_ManualObject->textureCoord(body->m_faces[i].m_n[2]->m_x.x(), body->m_faces[i].m_n[2]->m_x.y(), body->m_faces[i].m_n[2]->m_x.z());
+		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+		node0 = faces[i].m_n[0];
+		node1 = faces[i].m_n[1];
+		node2 = faces[i].m_n[2];
 
-		// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
-		// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
-		// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
-		// 
-		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
-		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
-		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
+		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 
-		// 		node0 = faces[i].m_n[0];
-		// 		node1 = faces[i].m_n[1];
-		// 		node2 = faces[i].m_n[2];
+		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 
-		// 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		// 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-		// 				
-		// 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		// 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-		// 				
-		// 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		// 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-
+		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 		m_ManualObject->index(i*3);
 		m_ManualObject->index(i*3+1);
 		m_ManualObject->index(i*3+2);
 	}
-
 	m_ManualObject->end();
 }
-
 

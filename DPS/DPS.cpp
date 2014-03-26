@@ -154,7 +154,7 @@ void DPS::createScene(void)
 	mGUI->createGUI(1);
 
 	// Basic Ogre stuff.
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.1f,0.1f,0.1f));
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7f,0.7f,0.5f));
 	mCamera->setPosition(Ogre::Vector3(0,5,20));
 	mCamera->lookAt(Ogre::Vector3(0,5,-10));
 	mCamera->setNearClipDistance(0.05f);
@@ -265,6 +265,9 @@ void DPS::GUIeventHandler(void)
 	if(mGUI->Command_Clear_Screen)
 	{
 		clearScreen();
+
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -296,7 +299,6 @@ void DPS::GUIeventHandler(void)
 		resetCamera();
 		mGUI->Command_Reset_Camera = false;
 	}
-
 	if(mGUI->Command_Cloth_Demo_1)
 	{
 		mGUI->Command_Cloth_Demo_1 = false;
@@ -304,13 +306,14 @@ void DPS::GUIeventHandler(void)
 		//clean screen before create new demo
 		clearScreen();
 
+		resetCamera(Ogre::Vector3(0.0f,8.0f,20.0f));
+
 		//create demo
 		dpsSoftbodyHelper->createClothDemo_1();
 
 		//run demo after ceate
 		runClothDome_1 = true;
 	}
-
 	if(mGUI->Command_Cloth_Demo_2)
 	{
 		mGUI->Command_Cloth_Demo_2 = false;
@@ -318,12 +321,58 @@ void DPS::GUIeventHandler(void)
 		//clean screen before create new demo
 		clearScreen();
 
+		resetCamera(Ogre::Vector3(0.0f,12.0f,20.0f));
 		//create demo
+
 		dpsSoftbodyHelper->createClothDemo_2();
+		for(int i=0 ; i<26; i+=5)
+		{
+			dpsHelper->createCube(Ogre::Vector3(0,40+i,0));
+		}
+
 
 		//run demo after ceate
 		runClothDome_2 = true;
 	}
+// 	if(mGUI->Command_Cloth_Demo_3)
+// 	{
+// 		mGUI->Command_Cloth_Demo_3 = false;
+// 
+// 		//clean screen before create new demo
+// 		clearScreen();
+// 
+// 		//create demo
+// 		dpsSoftbodyHelper->createClothDemo_3();
+// 
+// 		//run demo after ceate
+// 		runClothDome_3 = true;
+// 	}
+// 	if(mGUI->Command_Cloth_Demo_4)
+// 	{
+// 		mGUI->Command_Cloth_Demo_4 = false;
+// 
+// 		//clean screen before create new demo
+// 		clearScreen();
+// 
+// 		//create demo
+// 		dpsSoftbodyHelper->createClothDemo_4();
+// 
+// 		//run demo after ceate
+// 		runClothDome_4 = true;
+// 	}
+// 	if(mGUI->Command_Cloth_Demo_5)
+// 	{
+// 		mGUI->Command_Cloth_Demo_5 = false;
+// 
+// 		//clean screen before create new demo
+// 		clearScreen();
+// 
+// 		//create demo
+// 		dpsSoftbodyHelper->createClothDemo_5();
+// 
+// 		//run demo after ceate
+// 		runClothDome_5 = true;
+// 	}
 }
 
 void DPS::demoController(void)
@@ -336,6 +385,18 @@ void DPS::demoController(void)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_2, dpsSoftbodyHelper->m_clothBody_2);
 	}
+// 	if(runClothDome_3)
+// 	{
+// 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_3, dpsSoftbodyHelper->m_clothBody_3);
+// 	}
+// 	if(runClothDome_4)
+// 	{
+// 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_4, dpsSoftbodyHelper->m_clothBody_4);
+// 	}
+// 	if(runClothDome_5)
+// 	{
+// 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_5, dpsSoftbodyHelper->m_clothBody_5);
+// 	}
 }
 
 
@@ -353,10 +414,6 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	{
 		dpsHelper->createOgreHead();
 	}
-// 	if (arg.key == OIS::KC_4) 
-// 	{
-// 
-// 	}
 	if (arg.key == OIS::KC_SPACE) 
 	{
 		GimpactRayCallBack();
@@ -822,6 +879,14 @@ void DPS::resetCamera(void)
 }
 
 
+void DPS::resetCamera(Ogre::Vector3 camPos)
+{
+	mCamera->setPosition(camPos);
+	mCamera->lookAt(Ogre::Vector3(camPos.x,camPos.y,-camPos.z));
+}
+
+
+
 void DPS::setMiniCamPosition(Ogre::Vector3 camPos)
 {
 	miniCam->setPosition(10+camPos);
@@ -975,6 +1040,23 @@ void DPS::leapMotionUpdate(void)
 			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
 			dpsHelper->sphereBody_1->setWorldTransform(tr1);
 		}
+	}
+	else
+	{
+		mSceneMgr->getSceneNode(fingerName_0)->setPosition(Ogre::Vector3(-12.f,100.0f,0.0f));
+		mSceneMgr->getSceneNode(fingerName_1)->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
+
+		btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
+		tr0.setOrigin(btVector3(-12.f,100.0f,0.0f));
+		dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
+		dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
+		dpsHelper->sphereBody_0->setWorldTransform(tr0);
+
+		btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
+		tr1.setOrigin(btVector3(-9.f,100.0f,0.0f));
+		dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
+		dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
+		dpsHelper->sphereBody_1->setWorldTransform(tr1);
 	}
 }
 

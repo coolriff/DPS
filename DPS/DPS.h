@@ -97,6 +97,7 @@ class DPS : public BaseApplication
 		void initPhysics(void);
 		void exitPhysics(void);
 		void resetCamera(void);
+		void resetCamera(Ogre::Vector3 camPos);
 		void deleteOgreEntities(void);
 		void deletePhysicsShapes(void);
 		void GimpactRayCallBack(void);
