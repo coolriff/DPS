@@ -7,7 +7,6 @@
 #include "BtOgrePG.h"
 #include "BtOgreGP.h"
 #include "BtOgreExtras.h"
-#include "ExampleApplication.h"
 #include <btBulletDynamicsCommon.h>
 #include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
@@ -107,10 +106,16 @@ class DPS : public BaseApplication
 		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
 		void GUIeventHandler(void);
 		void setMiniCamPosition(Ogre::Vector3 camPos);
+		std::string convertInt(int number);
+
+		void demoController(void);
 
 		Ogre::FrameEvent evt;
 		double dt;
+
 		int leapMotionCounter;
+		std::string fingerName_0;
+		std::string fingerName_1;
 
 		LeapListener leapMotionListener;
 		Leap::Controller leapMotionController;
@@ -123,6 +128,13 @@ class DPS : public BaseApplication
 		bool leapMotionInit(void);
 		void leapMotionUpdate(void);
 		void leapMotionCleanup(void);
+
+
+		bool runClothDome_1;
+		bool runClothDome_2;
+		bool runClothDome_3;
+		bool runClothDome_4;
+		bool runClothDome_5;
 
 	protected:
 
@@ -141,8 +153,8 @@ class DPS : public BaseApplication
 		virtual bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 		virtual bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
-		void initSoftBody(btSoftBody* body);
-		void updateSoftBody(btSoftBody* body);
+		//void initSoftBody(btSoftBody* body);
+		//void updateSoftBody(btSoftBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
 		void ClickFocus(MyGUI::IntPoint mousePos, const OIS::MouseEvent &arg);
 		bool PickEntity(Ogre::RaySceneQuery* mRaySceneQuery, Ogre::Ray &ray, Ogre::Entity **result, Ogre::Vector3 &hitpoint, bool excludeInVisible,Ogre::uint32 mask, const Ogre::String& excludeobject, Ogre::Real max_distance);

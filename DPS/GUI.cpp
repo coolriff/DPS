@@ -13,13 +13,18 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Cloth_Demo_1 = false;
 	Command_Cloth_Demo_2 = false;
 	Command_Cloth_Demo_3 = false;
+	Command_Cloth_Demo_4 = false;
+	Command_Cloth_Demo_5 = false;
 	Command_Softbody_Demo_1 = false;
 	Command_Softbody_Demo_2 = false;
 	Command_Softbody_Demo_3 = false;
+	Command_Softbody_Demo_4 = false;
+	Command_Softbody_Demo_5 = false;
 	Command_Deformable_Demo_1 = false;
 	Command_Deformable_Demo_2 = false;
 	Command_Deformable_Demo_3 = false;
 	Command_Deformable_Demo_4 = false;
+	Command_Deformable_Demo_5 = false;
 	Command_ResetCamera = false;
 	Theme_Choice = 0;
 	Command_SwitchTheme = false;
@@ -146,6 +151,74 @@ void GUI::menuListener(void)
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
+
+	//softbody demos
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+
+	//cloth demos
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+
+	//deformable demos
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+
+
 	
 }
 
@@ -302,6 +375,70 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		Command_Reset_Camera = true;
 	}
 
+	if(name == "Command_Cloth_Demo_1")
+	{
+		Command_Cloth_Demo_1 = true;
+	}
+	if(name == "Command_Cloth_Demo_2")
+	{
+		Command_Cloth_Demo_2 = true;
+	}
+	if(name == "Command_Cloth_Demo_3")
+	{
+		Command_Cloth_Demo_3 = true;
+	}
+	if(name == "Command_Cloth_Demo_4")
+	{
+		Command_Cloth_Demo_4 = true;
+	}
+	if(name == "Command_Cloth_Demo_5")
+	{
+		Command_Cloth_Demo_5 = true;
+	}
+
+
+	if(name == "Command_Softbody_Demo_1")
+	{
+		Command_Softbody_Demo_1 = true;
+	}
+	if(name == "Command_Softbody_Demo_2")
+	{
+		Command_Softbody_Demo_2 = true;
+	}
+	if(name == "Command_Softbody_Demo_3")
+	{
+		Command_Softbody_Demo_3 = true;
+	}
+	if(name == "Command_Softbody_Demo_4")
+	{
+		Command_Softbody_Demo_4 = true;
+	}
+	if(name == "Command_Softbody_Demo_5")
+	{
+		Command_Softbody_Demo_5 = true;
+	}
+
+
+	if(name == "Command_Deformable_Demo_1")
+	{
+		Command_Deformable_Demo_1 = true;
+	}
+	if(name == "Command_Deformable_Demo_2")
+	{
+		Command_Deformable_Demo_2 = true;
+	}
+	if(name == "Command_Deformable_Demo_3")
+	{
+		Command_Deformable_Demo_3 = true;
+	}
+	if(name == "Command_Deformable_Demo_4")
+	{
+		Command_Deformable_Demo_4 = true;
+	}
+	if(name == "Command_Deformable_Demo_5")
+	{
+		Command_Deformable_Demo_5 = true;
+	}
 }
 
 void GUI::createMiniCamera(Ogre::Camera* miniCam)

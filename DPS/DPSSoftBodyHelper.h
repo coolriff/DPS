@@ -17,14 +17,21 @@ public:
 	btSoftBody* createDeformableModel(void);
 	btSoftBody* createMesh(void);
 	btSoftBody* createSoftBody(const btVector3& startPos);
-	btSoftBody* createCloth(void);
+	void createCloth(void);
 	btSoftBody* createBunny(void);
+
+	void initSoftBody(Ogre::ManualObject* m_ManualObject, btSoftBody* body);
+	void updateSoftBody(Ogre::ManualObject* m_ManualObject, btSoftBody* body);
+
 	btSoftBody* m_deformableModel;
 	btSoftBody* m_mesh;
 	btSoftBody* m_SoftBody;
 	btSoftBody* m_cloth;
 	btSoftBody* m_bunny;
-	
+
+	Ogre::ManualObject* m_clothManualObject;
+	/*Ogre::ManualObject* m_ManualObject;*/
+
 // 	struct RenderBufferVertexElement
 // 	{
 // 		std::vector<float> triangles;
