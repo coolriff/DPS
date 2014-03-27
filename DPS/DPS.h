@@ -137,6 +137,11 @@ class DPS : public BaseApplication
 		bool runClothDome_3;
 		bool runClothDome_4;
 		bool runClothDome_5;
+		bool runClothDome_6;
+		bool runClothDome_7;
+		bool runClothDome_8;
+		bool runClothDome_9;
+		bool runClothDome_10;
 
 	protected:
 

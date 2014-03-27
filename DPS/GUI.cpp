@@ -157,49 +157,6 @@ void GUI::menuListener(void)
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
 
-	//softbody demos
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_6"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_7"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_8"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_9"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_10"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-
-
 	//cloth demos
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1"))
 	{
@@ -221,6 +178,72 @@ void GUI::menuListener(void)
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+
+
+	//softbody demos
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_6"))
+// 	{
+// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+// 	}
+// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_7"))
+// 	{
+// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+// 	}
+// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_8"))
+// 	{
+// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+// 	}
+// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_9"))
+// 	{
+// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+// 	}
+// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_10"))
+// 	{
+// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+// 	}
+
+
+
 
 	//deformable demos
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1"))
@@ -346,16 +369,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Simulation_Default")
 	{
-		Simulation_Stop = false;
-		mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: " + MyGUI::utility::toString(0)+"%");
-		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setScrollPosition(50);
-		mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
-		demoDt = 0;
-
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(false);
-		Command_Enable_Slow = false;
-		Command_Disable_Slow = false;
+		defaultState();
 	}
 	if(name == "Simulation_Stop")
 	{
@@ -473,7 +487,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Cloth_Demo_6")
 	{
-		Command_Cloth_Demo_5 = true;
+		Command_Cloth_Demo_6 = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -487,7 +501,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Cloth_Demo_7")
 	{
-		Command_Cloth_Demo_5 = true;
+		Command_Cloth_Demo_7 = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -501,7 +515,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Cloth_Demo_8")
 	{
-		Command_Cloth_Demo_5 = true;
+		Command_Cloth_Demo_8 = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -515,7 +529,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Cloth_Demo_9")
 	{
-		Command_Cloth_Demo_5 = true;
+		Command_Cloth_Demo_9 = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -529,7 +543,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 	if(name == "Command_Cloth_Demo_10")
 	{
-		Command_Cloth_Demo_5 = true;
+		Command_Cloth_Demo_10 = true;
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -584,6 +598,21 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	{
 		Command_Deformable_Demo_5 = true;
 	}
+}
+
+
+void GUI::defaultState(void)
+{
+	Simulation_Stop = false;
+	mGuiSystem->findWidget<MyGUI::TextBox>("Status_Speed")->setCaption("Simulation Speed: " + MyGUI::utility::toString(0)+"%");
+	mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setScrollPosition(50);
+	mGuiSystem->findWidget<MyGUI::ScrollBar>("Status_SpeedBar")->setEnabled(true);
+	demoDt = 0;
+
+	mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Slow")->setEnabled(true);
+	mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Slow")->setEnabled(false);
+	Command_Enable_Slow = false;
+	Command_Disable_Slow = false;
 }
 
 void GUI::createMiniCamera(Ogre::Camera* miniCam)

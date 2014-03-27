@@ -9,6 +9,9 @@
 #include <BulletSoftBody/btSoftBodyHelpers.h>
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
 
+#define RAND_MAX 0x7fff
+#define SIMD_PI btScalar(3.1415926535897932384626433832795029)
+
 DPSSoftBodyHelper::DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr)
 {
 	this->phyWorld = phyWorld;
@@ -361,6 +364,203 @@ void DPSSoftBodyHelper::createClothDemo_5(void)
 
 	Ogre::SceneNode* m_clothNode_1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_clothNode_1->attachObject(m_clothManualObject_5_1);
+}
+
+
+void DPSSoftBodyHelper::createClothDemo_6(void)
+{
+	float s = 5;
+	float h = 10;
+
+	//1
+	m_clothBody_6_0 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),6,6,0,true);
+	btSoftBody::Material* pm = m_clothBody_6_0->appendMaterial();
+	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_clothBody_6_0->generateBendingConstraints(2,pm);
+	m_clothBody_6_0->m_cfg.kLF = 0.004;
+	m_clothBody_6_0->m_cfg.kDG = 0.0003;
+	m_clothBody_6_0->m_cfg.aeromodel = btSoftBody::eAeroModel::V_TwoSided;
+	btTransform trs;
+	btQuaternion rot;
+	btVector3 ra = Vector3Rand()*0.1;
+	btVector3 rp = Vector3Rand()*15+btVector3(0,20,80);
+	rot.setEuler(SIMD_PI/8+ra.x(),-SIMD_PI/7+ra.y(),ra.z());
+	trs.setIdentity();
+	trs.setOrigin(rp);
+	trs.setRotation(rot);
+	m_clothBody_6_0->transform(trs);
+	m_clothBody_6_0->setTotalMass(0.1);
+	m_clothBody_6_0->addForce(btVector3(0,2,0),0);
+	phyWorld->addSoftBody(m_clothBody_6_0);
+
+	initSoftBody(m_clothManualObject_6_0, m_clothBody_6_0);
+
+	Ogre::SceneNode* m_clothNode_0 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode_0->attachObject(m_clothManualObject_6_0);
+
+
+	//2
+	m_clothBody_6_1 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),6,6,0,true);
+	btSoftBody::Material* pm1 = m_clothBody_6_1->appendMaterial();
+	pm1->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_clothBody_6_1->generateBendingConstraints(2,pm);
+	m_clothBody_6_1->m_cfg.kLF = 0.004;
+	m_clothBody_6_1->m_cfg.kDG = 0.0003;
+	m_clothBody_6_1->m_cfg.aeromodel = btSoftBody::eAeroModel::V_TwoSided;
+	btTransform trs1;
+	btQuaternion rot1;
+	btVector3 ra1 = Vector3Rand()*0.1;
+	btVector3 rp1 = Vector3Rand()*15+btVector3(0,20,80);
+	rot1.setEuler(SIMD_PI/8+ra1.x(),-SIMD_PI/7+ra1.y(),ra1.z());
+	trs1.setIdentity();
+	trs1.setOrigin(rp1);
+	trs1.setRotation(rot1);
+	m_clothBody_6_1->transform(trs1);
+	m_clothBody_6_1->setTotalMass(0.1);
+	m_clothBody_6_1->addForce(btVector3(0,2,0),0);
+	phyWorld->addSoftBody(m_clothBody_6_1);
+
+	initSoftBody(m_clothManualObject_6_1, m_clothBody_6_1);
+
+	Ogre::SceneNode* m_clothNode_1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode_1->attachObject(m_clothManualObject_6_1);
+
+
+	//3
+	m_clothBody_6_2 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),6,6,0,true);
+	btSoftBody::Material* pm2 = m_clothBody_6_2->appendMaterial();
+	pm2->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_clothBody_6_2->generateBendingConstraints(2,pm);
+	m_clothBody_6_2->m_cfg.kLF = 0.004;
+	m_clothBody_6_2->m_cfg.kDG = 0.0003;
+	m_clothBody_6_2->m_cfg.aeromodel = btSoftBody::eAeroModel::V_TwoSided;
+	btTransform trs2;
+	btQuaternion rot2;
+	btVector3 ra2 = Vector3Rand()*0.1;
+	btVector3 rp2 = Vector3Rand()*15+btVector3(0,20,80);
+	rot2.setEuler(SIMD_PI/8+ra2.x(),-SIMD_PI/7+ra2.y(),ra2.z());
+	trs2.setIdentity();
+	trs2.setOrigin(rp2);
+	trs2.setRotation(rot2);
+	m_clothBody_6_2->transform(trs2);
+	m_clothBody_6_2->setTotalMass(0.1);
+	m_clothBody_6_2->addForce(btVector3(0,2,0),0);
+	phyWorld->addSoftBody(m_clothBody_6_2);
+
+	initSoftBody(m_clothManualObject_6_2, m_clothBody_6_2);
+
+	Ogre::SceneNode* m_clothNode_2 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode_2->attachObject(m_clothManualObject_6_2);
+}
+
+
+void DPSSoftBodyHelper::createClothDemo_7(void)
+{
+	float s = 5;
+	float h = 0;
+
+	//1
+	m_clothBody_7_0 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s*3),btVector3(s,h,-s*3),btVector3(-s,h,s),btVector3(s,h,s),10,30,1+2,true);
+	m_clothBody_7_0->getCollisionShape()->setMargin(0.5);
+	btSoftBody::Material* pm = m_clothBody_7_0->appendMaterial();
+	pm->m_kLST = 0.0004;
+	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_clothBody_7_0->generateBendingConstraints(2,pm);
+	m_clothBody_7_0->m_cfg.kLF = 0.05;
+	m_clothBody_7_0->m_cfg.kDG = 0.01;
+	m_clothBody_7_0->m_cfg.piterations = 2;
+	m_clothBody_7_0->m_cfg.aeromodel = btSoftBody::eAeroModel::V_TwoSidedLiftDrag;
+	m_clothBody_7_0->setWindVelocity(btVector3(4, -12.0, -25.0));
+
+	btTransform trs;
+	btQuaternion rot;
+	rot.setRotation(btVector3(1, 0, 0), btScalar(SIMD_PI/2));
+	trs.setIdentity();
+	trs.setOrigin(btVector3(7, 40, -10));
+	trs.setRotation(rot);
+	m_clothBody_7_0->transform(trs);
+	m_clothBody_7_0->setTotalMass(2.0);
+	phyWorld->addSoftBody(m_clothBody_7_0);
+
+	initSoftBody(m_clothManualObject_7_0, m_clothBody_7_0);
+
+	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode->attachObject(m_clothManualObject_7_0);
+
+
+	//2
+	m_clothBody_7_1 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s*3),btVector3(s,h,-s*3),btVector3(-s,h,s),btVector3(s,h,s),10,30,1+2,true);
+	m_clothBody_7_1->getCollisionShape()->setMargin(0.5);
+	btSoftBody::Material* pm1 = m_clothBody_7_1->appendMaterial();
+	pm1->m_kLST = 0.0004;
+	pm1->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_clothBody_7_1->generateBendingConstraints(2,pm);
+	m_clothBody_7_1->m_cfg.kLF = 0.05;
+	m_clothBody_7_1->m_cfg.kDG = 0.01;
+	m_clothBody_7_1->m_cfg.piterations = 2;
+	m_clothBody_7_1->m_cfg.aeromodel = btSoftBody::eAeroModel::V_TwoSidedLiftDrag;
+	m_clothBody_7_1->setWindVelocity(btVector3(4, -12.0, -25.0));
+
+	btTransform trs1;
+	btQuaternion rot1;
+	rot1.setRotation(btVector3(1, 0, 0), btScalar(SIMD_PI/2));
+	trs1.setIdentity();
+	trs1.setOrigin(btVector3(-5, 40, 0));
+	trs1.setRotation(rot);
+	m_clothBody_7_1->transform(trs1);
+	m_clothBody_7_1->setTotalMass(2.0);
+	phyWorld->addSoftBody(m_clothBody_7_1);
+
+	initSoftBody(m_clothManualObject_7_1, m_clothBody_7_1);
+
+	Ogre::SceneNode* m_clothNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode1->attachObject(m_clothManualObject_7_1);
+
+
+	//3
+	m_clothBody_7_2 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s*3),btVector3(s,h,-s*3),btVector3(-s,h,s),btVector3(s,h,s),10,30,1+2,true);
+	m_clothBody_7_2->getCollisionShape()->setMargin(0.5);
+	btSoftBody::Material* pm2 = m_clothBody_7_2->appendMaterial();
+	pm2->m_kLST = 0.0004;
+	pm2->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_clothBody_7_2->generateBendingConstraints(2,pm);
+	m_clothBody_7_2->m_cfg.kLF = 0.05;
+	m_clothBody_7_2->m_cfg.kDG = 0.01;
+	m_clothBody_7_2->m_cfg.piterations = 2;
+	m_clothBody_7_2->m_cfg.aeromodel = btSoftBody::eAeroModel::V_TwoSidedLiftDrag;
+	m_clothBody_7_2->setWindVelocity(btVector3(4, -12.0, -25.0));
+
+	btTransform trs2;
+	btQuaternion rot2;
+	rot2.setRotation(btVector3(1, 0, 0), btScalar(SIMD_PI/2));
+	trs2.setIdentity();
+	trs2.setOrigin(btVector3(-16, 40, 10));
+	trs2.setRotation(rot2);
+	m_clothBody_7_2->transform(trs2);
+	m_clothBody_7_2->setTotalMass(2.0);
+	phyWorld->addSoftBody(m_clothBody_7_2);
+
+	initSoftBody(m_clothManualObject_7_2, m_clothBody_7_2);
+
+	Ogre::SceneNode* m_clothNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode2->attachObject(m_clothManualObject_7_2);
+}
+
+
+btScalar DPSSoftBodyHelper::UnitRand()
+{
+	return (rand()/(btScalar)RAND_MAX);
+}
+
+btScalar DPSSoftBodyHelper::SignedUnitRand()
+{
+	return (UnitRand()*2-1);
+}
+
+btVector3 DPSSoftBodyHelper::Vector3Rand()
+{
+	const btVector3	p=btVector3(SignedUnitRand(),SignedUnitRand(),SignedUnitRand());
+	return (p.normalized());
 }
 
 

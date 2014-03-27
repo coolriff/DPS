@@ -20,6 +20,10 @@ public:
 
 	btSoftBody* createBunny(void);
 
+	btScalar DPSSoftBodyHelper::UnitRand();
+	btScalar DPSSoftBodyHelper::SignedUnitRand();
+	btVector3 DPSSoftBodyHelper::Vector3Rand();
+
 	void initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body);
 	void updateSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body);
 
@@ -45,6 +49,21 @@ public:
 	btSoftBody* m_clothBody_5_1;
 	void createClothDemo_5(void);
 
+	Ogre::ManualObject* m_clothManualObject_6_0;
+	btSoftBody* m_clothBody_6_0;
+	Ogre::ManualObject* m_clothManualObject_6_1;
+	btSoftBody* m_clothBody_6_1;
+	Ogre::ManualObject* m_clothManualObject_6_2;
+	btSoftBody* m_clothBody_6_2;
+	void createClothDemo_6(void);
+
+	Ogre::ManualObject* m_clothManualObject_7_0;
+	btSoftBody* m_clothBody_7_0;
+	Ogre::ManualObject* m_clothManualObject_7_1;
+	btSoftBody* m_clothBody_7_1;
+	Ogre::ManualObject* m_clothManualObject_7_2;
+	btSoftBody* m_clothBody_7_2;
+	void createClothDemo_7(void);
 
 	btSoftBody* m_deformableModel;
 	btSoftBody* m_mesh;

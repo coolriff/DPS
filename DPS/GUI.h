@@ -81,6 +81,7 @@ public:
 	void createSimulationSpeedWindow(void);
 	void modifySimulationSpeed(MyGUI::ScrollBar* sender, size_t pos);
 	double demoSpeed(double dt);
+	void defaultState(void);
 /*	void createFPSWindow(void);*/
 
 };
