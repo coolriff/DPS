@@ -267,7 +267,7 @@ void DPSHelper::createLeapMotionSphere_1(std::string fingerName, Ogre::Vector3 p
 	sphereNode_1->attachObject(ent);
 }
 
-void DPSHelper::createCube(Ogre::Vector3 position)
+void DPSHelper::createCube(Ogre::Vector3 position, btScalar mass)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
 	Ogre::Entity *ent = mSceneMgr->createEntity("defCube.mesh");
@@ -281,7 +281,7 @@ void DPSHelper::createCube(Ogre::Vector3 position)
 	btCollisionShape* entShape = new btBoxShape(btVector3(1,1,1));
 
 	//Calculate inertia.
-	btScalar mass = 1;
+	//btScalar mass = 1;
 	btVector3 inertia(0,0,0);
 	entShape->calculateLocalInertia(mass, inertia);
 
@@ -295,7 +295,7 @@ void DPSHelper::createCube(Ogre::Vector3 position)
 	cubeNode->attachObject(ent);
 }
 
-void DPSHelper::createSphere(Ogre::Vector3 position)
+void DPSHelper::createSphere(Ogre::Vector3 position, btScalar mass)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
 	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
@@ -304,11 +304,11 @@ void DPSHelper::createSphere(Ogre::Vector3 position)
 	//ent->setMaterialName("Examples/BumpyMetal");
 
 	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position,rot);
-	//sphereNode->setScale(Ogre::Vector3(0.01f,0.01f,0.01f));
+	sphereNode->setScale(Ogre::Vector3(2.0f,2.01f,2.0f));
 
-	btCollisionShape* entShape = new btSphereShape(1);
+	btCollisionShape* entShape = new btSphereShape(2);
 	//Calculate inertia.
-	btScalar mass = 1;
+	//btScalar mass = 1;
 	btVector3 inertia(0,0,0);
 	entShape->calculateLocalInertia(mass, inertia);
 

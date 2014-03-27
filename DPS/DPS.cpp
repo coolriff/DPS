@@ -255,8 +255,10 @@ void DPS::clearScreen(void)
 	leapMotionRunning = false;
 	leapMotionInit();
 
+	//stop demos loops
 	runClothDome_1 = false;
 	runClothDome_2 = false;
+	runClothDome_3 = false;
 }
 
 
@@ -327,26 +329,27 @@ void DPS::GUIeventHandler(void)
 		dpsSoftbodyHelper->createClothDemo_2();
 		for(int i=0 ; i<26; i+=5)
 		{
-			dpsHelper->createCube(Ogre::Vector3(0,40+i,0));
+			dpsHelper->createCube(Ogre::Vector3(0,40+i,0),1);
 		}
-
 
 		//run demo after ceate
 		runClothDome_2 = true;
 	}
-// 	if(mGUI->Command_Cloth_Demo_3)
-// 	{
-// 		mGUI->Command_Cloth_Demo_3 = false;
-// 
-// 		//clean screen before create new demo
-// 		clearScreen();
-// 
-// 		//create demo
-// 		dpsSoftbodyHelper->createClothDemo_3();
-// 
-// 		//run demo after ceate
-// 		runClothDome_3 = true;
-// 	}
+	if(mGUI->Command_Cloth_Demo_3)
+	{
+		mGUI->Command_Cloth_Demo_3 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createClothDemo_3();
+		dpsHelper->createSphere(Ogre::Vector3(0,5,0),0);
+
+		//run demo after ceate
+		runClothDome_3 = true;
+	}
 // 	if(mGUI->Command_Cloth_Demo_4)
 // 	{
 // 		mGUI->Command_Cloth_Demo_4 = false;
@@ -385,10 +388,10 @@ void DPS::demoController(void)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_2, dpsSoftbodyHelper->m_clothBody_2);
 	}
-// 	if(runClothDome_3)
-// 	{
-// 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_3, dpsSoftbodyHelper->m_clothBody_3);
-// 	}
+	if(runClothDome_3)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_3, dpsSoftbodyHelper->m_clothBody_3);
+	}
 // 	if(runClothDome_4)
 // 	{
 // 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_4, dpsSoftbodyHelper->m_clothBody_4);

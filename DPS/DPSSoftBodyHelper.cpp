@@ -110,44 +110,6 @@ btSoftBody* DPSSoftBodyHelper::createMesh(void)
 }
 
 
-void DPSSoftBodyHelper::createClothDemo_1(void)
-{
-	float s=4;
-	float h=10;
-	m_clothBody_1 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
-// 	m_clothBody_1->m_cfg.viterations=500;
-// 	m_clothBody_1->m_cfg.piterations=500;
-	m_clothBody_1->setTotalMass(3.0);
-	//m_cloth->setMass(100,100);
-	//m_cloth->setCollisionFlags(m_cloth->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
-	phyWorld->addSoftBody(m_clothBody_1);
-
-	initSoftBody(m_clothManualObject_1, m_clothBody_1);
-
-	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_clothNode->attachObject(m_clothManualObject_1);
-}
-
-
-void DPSSoftBodyHelper::createClothDemo_2(void)
-{
-	float s=4;
-	float h=10;
-	m_clothBody_2 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,1+2+4+8,true);
-// 	m_clothBody_2->m_cfg.viterations=500;
-// 	m_clothBody_2->m_cfg.piterations=500;
-	m_clothBody_2->setTotalMass(3.0);
-	//m_cloth->setMass(100,100);
-	//m_cloth->setCollisionFlags(m_cloth->getCollisionFlags() | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
-	phyWorld->addSoftBody(m_clothBody_2);
-
-	initSoftBody(m_clothManualObject_2, m_clothBody_2);
-
-	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_clothNode->attachObject(m_clothManualObject_2);
-}
-
-
 btSoftBody* DPSSoftBodyHelper::createBunny(void)
 {
 	m_bunny = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),gVerticesBunny,&gIndicesBunny[0][0],BUNNY_NUM_TRIANGLES);
@@ -299,6 +261,55 @@ btSoftBody* DPSSoftBodyHelper::createBunny(void)
 // 
 // 	m_ManualObject->end();
 // }
+
+
+
+void DPSSoftBodyHelper::createClothDemo_1(void)
+{
+	float s=4;
+	float h=10;
+	m_clothBody_1 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
+	m_clothBody_1->setTotalMass(3.0);
+	phyWorld->addSoftBody(m_clothBody_1);
+
+	initSoftBody(m_clothManualObject_1, m_clothBody_1);
+
+	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode->attachObject(m_clothManualObject_1);
+}
+
+
+void DPSSoftBodyHelper::createClothDemo_2(void)
+{
+	float s=4;
+	float h=10;
+	m_clothBody_2 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,1+2+4+8,true);
+	m_clothBody_2->setTotalMass(3.0);
+	phyWorld->addSoftBody(m_clothBody_2);
+
+	initSoftBody(m_clothManualObject_2, m_clothBody_2);
+
+	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode->attachObject(m_clothManualObject_2);
+}
+
+
+void DPSSoftBodyHelper::createClothDemo_3(void)
+{
+	float s=4;
+	float h=10;
+	m_clothBody_3 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,0,true);
+	m_clothBody_3->setTotalMass(0.1);
+	m_clothBody_3->m_cfg.piterations = 10;
+	m_clothBody_3->m_cfg.citerations = 10;
+	m_clothBody_3->m_cfg.diterations = 10;
+	phyWorld->addSoftBody(m_clothBody_3);
+
+	initSoftBody(m_clothManualObject_3, m_clothBody_3);
+
+	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode->attachObject(m_clothManualObject_3);
+}
 
 
 void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)
