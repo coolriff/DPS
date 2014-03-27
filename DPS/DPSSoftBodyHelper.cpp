@@ -329,8 +329,8 @@ void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoft
 	m_ManualObject->estimateIndexCount(faces.size()*3);
 
 	//http://www.ogre3d.org/tikiwiki/ManualObject
-	m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-	//m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	//m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
 	for (int i = 0; i < faces.size(); ++i)
 	{
 		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;

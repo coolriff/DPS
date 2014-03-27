@@ -267,6 +267,7 @@ void DPSHelper::createLeapMotionSphere_1(std::string fingerName, Ogre::Vector3 p
 	sphereNode_1->attachObject(ent);
 }
 
+
 void DPSHelper::createCube(Ogre::Vector3 position, btScalar mass)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
@@ -295,7 +296,36 @@ void DPSHelper::createCube(Ogre::Vector3 position, btScalar mass)
 	cubeNode->attachObject(ent);
 }
 
+
 void DPSHelper::createSphere(Ogre::Vector3 position, btScalar mass)
+{
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
+	setColor(ent, Ogre::Vector3(0.4402f,0.4408f,0.4471f));
+	ent->setCastShadows(true);
+	//ent->setMaterialName("Examples/BumpyMetal");
+
+	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position,rot);
+	sphereNode->setScale(Ogre::Vector3(1.0f,1.01f,1.0f));
+
+	btCollisionShape* entShape = new btSphereShape(1);
+	//Calculate inertia.
+	//btScalar mass = 1;
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	phyWorld->addRigidBody(entBody);
+
+	sphereNode->attachObject(ent);
+}
+
+
+void DPSHelper::createFixedSphere(Ogre::Vector3 position, btScalar mass)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
 	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
@@ -317,6 +347,7 @@ void DPSHelper::createSphere(Ogre::Vector3 position, btScalar mass)
 
 	//Create the Body.
 	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	entBody->setFriction(0.8f);
 	phyWorld->addRigidBody(entBody);
 
 	sphereNode->attachObject(ent);

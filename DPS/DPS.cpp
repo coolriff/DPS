@@ -323,9 +323,9 @@ void DPS::GUIeventHandler(void)
 		//clean screen before create new demo
 		clearScreen();
 
-		resetCamera(Ogre::Vector3(0.0f,12.0f,20.0f));
+		
 		//create demo
-
+		resetCamera(Ogre::Vector3(0.0f,12.0f,20.0f));
 		dpsSoftbodyHelper->createClothDemo_2();
 		for(int i=0 ; i<26; i+=5)
 		{
@@ -345,7 +345,7 @@ void DPS::GUIeventHandler(void)
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
 		dpsSoftbodyHelper->createClothDemo_3();
-		dpsHelper->createSphere(Ogre::Vector3(0,5,0),0);
+		dpsHelper->createFixedSphere(Ogre::Vector3(0,5,0),0);
 
 		//run demo after ceate
 		runClothDome_3 = true;
