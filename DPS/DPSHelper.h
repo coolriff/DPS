@@ -22,7 +22,8 @@ class DPSHelper
 		void createOgreHead(void);
 		void createLeapMotionSphere_0(std::string fingerName, Ogre::Vector3 position);
 		void createLeapMotionSphere_1(std::string fingerName, Ogre::Vector3 position);
-		void createCube(Ogre::Vector3 position, btScalar mass);
+		void createCube(Ogre::Vector3 position, Ogre::Vector3 cubeSize, btScalar mass);
+		btRigidBody* createCubeAndReturnBody(Ogre::Vector3 position, Ogre::Vector3 cubeSize, btScalar mass);
 		void createSphere(Ogre::Vector3 position, btScalar mass);
 		void createFixedSphere(Ogre::Vector3 position, btScalar mass);
 

@@ -267,8 +267,8 @@ void DPSHelper::createLeapMotionSphere_1(std::string fingerName, Ogre::Vector3 p
 	sphereNode_1->attachObject(ent);
 }
 
-
-void DPSHelper::createCube(Ogre::Vector3 position, btScalar mass)
+// 2 is the smallest for cubeSize
+void DPSHelper::createCube(Ogre::Vector3 position, Ogre::Vector3 cubeSize, btScalar mass)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
 	Ogre::Entity *ent = mSceneMgr->createEntity("defCube.mesh");
@@ -277,9 +277,9 @@ void DPSHelper::createCube(Ogre::Vector3 position, btScalar mass)
 	ent->setMaterialName("Examples/BumpyMetal");
 
 	Ogre::SceneNode* cubeNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position,rot);
-	cubeNode->setScale(Ogre::Vector3(2.0f,2.0f,2.0f));
+	cubeNode->setScale(cubeSize);
 
-	btCollisionShape* entShape = new btBoxShape(btVector3(1,1,1));
+	btCollisionShape* entShape = new btBoxShape(btVector3(cubeSize.x/2,cubeSize.y/2,cubeSize.z/2));
 
 	//Calculate inertia.
 	//btScalar mass = 1;
@@ -295,6 +295,38 @@ void DPSHelper::createCube(Ogre::Vector3 position, btScalar mass)
 
 	cubeNode->attachObject(ent);
 }
+
+
+btRigidBody* DPSHelper::createCubeAndReturnBody(Ogre::Vector3 position, Ogre::Vector3 cubeSize, btScalar mass)
+{
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("defCube.mesh");
+	setColor(ent, Ogre::Vector3(0.3021f,0.3308f,0.3671f));
+	ent->setCastShadows(true);
+	ent->setMaterialName("Examples/BumpyMetal");
+
+	Ogre::SceneNode* cubeNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position,rot);
+	cubeNode->setScale(cubeSize);
+
+	btCollisionShape* entShape = new btBoxShape(btVector3(cubeSize.x/2,cubeSize.y/2,cubeSize.z/2));
+
+	//Calculate inertia.
+	//btScalar mass = 1;
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(cubeNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	phyWorld->addRigidBody(entBody);
+
+	cubeNode->attachObject(ent);
+
+	return entBody;
+}
+
 
 
 void DPSHelper::createSphere(Ogre::Vector3 position, btScalar mass)

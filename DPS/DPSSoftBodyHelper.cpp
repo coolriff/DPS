@@ -312,6 +312,25 @@ void DPSSoftBodyHelper::createClothDemo_3(void)
 }
 
 
+void DPSSoftBodyHelper::createClothDemo_4(btRigidBody* body)
+{
+	float s=4;
+	float h=15;
+	m_clothBody_4 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),20,20,4+8,true);
+	phyWorld->addSoftBody(m_clothBody_4);
+
+	initSoftBody(m_clothManualObject_4, m_clothBody_4);
+
+	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_clothNode->attachObject(m_clothManualObject_4);
+
+	
+	m_clothBody_4->appendAnchor(0,body);
+	m_clothBody_4->appendAnchor(8,body);
+
+}
+
+
 void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)
 {
 		//manual objects are used to generate new meshes based on raw vertex data

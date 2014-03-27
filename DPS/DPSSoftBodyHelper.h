@@ -35,6 +35,11 @@ public:
 	btSoftBody* m_clothBody_3;
 	void createClothDemo_3(void);
 
+	Ogre::ManualObject* m_clothManualObject_4;
+	btSoftBody* m_clothBody_4;
+	void createClothDemo_4(btRigidBody* body);
+
+
 	btSoftBody* m_deformableModel;
 	btSoftBody* m_mesh;
 	btSoftBody* m_SoftBody;
