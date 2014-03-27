@@ -16,7 +16,7 @@ public:
 
 	btSoftBody* createDeformableModel(void);
 	btSoftBody* createMesh(void);
-	btSoftBody* createSoftBody(const btVector3& startPos);
+
 
 	btSoftBody* createBunny(void);
 
@@ -27,6 +27,8 @@ public:
 	void initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body);
 	void updateSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body);
 
+
+	//cloth demos
 	Ogre::ManualObject* m_clothManualObject_1;
 	btSoftBody* m_clothBody_1;
 	void createClothDemo_1(void);
@@ -65,9 +67,17 @@ public:
 	btSoftBody* m_clothBody_7_2;
 	void createClothDemo_7(void);
 
+
+	//softbody demos
+	Ogre::ManualObject* m_softManualObject_1;
+	btSoftBody* m_softBody_1;
+	void createSoftDemo_1(const btVector3& startPos);
+
+
+
+
 	btSoftBody* m_deformableModel;
 	btSoftBody* m_mesh;
-	btSoftBody* m_SoftBody;
 
 	btSoftBody* m_bunny;
 

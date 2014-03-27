@@ -32,6 +32,18 @@ DPS::DPS(void)
 	runClothDome_8 = false;
 	runClothDome_9 = false;
 	runClothDome_10 = false;
+
+	runSoftbodyDome_1 = false;
+	runSoftbodyDome_2 = false;
+	runSoftbodyDome_3 = false;
+	runSoftbodyDome_4 = false;
+	runSoftbodyDome_5 = false;
+
+	runDeformDome_1 = false;
+	runDeformDome_2 = false;
+	runDeformDome_3 = false;
+	runDeformDome_4 = false;
+	runDeformDome_5 = false;
 }
 
 DPS::~DPS(void)
@@ -264,6 +276,18 @@ void DPS::clearScreen(void)
 	runClothDome_5 = false;
 	runClothDome_6 = false;
 	runClothDome_7 = false;
+
+	runSoftbodyDome_1 = false;
+// 	runSoftbodyDome_2 = false;
+// 	runSoftbodyDome_3 = false;
+// 	runSoftbodyDome_4 = false;
+// 	runSoftbodyDome_5 = false;
+// 
+// 	runDeformDome_1 = false;
+// 	runDeformDome_2 = false;
+// 	runDeformDome_3 = false;
+// 	runDeformDome_4 = false;
+// 	runDeformDome_5 = false;
 }
 
 
@@ -283,6 +307,8 @@ void DPS::GUIeventHandler(void)
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
+
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(false);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -419,6 +445,23 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runClothDome_7 = true;
 	}
+
+
+	//softbody demos
+	if(mGUI->Command_Softbody_Demo_1)
+	{
+		mGUI->Command_Softbody_Demo_1 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,17.0f,20.0f));
+		dpsSoftbodyHelper->createSoftDemo_1(btVector3(0,20,0));
+
+		//run demo after ceate
+		runSoftbodyDome_1 = true;
+	}
 }
 
 void DPS::demoController(void)
@@ -455,6 +498,10 @@ void DPS::demoController(void)
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_7_0, dpsSoftbodyHelper->m_clothBody_7_0);
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_7_1, dpsSoftbodyHelper->m_clothBody_7_1);
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_7_2, dpsSoftbodyHelper->m_clothBody_7_2);
+	}
+	if(runSoftbodyDome_1)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_1, dpsSoftbodyHelper->m_softBody_1);
 	}
 }
 

@@ -25,44 +25,6 @@ DPSSoftBodyHelper::~DPSSoftBodyHelper(void)
 }
 
 
-btSoftBody* DPSSoftBodyHelper::createSoftBody(const btVector3& startPos)
-{
-	m_SoftBody = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 100);
-	//m_SoftBody->m_cfg.viterations=50;
-	//m_SoftBody->m_cfg.piterations=50;
-	//set the liquid body properties
-	//m_SoftBody->m_cfg.kPR = 3500.f;
-	//m_SoftBody->m_cfg.kDP = 0.001f;
-	//m_SoftBody->m_cfg.kDF = 0.1f;
-	//m_SoftBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
-	//m_SoftBody->m_cfg.kCHR  = 1.f;
-	//m_SoftBody->setTotalMass(50.0);
-	//m_SoftBody->setMass(0,0);
-	//m_LiquidBody->generateClusters(100);
-	//m_SoftBody->m_materials[0]->m_kLST = 0.1f;
-
-// 	m_SoftBody->m_materials[0]->m_kLST	=	0.1;
-// 	m_SoftBody->m_cfg.kDF				=	1;
-// 	m_SoftBody->m_cfg.kDP				=	0.001;
-// 	m_SoftBody->m_cfg.kPR				=	2500;
-// 	m_SoftBody->setTotalMass(30,true);
-// 	m_SoftBody->setMass(0,0);
-
-	m_SoftBody->m_cfg.kPR = 3500.f;
-	m_SoftBody->m_cfg.kDP = 0.001f;
-	m_SoftBody->m_cfg.kDF = 0.1f;
-	m_SoftBody->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
-	m_SoftBody->m_cfg.kCHR  = 1.f;
-
-	m_SoftBody->generateClusters(100);
-	m_SoftBody->m_materials[0]->m_kLST = 0.1f;
-
-	phyWorld->addSoftBody(m_SoftBody);
-
-	return m_SoftBody;
-}
-
-
 btSoftBody* DPSSoftBodyHelper::createDeformableModel(void)
 {
 	Objloader* obj = new Objloader;
@@ -544,6 +506,32 @@ void DPSSoftBodyHelper::createClothDemo_7(void)
 
 	Ogre::SceneNode* m_clothNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_clothNode2->attachObject(m_clothManualObject_7_2);
+}
+
+
+void DPSSoftBodyHelper::createSoftDemo_1(const btVector3& startPos)
+{
+	m_softBody_1 = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 100);
+	//m_SoftBody->m_cfg.viterations=50;
+	//m_SoftBody->m_cfg.piterations=50;
+	//set the liquid body properties
+	m_softBody_1->m_cfg.kPR = 3500.f;
+	m_softBody_1->m_cfg.kDP = 0.001f;
+	m_softBody_1->m_cfg.kDF = 0.1f;
+	m_softBody_1->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
+	m_softBody_1->m_cfg.kCHR  = 1.f;
+	m_softBody_1->setTotalMass(50.0);
+	m_softBody_1->setMass(0,0);
+	//m_LiquidBody->generateClusters(100);
+	m_softBody_1->m_materials[0]->m_kLST = 0.1f;
+
+	phyWorld->addSoftBody(m_softBody_1);
+
+	initSoftBody(m_softManualObject_1, m_softBody_1);
+
+	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_softNode->attachObject(m_softManualObject_1);
+
 }
 
 
