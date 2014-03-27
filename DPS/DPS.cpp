@@ -260,6 +260,7 @@ void DPS::clearScreen(void)
 	runClothDome_2 = false;
 	runClothDome_3 = false;
 	runClothDome_4 = false;
+	runClothDome_5 = false;
 }
 
 
@@ -271,6 +272,9 @@ void DPS::GUIeventHandler(void)
 
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -309,7 +313,7 @@ void DPS::GUIeventHandler(void)
 		//clean screen before create new demo
 		clearScreen();
 
-		resetCamera(Ogre::Vector3(0.0f,8.0f,20.0f));
+		resetCamera(Ogre::Vector3(0.0f,8.0f,25.0f));
 
 		//create demo
 		dpsSoftbodyHelper->createClothDemo_1();
@@ -326,7 +330,7 @@ void DPS::GUIeventHandler(void)
 
 		
 		//create demo
-		resetCamera(Ogre::Vector3(0.0f,12.0f,20.0f));
+		resetCamera(Ogre::Vector3(0.0f,12.0f,25.0f));
 		dpsSoftbodyHelper->createClothDemo_2();
 		for(int i=0 ; i<26; i+=5)
 		{
@@ -344,7 +348,7 @@ void DPS::GUIeventHandler(void)
 		clearScreen();
 
 		//create demo
-		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		resetCamera(Ogre::Vector3(0.0f,6.0f,25.0f));
 		dpsSoftbodyHelper->createClothDemo_3();
 		dpsHelper->createFixedSphere(Ogre::Vector3(0,5,0),0);
 
@@ -359,25 +363,26 @@ void DPS::GUIeventHandler(void)
 		clearScreen();
 
 		//create demo
-		resetCamera(Ogre::Vector3(0.0f,12.0f,20.0f));
+		resetCamera(Ogre::Vector3(0.0f,12.0f,25.0f));
 		dpsSoftbodyHelper->createClothDemo_4(dpsHelper->createCubeAndReturnBody(Ogre::Vector3(0,10,-5),Ogre::Vector3(10,1,3),50));
 
 		//run demo after ceate
 		runClothDome_4 = true;
 	}
-// 	if(mGUI->Command_Cloth_Demo_5)
-// 	{
-// 		mGUI->Command_Cloth_Demo_5 = false;
-// 
-// 		//clean screen before create new demo
-// 		clearScreen();
-// 
-// 		//create demo
-// 		dpsSoftbodyHelper->createClothDemo_5();
-// 
-// 		//run demo after ceate
-// 		runClothDome_5 = true;
-// 	}
+	if(mGUI->Command_Cloth_Demo_5)
+	{
+		mGUI->Command_Cloth_Demo_5 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,12.0f,25.0f));
+		dpsSoftbodyHelper->createClothDemo_5();
+
+		//run demo after ceate
+		runClothDome_5 = true;
+	}
 }
 
 void DPS::demoController(void)
@@ -398,10 +403,11 @@ void DPS::demoController(void)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_4, dpsSoftbodyHelper->m_clothBody_4);
 	}
-// 	if(runClothDome_5)
-// 	{
-// 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_5, dpsSoftbodyHelper->m_clothBody_5);
-// 	}
+	if(runClothDome_5)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_5_0, dpsSoftbodyHelper->m_clothBody_5_0);
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_5_1, dpsSoftbodyHelper->m_clothBody_5_1);
+	}
 }
 
 
