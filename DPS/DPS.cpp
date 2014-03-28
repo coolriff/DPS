@@ -511,8 +511,9 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_1(btVector3(0,1.5,0));
-		dpsHelper->createCube(Ogre::Vector3(-5,1.5,0),Ogre::Vector3(4,4,4),1);
+		dpsSoftbodyHelper->createDeformDemo_1(btVector3(0,1,0));
+		//dpsHelper->createCube(Ogre::Vector3(-5,1.5,0),Ogre::Vector3(4,4,4),1);
+		dpsHelper->createMesh(Ogre::Vector3(-5,1.5,0),1,"defCube.mesh",Ogre::Vector3(4,4,4));
 
 		//run demo after ceate
 		runDeformDome_1 = true;
@@ -527,8 +528,8 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,2.5,0));
-		dpsHelper->createBarrel(Ogre::Vector3(-8,2,0),1);
+		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,2,0));
+		dpsHelper->createMesh(Ogre::Vector3(-8,2,0),1,"Barrel.mesh",Ogre::Vector3(1,1,1));
 
 		//run demo after ceate
 		runDeformDome_2 = true;
@@ -542,7 +543,8 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_3(btVector3(0,10,0));
+		dpsSoftbodyHelper->createDeformDemo_3(btVector3(0,1,0));
+		dpsHelper->createMesh(Ogre::Vector3(-8,2,0),1,"m845.mesh",Ogre::Vector3(2,2,2));
 
 		//run demo after ceate
 		runDeformDome_3 = true;

@@ -307,7 +307,7 @@ void DPSSoftBodyHelper::createClothDemo_5(void)
 	m_clothBody_5_0 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),15,15,1+2+4+8,true);
 	m_clothBody_5_0->m_materials[0]->m_kLST	= 0.4;
 	m_clothBody_5_0->m_cfg.collisions |= btSoftBody::fCollision::VF_SS;
-	m_clothBody_5_0->setTotalMass(150);
+	m_clothBody_5_0->setTotalMass(10);
 	phyWorld->addSoftBody(m_clothBody_5_0);
 	initSoftBody(m_clothManualObject_5_0, m_clothBody_5_0);
 
@@ -324,7 +324,7 @@ void DPSSoftBodyHelper::createClothDemo_5(void)
 	m_clothBody_5_1->generateBendingConstraints(2,pm);
 	m_clothBody_5_1->m_materials[0]->m_kLST	= 0.5;
 	m_clothBody_5_1->m_cfg.collisions |= btSoftBody::fCollision::VF_SS;
-	m_clothBody_5_1->setTotalMass(150);
+	m_clothBody_5_1->setTotalMass(10);
 	phyWorld->addSoftBody(m_clothBody_5_1);
 	initSoftBody(m_clothManualObject_5_1, m_clothBody_5_1);
 
@@ -519,12 +519,12 @@ void DPSSoftBodyHelper::createSoftDemo_1(const btVector3& startPos)
 	//m_SoftBody->m_cfg.viterations=50;
 	//m_SoftBody->m_cfg.piterations=50;
 	//set the liquid body properties
-	m_softBody_1->m_cfg.kPR = 3500.f;
+	m_softBody_1->m_cfg.kPR = 35.f;
 	m_softBody_1->m_cfg.kDP = 0.001f;
 	m_softBody_1->m_cfg.kDF = 0.1f;
 	m_softBody_1->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
 	m_softBody_1->m_cfg.kCHR  = 1.f;
-	m_softBody_1->setTotalMass(50.0);
+	m_softBody_1->setTotalMass(150.0);
 	m_softBody_1->setMass(0,0);
 	//m_LiquidBody->generateClusters(100);
 	m_softBody_1->m_materials[0]->m_kLST = 0.1f;
@@ -695,7 +695,15 @@ void DPSSoftBodyHelper::createDeformDemo_2(const btVector3& startPos)
 
 void DPSSoftBodyHelper::createDeformDemo_3(const btVector3& startPos)
 {
-	m_deformBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gbarrel_va, &gbarrel_ia[0][0], gfaces_size);
+	triangles.clear();
+	indicies.clear();
+	texCoord.clear();
+
+	Objloader* obj = new Objloader;
+	obj->LoadModel("m845",&triangles,&indicies,&texCoord);
+	//load("monkey.obj",&triangles,&indicies);
+
+	m_deformBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
 	m_deformBody_3->setTotalMass(50.0,true);
 	//m_deformableModel->generateClusters(1000);
 	m_deformBody_3->m_cfg.kSRHR_CL=1.0;	
@@ -715,7 +723,7 @@ void DPSSoftBodyHelper::createDeformDemo_3(const btVector3& startPos)
 	// 	m_softBody_3->m_cfg.kDF			=	0.5;
 	m_deformBody_3->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
 	m_deformBody_3->translate(startPos);
-/*	m_deformBody_3->scale(btVector3(2,2,2));*/
+	m_deformBody_3->scale(btVector3(2,2,2));
 	phyWorld->addSoftBody(m_deformBody_3);
 
 	initSoftBody(m_deformManualObject_3, m_deformBody_3);
@@ -740,6 +748,13 @@ btVector3 DPSSoftBodyHelper::Vector3Rand()
 	const btVector3	p=btVector3(SignedUnitRand(),SignedUnitRand(),SignedUnitRand());
 	return (p.normalized());
 }
+
+
+
+
+
+
+
 
 
 void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)
@@ -769,15 +784,15 @@ void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoft
 		node2 = faces[i].m_n[2];
 
 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+		m_ManualObject->colour(Ogre::ColourValue(0.3021f,0.3308f,0.3671f,1.0f));
 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
 
 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+		m_ManualObject->colour(Ogre::ColourValue(0.3021f,0.3308f,0.3671f,1.0f));
 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
 
 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
+		m_ManualObject->colour(Ogre::ColourValue(0.3021f,0.3308f,0.3671f,1.0f));
 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
 
 

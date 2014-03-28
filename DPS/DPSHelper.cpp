@@ -357,21 +357,23 @@ void DPSHelper::createSphere(Ogre::Vector3 position, btScalar mass)
 }
 
 
-void DPSHelper::createBarrel(Ogre::Vector3 position, btScalar mass)
+void DPSHelper::createMesh(Ogre::Vector3 position, btScalar mass, std::string name, Ogre::Vector3 scaler)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
 
 	//Create Ogre stuff.
-	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity("Barrel.mesh");
+	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity(name);
 	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position, rot);
 	setColor(ogreHeadEntity, Ogre::Vector3(0.4402f,0.4408f,0.4471f));
+	ogreHeadNode->setScale(scaler);
 	ogreHeadEntity->setCastShadows(true);
 
 	//Create shape.
 	BtOgre::StaticMeshToShapeConverter converter(ogreHeadEntity);
 
 	//mNinjaShape = converter.createTrimesh();
-	btCollisionShape* ogreHeadShape = converter.createTrimesh();
+	btCollisionShape* ogreHeadShape = converter.createConvex();
+	ogreHeadShape->setLocalScaling(btVector3(scaler.x,scaler.y,scaler.z));
 	//mNinjaShape = converter.createConvex();
 
 	//Calculate inertia.
