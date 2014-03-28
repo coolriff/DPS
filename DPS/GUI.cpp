@@ -418,6 +418,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_1")
 	{
 		Command_Cloth_Demo_1 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -432,6 +433,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_2")
 	{
 		Command_Cloth_Demo_2 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -446,6 +448,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_3")
 	{
 		Command_Cloth_Demo_3 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(false);
@@ -460,6 +463,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_4")
 	{
 		Command_Cloth_Demo_4 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -474,6 +478,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_5")
 	{
 		Command_Cloth_Demo_5 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -488,6 +493,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_6")
 	{
 		Command_Cloth_Demo_6 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -502,6 +508,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_7")
 	{
 		Command_Cloth_Demo_7 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -516,6 +523,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_8")
 	{
 		Command_Cloth_Demo_8 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -530,6 +538,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_9")
 	{
 		Command_Cloth_Demo_9 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -544,6 +553,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Cloth_Demo_10")
 	{
 		Command_Cloth_Demo_10 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -560,6 +570,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Softbody_Demo_1")
 	{
 		Command_Softbody_Demo_1 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
@@ -569,6 +580,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Softbody_Demo_2")
 	{
 		Command_Softbody_Demo_2 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
@@ -578,6 +590,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Softbody_Demo_3")
 	{
 		Command_Softbody_Demo_3 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(false);
@@ -587,6 +600,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Softbody_Demo_4")
 	{
 		Command_Softbody_Demo_4 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
@@ -596,6 +610,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Softbody_Demo_5")
 	{
 		Command_Softbody_Demo_5 = true;
+		defaultState();
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);

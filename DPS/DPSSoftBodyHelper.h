@@ -73,6 +73,10 @@ public:
 	btSoftBody* m_softBody_1;
 	void createSoftDemo_1(const btVector3& startPos);
 
+	Ogre::ManualObject* m_softManualObject_2;
+	btSoftBody* m_softBody_2;
+	void createSoftDemo_2(const btVector3& startPos);
+
 
 
 

@@ -278,7 +278,7 @@ void DPS::clearScreen(void)
 	runClothDome_7 = false;
 
 	runSoftbodyDome_1 = false;
-// 	runSoftbodyDome_2 = false;
+ 	runSoftbodyDome_2 = false;
 // 	runSoftbodyDome_3 = false;
 // 	runSoftbodyDome_4 = false;
 // 	runSoftbodyDome_5 = false;
@@ -308,7 +308,8 @@ void DPS::GUIeventHandler(void)
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(false);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -398,7 +399,7 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,12.0f,25.0f));
-		dpsSoftbodyHelper->createClothDemo_4(dpsHelper->createCubeAndReturnBody(Ogre::Vector3(0,10,-5),Ogre::Vector3(10,1,3),50));
+		dpsSoftbodyHelper->createClothDemo_4(dpsHelper->createCubeAndReturnBody(Ogre::Vector3(0,15,-7.5),Ogre::Vector3(10,1,3),5));
 
 		//run demo after ceate
 		runClothDome_4 = true;
@@ -462,6 +463,20 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runSoftbodyDome_1 = true;
 	}
+	if(mGUI->Command_Softbody_Demo_2)
+	{
+		mGUI->Command_Softbody_Demo_2 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createSoftDemo_2(btVector3(0,1,0));
+
+		//run demo after ceate
+		runSoftbodyDome_2 = true;
+	}
 }
 
 void DPS::demoController(void)
@@ -502,6 +517,10 @@ void DPS::demoController(void)
 	if(runSoftbodyDome_1)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_1, dpsSoftbodyHelper->m_softBody_1);
+	}
+	if(runSoftbodyDome_2)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_2, dpsSoftbodyHelper->m_softBody_2);
 	}
 }
 

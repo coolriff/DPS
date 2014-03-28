@@ -263,17 +263,20 @@ void DPSSoftBodyHelper::createClothDemo_3(void)
 {
 	float s=4;
 	float h=10;
+	//btQuaternion orientation(-SIMD_PI/2,0,0);
 	m_clothBody_3 = btSoftBodyHelpers::CreatePatch(phyWorld->getWorldInfo(),btVector3(-s,h,-s),btVector3(s,h,-s),btVector3(-s,h,s),btVector3(s,h,s),50,50,0,true);
 	m_clothBody_3->setTotalMass(0.1);
 	m_clothBody_3->m_cfg.piterations = 10;
 	m_clothBody_3->m_cfg.citerations = 10;
 	m_clothBody_3->m_cfg.diterations = 10;
+	//m_clothBody_3->rotate(orientation);
 	phyWorld->addSoftBody(m_clothBody_3);
 
 	initSoftBody(m_clothManualObject_3, m_clothBody_3);
 
 	Ogre::SceneNode* m_clothNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_clothNode->attachObject(m_clothManualObject_3);
+	//m_clothNode->pitch(Ogre::Degree(180));
 }
 
 
@@ -291,7 +294,7 @@ void DPSSoftBodyHelper::createClothDemo_4(btRigidBody* body)
 
 	
 	m_clothBody_4->appendAnchor(0,body);
-	m_clothBody_4->appendAnchor(8,body);
+	m_clothBody_4->appendAnchor(19,body);
 
 }
 
@@ -532,6 +535,31 @@ void DPSSoftBodyHelper::createSoftDemo_1(const btVector3& startPos)
 	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_softNode->attachObject(m_softManualObject_1);
 
+}
+
+
+void DPSSoftBodyHelper::createSoftDemo_2(const btVector3& startPos)
+{
+	m_softBody_2 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVerticesBunny, &gIndicesBunny[0][0], BUNNY_NUM_TRIANGLES);
+	btSoftBody::Material* pm = m_softBody_2->appendMaterial();
+	pm->m_kLST = 0.5;
+	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	m_softBody_2->generateBendingConstraints(2,pm);
+	m_softBody_2->m_cfg.piterations = 2;
+	m_softBody_2->m_cfg.kDF = 0.5;
+	m_softBody_2->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+
+	m_softBody_2->randomizeConstraints();
+	m_softBody_2->translate(startPos);
+	m_softBody_2->scale(btVector3(6,6,6));
+	m_softBody_2->setTotalMass(50);
+
+	phyWorld->addSoftBody(m_softBody_2);
+
+	initSoftBody(m_softManualObject_2, m_softBody_2);
+
+	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_softNode->attachObject(m_softManualObject_2);
 }
 
 
