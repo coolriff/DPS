@@ -68,20 +68,6 @@ public:
 	void createClothDemo_7(void);
 
 
-	//softbody demos
-	Ogre::ManualObject* m_softManualObject_1;
-	btSoftBody* m_softBody_1;
-	void createSoftDemo_1(const btVector3& startPos);
-
-	Ogre::ManualObject* m_softManualObject_2;
-	btSoftBody* m_softBody_2;
-	void createSoftDemo_2(const btVector3& startPos);
-
-	Ogre::ManualObject* m_softManualObject_3;
-	btSoftBody* m_softBody_3;
-	void createSoftDemo_3(const btVector3& startPos);
-
-
 
 	//deformation demos
 	Ogre::ManualObject* m_deformManualObject_1;
@@ -95,6 +81,25 @@ public:
 	Ogre::ManualObject* m_deformManualObject_3;
 	btSoftBody* m_deformBody_3;
 	void createDeformDemo_3(const btVector3& startPos);
+
+	Ogre::ManualObject* m_deformManualObject_4;
+	btSoftBody* m_deformBody_4;
+	void createDeformDemo_4(const btVector3& startPos);
+
+	Ogre::ManualObject* m_deformManualObject_5;
+	btSoftBody* m_deformBody_5;
+	void createDeformDemo_5(const btVector3& startPos);
+
+	Ogre::ManualObject* m_deformManualObject_6;
+	btSoftBody* m_deformBody_6;
+	void createDeformDemo_6(const btVector3& startPos);
+
+	Ogre::ManualObject* m_deformManualObject_7;
+	btSoftBody* m_deformBody_7;
+	void createDeformDemo_7(const btVector3& startPos);
+
+
+
 
 	Ogre::ManualObject* m_BuunyManualObject_3;
 	btSoftBody* m_BuunyBody_3;

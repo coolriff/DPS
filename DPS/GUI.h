@@ -33,16 +33,13 @@ public:
 	bool Command_Cloth_Demo_8;
 	bool Command_Cloth_Demo_9;
 	bool Command_Cloth_Demo_10;
-	bool Command_Softbody_Demo_1;
-	bool Command_Softbody_Demo_2;
-	bool Command_Softbody_Demo_3;
-	bool Command_Softbody_Demo_4;
-	bool Command_Softbody_Demo_5;
 	bool Command_Deformable_Demo_1;
 	bool Command_Deformable_Demo_2;
 	bool Command_Deformable_Demo_3;
 	bool Command_Deformable_Demo_4;
 	bool Command_Deformable_Demo_5;
+	bool Command_Deformable_Demo_6;
+	bool Command_Deformable_Demo_7;
 	bool Command_ResetCamera;
 	size_t Theme_Choice;
 	bool Command_SwitchTheme;

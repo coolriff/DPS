@@ -33,17 +33,13 @@ DPS::DPS(void)
 	runClothDome_9 = false;
 	runClothDome_10 = false;
 
-	runSoftbodyDome_1 = false;
-	runSoftbodyDome_2 = false;
-	runSoftbodyDome_3 = false;
-	runSoftbodyDome_4 = false;
-	runSoftbodyDome_5 = false;
-
 	runDeformDome_1 = false;
 	runDeformDome_2 = false;
 	runDeformDome_3 = false;
 	runDeformDome_4 = false;
 	runDeformDome_5 = false;
+	runDeformDome_6 = false;
+	runDeformDome_7 = false;
 }
 
 DPS::~DPS(void)
@@ -277,17 +273,34 @@ void DPS::clearScreen(void)
 	runClothDome_6 = false;
 	runClothDome_7 = false;
 
-	runSoftbodyDome_1 = false;
- 	runSoftbodyDome_2 = false;
- 	runSoftbodyDome_3 = false;
-// 	runSoftbodyDome_4 = false;
-// 	runSoftbodyDome_5 = false;
 
  	runDeformDome_1 = false;
 	runDeformDome_2 = false;
 	runDeformDome_3 = false;
  	runDeformDome_4 = false;
-// 	runDeformDome_5 = false;
+ 	runDeformDome_5 = false;
+	runDeformDome_6 = false;
+	runDeformDome_7 = false;
+
+
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
+// 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
+// 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
+// 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
+
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
 }
 
 
@@ -297,28 +310,7 @@ void DPS::GUIeventHandler(void)
 	{
 		clearScreen();
 
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(true);
-
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -457,51 +449,7 @@ void DPS::GUIeventHandler(void)
 	}
 
 
-	//softbody demos
-	if(mGUI->Command_Softbody_Demo_1)
-	{
-		mGUI->Command_Softbody_Demo_1 = false;
-
-		//clean screen before create new demo
-		clearScreen();
-
-		//create demo
-		resetCamera(Ogre::Vector3(0.0f,17.0f,20.0f));
-		dpsSoftbodyHelper->createSoftDemo_1(btVector3(0,20,0));
-
-		//run demo after ceate
-		runSoftbodyDome_1 = true;
-	}
-	if(mGUI->Command_Softbody_Demo_2)
-	{
-		mGUI->Command_Softbody_Demo_2 = false;
-
-		//clean screen before create new demo
-		clearScreen();
-
-		//create demo
-		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createSoftDemo_2(btVector3(0,1,0));
-
-		//run demo after ceate
-		runSoftbodyDome_2 = true;
-	}
-	if(mGUI->Command_Softbody_Demo_3)
-	{
-		mGUI->Command_Softbody_Demo_3 = false;
-
-		//clean screen before create new demo
-		clearScreen();
-
-		//create demo
-		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createSoftDemo_3(btVector3(0,3,0));
-
-		//run demo after ceate
-		runSoftbodyDome_3 = true;
-	}
-
-
+	//deformable demos
 	if(mGUI->Command_Deformable_Demo_1)
 	{
 		mGUI->Command_Deformable_Demo_1 = false;
@@ -558,11 +506,53 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createGimpactBuuny();
+		dpsSoftbodyHelper->createDeformDemo_4(btVector3(0,3,0));
 
 		//run demo after ceate
 		runDeformDome_4 = true;
 	}
+	if(mGUI->Command_Deformable_Demo_5)
+	{
+		mGUI->Command_Deformable_Demo_5 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,17.0f,20.0f));
+		dpsSoftbodyHelper->createDeformDemo_5(btVector3(0,20,0));
+
+		//run demo after ceate
+		runDeformDome_5 = true;
+	}
+	if(mGUI->Command_Deformable_Demo_6)
+	{
+		mGUI->Command_Deformable_Demo_6 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createDeformDemo_6(btVector3(0,1,0));
+
+		//run demo after ceate
+		runDeformDome_6 = true;
+	}
+// 	if(mGUI->Command_Deformable_Demo_7)
+// 	{
+// 		mGUI->Command_Deformable_Demo_7 = false;
+// 
+// 		//clean screen before create new demo
+// 		clearScreen();
+// 
+// 		//create demo
+// 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+// 		dpsSoftbodyHelper->createDeformDemo_7(btVector3(0,1,0));
+// 
+// 		//run demo after ceate
+// 		runDeformDome_7 = true;
+// 	}
 }
 
 void DPS::demoController(void)
@@ -600,18 +590,7 @@ void DPS::demoController(void)
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_7_1, dpsSoftbodyHelper->m_clothBody_7_1);
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_7_2, dpsSoftbodyHelper->m_clothBody_7_2);
 	}
-	if(runSoftbodyDome_1)
-	{
-		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_1, dpsSoftbodyHelper->m_softBody_1);
-	}
-	if(runSoftbodyDome_2)
-	{
-		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_2, dpsSoftbodyHelper->m_softBody_2);
-	}
-	if(runSoftbodyDome_3)
-	{
-		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_3, dpsSoftbodyHelper->m_softBody_3);
-	}
+
 
 
 	if(runDeformDome_1)
@@ -626,6 +605,23 @@ void DPS::demoController(void)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_3, dpsSoftbodyHelper->m_deformBody_3);
 	}
+	if(runDeformDome_4)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_4, dpsSoftbodyHelper->m_deformBody_4);
+	}
+	if(runDeformDome_5)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_5, dpsSoftbodyHelper->m_deformBody_5);
+	}
+	if(runDeformDome_6)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_6, dpsSoftbodyHelper->m_deformBody_6);
+	}
+	if(runDeformDome_7)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_7, dpsSoftbodyHelper->m_deformBody_7);
+	}
+
 }
 
 

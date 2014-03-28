@@ -515,103 +515,13 @@ void DPSSoftBodyHelper::createClothDemo_7(void)
 }
 
 
-void DPSSoftBodyHelper::createSoftDemo_1(const btVector3& startPos)
-{
-	m_softBody_1 = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 100);
-	//m_SoftBody->m_cfg.viterations=50;
-	//m_SoftBody->m_cfg.piterations=50;
-	//set the liquid body properties
-	m_softBody_1->m_cfg.kPR = 35.f;
-	m_softBody_1->m_cfg.kDP = 0.001f;
-	m_softBody_1->m_cfg.kDF = 0.1f;
-	m_softBody_1->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
-	m_softBody_1->m_cfg.kCHR  = 1.f;
-	m_softBody_1->setTotalMass(150.0);
-	m_softBody_1->setMass(0,0);
-	//m_LiquidBody->generateClusters(100);
-	m_softBody_1->m_materials[0]->m_kLST = 0.1f;
-
-	phyWorld->addSoftBody(m_softBody_1);
-
-	initSoftBody(m_softManualObject_1, m_softBody_1);
-
-	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_softNode->attachObject(m_softManualObject_1);
-
-}
 
 
-void DPSSoftBodyHelper::createSoftDemo_2(const btVector3& startPos)
-{
-	m_softBody_2 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVerticesBunny, &gIndicesBunny[0][0], BUNNY_NUM_TRIANGLES);
-// 	btSoftBody::Material* pm = m_softBody_2->appendMaterial();
-// 	pm->m_kLST = 0.5;
-// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
-// 	m_softBody_2->generateBendingConstraints(2,pm);
-// 	m_softBody_2->m_cfg.piterations = 2;
-// 	m_softBody_2->m_cfg.kDF = 0.5;
-// 	m_softBody_2->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
-// 
-// 	m_softBody_2->randomizeConstraints();
-// 	m_softBody_2->translate(startPos);
-// 	m_softBody_2->scale(btVector3(6,6,6));
-// 	m_softBody_2->setTotalMass(50);
 
 
-	m_softBody_2->m_cfg.kSRHR_CL=1.0;	
-	m_softBody_2->m_cfg.kCHR=1.0;
-	m_softBody_2->m_cfg.kSHR=1.0;
-	m_softBody_2->m_cfg.kAHR=1.0;
-	m_softBody_2->m_cfg.kPR=50;
-	m_softBody_2->m_cfg.piterations=50;
-
-	m_softBody_2->translate(startPos);
-	m_softBody_2->setTotalMass(20.0,true);
-	m_softBody_2->scale(btVector3(3,3,3));
-
-	phyWorld->addSoftBody(m_softBody_2);
-
-	initSoftBody(m_softManualObject_2, m_softBody_2);
-
-	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_softNode->attachObject(m_softManualObject_2);
-}
 
 
-void DPSSoftBodyHelper::createSoftDemo_3(const btVector3& startPos)
-{
-	m_softBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVertices, &gIndices[0][0], NUM_TRIANGLES);
-	// 	btSoftBody::Material* pm = m_softBody_2->appendMaterial();
-	// 	pm->m_kLST = 0.5;
-	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
-	// 	m_softBody_2->generateBendingConstraints(2,pm);
-	// 	m_softBody_2->m_cfg.piterations = 2;
-	// 	m_softBody_2->m_cfg.kDF = 0.5;
-	// 	m_softBody_2->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
-	// 
-	// 	m_softBody_2->randomizeConstraints();
-	// 	m_softBody_2->translate(startPos);
-	// 	m_softBody_2->scale(btVector3(6,6,6));
-	// 	m_softBody_2->setTotalMass(50);
 
-
-	m_softBody_3->m_cfg.kSRHR_CL=1.0;	
-	m_softBody_3->m_cfg.kCHR=1.0;
-	m_softBody_3->m_cfg.kSHR=1.0;
-	m_softBody_3->m_cfg.kAHR=1.0;
-	m_softBody_3->m_cfg.kPR=50;
-	m_softBody_3->m_cfg.piterations=50;
-
-	m_softBody_3->translate(startPos);
-	m_softBody_3->setTotalMass(20.0,true);
-	m_softBody_3->scale(btVector3(3,3,3));
-	phyWorld->addSoftBody(m_softBody_3);
-
-	initSoftBody(m_softManualObject_3, m_softBody_3);
-
-	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_softNode->attachObject(m_softManualObject_3);
-}
 
 
 //btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gbarrel_va, &gbarrel_ia[0][0], gfaces_size);
@@ -732,6 +642,105 @@ void DPSSoftBodyHelper::createDeformDemo_3(const btVector3& startPos)
 
 	Ogre::SceneNode* m_deformNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_deformNode->attachObject(m_deformManualObject_3);
+}
+
+
+void DPSSoftBodyHelper::createDeformDemo_4(const btVector3& startPos)
+{
+	m_deformBody_4 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVertices, &gIndices[0][0], NUM_TRIANGLES);
+	// 	btSoftBody::Material* pm = m_softBody_2->appendMaterial();
+	// 	pm->m_kLST = 0.5;
+	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	// 	m_softBody_2->generateBendingConstraints(2,pm);
+	// 	m_softBody_2->m_cfg.piterations = 2;
+	// 	m_softBody_2->m_cfg.kDF = 0.5;
+	// 	m_softBody_2->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	// 
+	// 	m_softBody_2->randomizeConstraints();
+	// 	m_softBody_2->translate(startPos);
+	// 	m_softBody_2->scale(btVector3(6,6,6));
+	// 	m_softBody_2->setTotalMass(50);
+
+
+	m_deformBody_4->m_cfg.kSRHR_CL=1.0;	
+	m_deformBody_4->m_cfg.kCHR=1.0;
+	m_deformBody_4->m_cfg.kSHR=1.0;
+	m_deformBody_4->m_cfg.kAHR=1.0;
+	m_deformBody_4->m_cfg.kPR=50;
+	m_deformBody_4->m_cfg.piterations=50;
+
+	m_deformBody_4->translate(startPos);
+	m_deformBody_4->setTotalMass(20.0,true);
+	m_deformBody_4->scale(btVector3(3,3,3));
+	phyWorld->addSoftBody(m_deformBody_4);
+
+	initSoftBody(m_deformManualObject_4, m_deformBody_4);
+
+	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_softNode->attachObject(m_deformManualObject_4);
+}
+
+
+void DPSSoftBodyHelper::createDeformDemo_5(const btVector3& startPos)
+{
+	m_deformBody_5 = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 100);
+	//m_SoftBody->m_cfg.viterations=50;
+	//m_SoftBody->m_cfg.piterations=50;
+	//set the liquid body properties
+	m_deformBody_5->m_cfg.kPR = 3500.f;
+	m_deformBody_5->m_cfg.kDP = 0.001f;
+	m_deformBody_5->m_cfg.kDF = 0.1f;
+	m_deformBody_5->m_cfg.kKHR = 1.f; //we hardcode this parameter, since any value below 1.0 means the soft body does less than full correction on penetration
+	m_deformBody_5->m_cfg.kCHR  = 1.f;
+	m_deformBody_5->setTotalMass(150.0);
+	m_deformBody_5->setMass(0,0);
+	//m_LiquidBody->generateClusters(100);
+	m_deformBody_5->m_materials[0]->m_kLST = 0.1f;
+
+	phyWorld->addSoftBody(m_deformBody_5);
+
+	initSoftBody(m_deformManualObject_5, m_deformBody_5);
+
+	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_softNode->attachObject(m_deformManualObject_5);
+
+}
+
+
+void DPSSoftBodyHelper::createDeformDemo_6(const btVector3& startPos)
+{
+	m_deformBody_6 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVerticesBunny, &gIndicesBunny[0][0], BUNNY_NUM_TRIANGLES);
+	// 	btSoftBody::Material* pm = m_softBody_2->appendMaterial();
+	// 	pm->m_kLST = 0.5;
+	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	// 	m_softBody_2->generateBendingConstraints(2,pm);
+	// 	m_softBody_2->m_cfg.piterations = 2;
+	// 	m_softBody_2->m_cfg.kDF = 0.5;
+	// 	m_softBody_2->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	// 
+	// 	m_softBody_2->randomizeConstraints();
+	// 	m_softBody_2->translate(startPos);
+	// 	m_softBody_2->scale(btVector3(6,6,6));
+	// 	m_softBody_2->setTotalMass(50);
+
+
+	m_deformBody_6->m_cfg.kSRHR_CL=1.0;	
+	m_deformBody_6->m_cfg.kCHR=1.0;
+	m_deformBody_6->m_cfg.kSHR=1.0;
+	m_deformBody_6->m_cfg.kAHR=1.0;
+	m_deformBody_6->m_cfg.kPR=50;
+	m_deformBody_6->m_cfg.piterations=50;
+
+	m_deformBody_6->translate(startPos);
+	m_deformBody_6->setTotalMass(20.0,true);
+	m_deformBody_6->scale(btVector3(3,3,3));
+
+	phyWorld->addSoftBody(m_deformBody_6);
+
+	initSoftBody(m_deformManualObject_6, m_deformBody_6);
+
+	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_softNode->attachObject(m_deformManualObject_6);
 }
 
 

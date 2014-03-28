@@ -143,17 +143,13 @@ class DPS : public BaseApplication
 		bool runClothDome_9;
 		bool runClothDome_10;
 
-		bool runSoftbodyDome_1;
-		bool runSoftbodyDome_2;
-		bool runSoftbodyDome_3;
-		bool runSoftbodyDome_4;
-		bool runSoftbodyDome_5;
-
 		bool runDeformDome_1;
 		bool runDeformDome_2;
 		bool runDeformDome_3;
 		bool runDeformDome_4;
 		bool runDeformDome_5;
+		bool runDeformDome_6;
+		bool runDeformDome_7;
 
 	protected:
 

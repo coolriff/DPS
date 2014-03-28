@@ -20,16 +20,13 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Cloth_Demo_8 = false;
 	Command_Cloth_Demo_9 = false;
 	Command_Cloth_Demo_10 = false;
-	Command_Softbody_Demo_1 = false;
-	Command_Softbody_Demo_2 = false;
-	Command_Softbody_Demo_3 = false;
-	Command_Softbody_Demo_4 = false;
-	Command_Softbody_Demo_5 = false;
 	Command_Deformable_Demo_1 = false;
 	Command_Deformable_Demo_2 = false;
 	Command_Deformable_Demo_3 = false;
 	Command_Deformable_Demo_4 = false;
 	Command_Deformable_Demo_5 = false;
+	Command_Deformable_Demo_6 = false;
+	Command_Deformable_Demo_7 = false;
 	Command_ResetCamera = false;
 	Theme_Choice = 0;
 	Command_SwitchTheme = false;
@@ -200,50 +197,6 @@ void GUI::menuListener(void)
 	}
 
 
-	//softbody demos
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_6"))
-// 	{
-// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-// 	}
-// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_7"))
-// 	{
-// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-// 	}
-// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_8"))
-// 	{
-// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-// 	}
-// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_9"))
-// 	{
-// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-// 	}
-// 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_10"))
-// 	{
-// 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-// 	}
-
-
-
 
 	//deformable demos
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1"))
@@ -263,6 +216,14 @@ void GUI::menuListener(void)
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7"))
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
@@ -567,57 +528,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	}
 
 
-	if(name == "Command_Softbody_Demo_1")
-	{
-		Command_Softbody_Demo_1 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(true);
-	}
-	if(name == "Command_Softbody_Demo_2")
-	{
-		Command_Softbody_Demo_2 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(true);
-	}
-	if(name == "Command_Softbody_Demo_3")
-	{
-		Command_Softbody_Demo_3 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(true);
-	}
-	if(name == "Command_Softbody_Demo_4")
-	{
-		Command_Softbody_Demo_4 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(true);
-	}
-	if(name == "Command_Softbody_Demo_5")
-	{
-		Command_Softbody_Demo_5 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(false);
-	}
-
 
 	if(name == "Command_Deformable_Demo_1")
 	{
@@ -628,6 +538,8 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
 	}
 	if(name == "Command_Deformable_Demo_2")
 	{
@@ -638,6 +550,8 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
 	}
 	if(name == "Command_Deformable_Demo_3")
 	{
@@ -648,6 +562,8 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
 	}
 	if(name == "Command_Deformable_Demo_4")
 	{
@@ -658,6 +574,8 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
 	}
 	if(name == "Command_Deformable_Demo_5")
 	{
@@ -668,6 +586,32 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
+	}
+	if(name == "Command_Deformable_Demo_6")
+	{
+		Command_Deformable_Demo_6 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
+	}
+	if(name == "Command_Deformable_Demo_7")
+	{
+		Command_Deformable_Demo_7 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(false);
 	}
 }
 
