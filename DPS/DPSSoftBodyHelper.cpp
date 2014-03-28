@@ -577,31 +577,31 @@ void DPSSoftBodyHelper::createSoftDemo_2(const btVector3& startPos)
 
 void DPSSoftBodyHelper::createSoftDemo_3(const btVector3& startPos)
 {
-	Objloader* obj = new Objloader;
-	obj->LoadModel("softcube8",&triangles,&indicies,&texCoord);
-	//load("monkey.obj",&triangles,&indicies);
+	m_softBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVertices, &gIndices[0][0], NUM_TRIANGLES);
+	// 	btSoftBody::Material* pm = m_softBody_2->appendMaterial();
+	// 	pm->m_kLST = 0.5;
+	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	// 	m_softBody_2->generateBendingConstraints(2,pm);
+	// 	m_softBody_2->m_cfg.piterations = 2;
+	// 	m_softBody_2->m_cfg.kDF = 0.5;
+	// 	m_softBody_2->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	// 
+	// 	m_softBody_2->randomizeConstraints();
+	// 	m_softBody_2->translate(startPos);
+	// 	m_softBody_2->scale(btVector3(6,6,6));
+	// 	m_softBody_2->setTotalMass(50);
 
-	m_softBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-	m_softBody_3->setTotalMass(20.0,true);
-	//m_deformableModel->generateClusters(1000);
+
 	m_softBody_3->m_cfg.kSRHR_CL=1.0;	
-	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
-	m_softBody_3->m_cfg.viterations=500;
-	m_softBody_3->m_cfg.piterations=500;
-	m_softBody_3->m_cfg.citerations=500;
-	m_softBody_3->m_cfg.diterations=500;
-	m_softBody_3->m_cfg.kPR=500;
+	m_softBody_3->m_cfg.kCHR=1.0;
+	m_softBody_3->m_cfg.kSHR=1.0;
+	m_softBody_3->m_cfg.kAHR=1.0;
+	m_softBody_3->m_cfg.kPR=50;
+	m_softBody_3->m_cfg.piterations=50;
 
-
-// 	btSoftBody::Material* pm = m_softBody_3->appendMaterial();
-// 	pm->m_kLST = 0.5;
-// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
-// 	m_softBody_3->generateBendingConstraints(2,pm);
-// 	m_softBody_3->m_cfg.piterations	=	2;
-// 	m_softBody_3->m_cfg.kDF			=	0.5;
-	m_softBody_3->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
 	m_softBody_3->translate(startPos);
-	m_softBody_3->scale(btVector3(2,2,2));
+	m_softBody_3->setTotalMass(20.0,true);
+	m_softBody_3->scale(btVector3(3,3,3));
 	phyWorld->addSoftBody(m_softBody_3);
 
 	initSoftBody(m_softManualObject_3, m_softBody_3);
@@ -613,12 +613,16 @@ void DPSSoftBodyHelper::createSoftDemo_3(const btVector3& startPos)
 
 void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 {
+	triangles.clear();
+	indicies.clear();
+	texCoord.clear();
+
 	Objloader* obj = new Objloader;
 	obj->LoadModel("softcube8",&triangles,&indicies,&texCoord);
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformBody_1 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-	m_deformBody_1->setTotalMass(50.0,true);
+	m_deformBody_1->setTotalMass(20.0,true);
 	//m_deformableModel->generateClusters(1000);
 	m_deformBody_1->m_cfg.kSRHR_CL=1.0;	
 	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
@@ -635,7 +639,7 @@ void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 	// 	m_softBody_3->generateBendingConstraints(2,pm);
 	// 	m_softBody_3->m_cfg.piterations	=	2;
 	// 	m_softBody_3->m_cfg.kDF			=	0.5;
-	m_deformBody_1->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	m_deformBody_1->m_cfg.collisions = btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
 	m_deformBody_1->translate(startPos);
 	m_deformBody_1->scale(btVector3(2,2,2));
 	phyWorld->addSoftBody(m_deformBody_1);
@@ -644,6 +648,82 @@ void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 
 	Ogre::SceneNode* m_deformNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_deformNode->attachObject(m_deformManualObject_1);
+}
+
+
+void DPSSoftBodyHelper::createDeformDemo_2(const btVector3& startPos)
+{
+	triangles.clear();
+	indicies.clear();
+	texCoord.clear();
+
+	Objloader* obj = new Objloader;
+	obj->LoadModel("m845",&triangles,&indicies,&texCoord);
+	//load("monkey.obj",&triangles,&indicies);
+
+	m_deformBody_2 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_deformBody_2->setTotalMass(50.0,true);
+	//m_deformableModel->generateClusters(1000);
+	m_deformBody_2->m_cfg.kSRHR_CL=1.0;	
+	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
+	m_deformBody_2->m_cfg.viterations=500;
+	m_deformBody_2->m_cfg.piterations=500;
+	m_deformBody_2->m_cfg.citerations=500;
+	m_deformBody_2->m_cfg.diterations=500;
+	m_deformBody_2->m_cfg.kPR=500;
+
+
+	// 	btSoftBody::Material* pm = m_softBody_3->appendMaterial();
+	// 	pm->m_kLST = 0.5;
+	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	// 	m_softBody_3->generateBendingConstraints(2,pm);
+	// 	m_softBody_3->m_cfg.piterations	=	2;
+	// 	m_softBody_3->m_cfg.kDF			=	0.5;
+	m_deformBody_2->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	m_deformBody_2->translate(startPos);
+	m_deformBody_2->scale(btVector3(2,2,2));
+	phyWorld->addSoftBody(m_deformBody_2);
+
+	initSoftBody(m_deformManualObject_2, m_deformBody_2);
+
+	Ogre::SceneNode* m_deformNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_deformNode->attachObject(m_deformManualObject_2);
+}
+
+
+void DPSSoftBodyHelper::createDeformDemo_3(const btVector3& startPos)
+{
+	Objloader* obj = new Objloader;
+	obj->LoadModel("b8",&triangles,&indicies,&texCoord);
+	//load("monkey.obj",&triangles,&indicies);
+
+	m_deformBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_deformBody_3->setTotalMass(50.0,true);
+	//m_deformableModel->generateClusters(1000);
+	m_deformBody_3->m_cfg.kSRHR_CL=1.0;	
+	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;
+	m_deformBody_3->m_cfg.viterations=500;
+	m_deformBody_3->m_cfg.piterations=500;
+	m_deformBody_3->m_cfg.citerations=500;
+	m_deformBody_3->m_cfg.diterations=500;
+	m_deformBody_3->m_cfg.kPR=500;
+
+
+	// 	btSoftBody::Material* pm = m_softBody_3->appendMaterial();
+	// 	pm->m_kLST = 0.5;
+	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+	// 	m_softBody_3->generateBendingConstraints(2,pm);
+	// 	m_softBody_3->m_cfg.piterations	=	2;
+	// 	m_softBody_3->m_cfg.kDF			=	0.5;
+	m_deformBody_3->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	m_deformBody_3->translate(startPos);
+	m_deformBody_3->scale(btVector3(2,2,2));
+	phyWorld->addSoftBody(m_deformBody_3);
+
+	initSoftBody(m_deformManualObject_3, m_deformBody_3);
+
+	Ogre::SceneNode* m_deformNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_deformNode->attachObject(m_deformManualObject_3);
 }
 
 

@@ -284,8 +284,8 @@ void DPS::clearScreen(void)
 // 	runSoftbodyDome_5 = false;
 
  	runDeformDome_1 = false;
-// 	runDeformDome_2 = false;
-// 	runDeformDome_3 = false;
+	runDeformDome_2 = false;
+	runDeformDome_3 = false;
 // 	runDeformDome_4 = false;
 // 	runDeformDome_5 = false;
 }
@@ -511,10 +511,40 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_1(btVector3(0,3,0));
+		dpsSoftbodyHelper->createDeformDemo_1(btVector3(0,1.5,0));
+		dpsHelper->createCube(Ogre::Vector3(-5,1.5,0),Ogre::Vector3(4,4,4),1);
 
 		//run demo after ceate
 		runDeformDome_1 = true;
+	}
+
+	if(mGUI->Command_Deformable_Demo_2)
+	{
+		mGUI->Command_Deformable_Demo_2 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,1.5,0));
+
+		//run demo after ceate
+		runDeformDome_2 = true;
+	}
+	if(mGUI->Command_Deformable_Demo_3)
+	{
+		mGUI->Command_Deformable_Demo_3 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createDeformDemo_3(btVector3(0,3,0));
+
+		//run demo after ceate
+		runDeformDome_3 = true;
 	}
 }
 
@@ -570,6 +600,14 @@ void DPS::demoController(void)
 	if(runDeformDome_1)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_1, dpsSoftbodyHelper->m_deformBody_1);
+	}
+	if(runDeformDome_2)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_2, dpsSoftbodyHelper->m_deformBody_2);
+	}
+	if(runDeformDome_3)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_2, dpsSoftbodyHelper->m_deformBody_2);
 	}
 }
 

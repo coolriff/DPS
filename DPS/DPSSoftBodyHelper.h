@@ -88,6 +88,14 @@ public:
 	btSoftBody* m_deformBody_1;
 	void createDeformDemo_1(const btVector3& startPos);
 
+	Ogre::ManualObject* m_deformManualObject_2;
+	btSoftBody* m_deformBody_2;
+	void createDeformDemo_2(const btVector3& startPos);
+
+	Ogre::ManualObject* m_deformManualObject_3;
+	btSoftBody* m_deformBody_3;
+	void createDeformDemo_3(const btVector3& startPos);
+
 
 	btSoftBody* m_deformableModel;
 	btSoftBody* m_mesh;
