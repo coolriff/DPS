@@ -101,9 +101,9 @@ class DPS : public BaseApplication
 		void deleteOgreEntities(void);
 		void deletePhysicsShapes(void);
 		void GimpactRayCallBack(void);
-		void createGimpactBarrel(void);
-		void createGimpactBuuny(void);
-		void createGimpactTorus(void);
+// 		void createGimpactBarrel(void);
+// 		void createGimpactBuuny(void);
+// 		void createGimpactTorus(void);
 		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
 		void GUIeventHandler(void);
 		void setMiniCamPosition(Ogre::Vector3 camPos);

@@ -96,7 +96,14 @@ public:
 	btSoftBody* m_deformBody_3;
 	void createDeformDemo_3(const btVector3& startPos);
 
+	Ogre::ManualObject* m_BuunyManualObject_3;
+	btSoftBody* m_BuunyBody_3;
+	void createGimpactBuuny(void);
 
+
+	void createGimpactBarrel(void);
+
+	void createGimpactTorus(void);
 
 
 	btSoftBody* m_deformableModel;
