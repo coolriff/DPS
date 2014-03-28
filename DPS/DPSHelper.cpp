@@ -357,6 +357,37 @@ void DPSHelper::createSphere(Ogre::Vector3 position, btScalar mass)
 }
 
 
+void DPSHelper::createBarrel(Ogre::Vector3 position, btScalar mass)
+{
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+
+	//Create Ogre stuff.
+	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity("Barrel.mesh");
+	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position, rot);
+	setColor(ogreHeadEntity, Ogre::Vector3(0.4402f,0.4408f,0.4471f));
+	ogreHeadEntity->setCastShadows(true);
+
+	//Create shape.
+	BtOgre::StaticMeshToShapeConverter converter(ogreHeadEntity);
+
+	//mNinjaShape = converter.createTrimesh();
+	btCollisionShape* ogreHeadShape = converter.createTrimesh();
+	//mNinjaShape = converter.createConvex();
+
+	//Calculate inertia.
+	btVector3 inertia(0,0,0);
+	ogreHeadShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState *ogreheadState = new BtOgre::RigidBodyState(ogreHeadNode);
+
+	//Create the Body.
+	btRigidBody* ogreHeadBody = new btRigidBody(mass, ogreheadState, ogreHeadShape, inertia);
+	phyWorld->addRigidBody(ogreHeadBody);
+	ogreHeadNode->attachObject(ogreHeadEntity);
+}
+
+
 void DPSHelper::createFixedSphere(Ogre::Vector3 position, btScalar mass)
 {
 	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;

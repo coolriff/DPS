@@ -611,6 +611,7 @@ void DPSSoftBodyHelper::createSoftDemo_3(const btVector3& startPos)
 	m_softNode->attachObject(m_softManualObject_3);
 }
 
+
 //btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gbarrel_va, &gbarrel_ia[0][0], gfaces_size);
 void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 {

@@ -25,6 +25,7 @@ class DPSHelper
 		void createCube(Ogre::Vector3 position, Ogre::Vector3 cubeSize, btScalar mass);
 		btRigidBody* createCubeAndReturnBody(Ogre::Vector3 position, Ogre::Vector3 cubeSize, btScalar mass);
 		void createSphere(Ogre::Vector3 position, btScalar mass);
+		void createBarrel(Ogre::Vector3 position, btScalar mass);
 		void createFixedSphere(Ogre::Vector3 position, btScalar mass);
 
 		Ogre::SceneNode* sphereNode_0;
