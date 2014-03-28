@@ -3,6 +3,7 @@
 #include "Mesh/BunnyMesh.h"
 #include "Mesh/TorusMesh.h"
 /*#include "Mesh/barrel.h"*/
+#include "Mesh/barrelg.h"
 #include <btBulletDynamicsCommon.h>
 #include <BulletSoftBody/btSoftRigidDynamicsWorld.h>
 #include <BulletSoftBody/btDefaultSoftBodySolver.h>
@@ -610,7 +611,7 @@ void DPSSoftBodyHelper::createSoftDemo_3(const btVector3& startPos)
 	m_softNode->attachObject(m_softManualObject_3);
 }
 
-
+//btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gbarrel_va, &gbarrel_ia[0][0], gfaces_size);
 void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 {
 	triangles.clear();
@@ -658,7 +659,7 @@ void DPSSoftBodyHelper::createDeformDemo_2(const btVector3& startPos)
 	texCoord.clear();
 
 	Objloader* obj = new Objloader;
-	obj->LoadModel("m845",&triangles,&indicies,&texCoord);
+	obj->LoadModel("b8",&triangles,&indicies,&texCoord);
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformBody_2 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
@@ -693,11 +694,7 @@ void DPSSoftBodyHelper::createDeformDemo_2(const btVector3& startPos)
 
 void DPSSoftBodyHelper::createDeformDemo_3(const btVector3& startPos)
 {
-	Objloader* obj = new Objloader;
-	obj->LoadModel("b8",&triangles,&indicies,&texCoord);
-	//load("monkey.obj",&triangles,&indicies);
-
-	m_deformBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_deformBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gbarrel_va, &gbarrel_ia[0][0], gfaces_size);
 	m_deformBody_3->setTotalMass(50.0,true);
 	//m_deformableModel->generateClusters(1000);
 	m_deformBody_3->m_cfg.kSRHR_CL=1.0;	
@@ -717,7 +714,7 @@ void DPSSoftBodyHelper::createDeformDemo_3(const btVector3& startPos)
 	// 	m_softBody_3->m_cfg.kDF			=	0.5;
 	m_deformBody_3->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
 	m_deformBody_3->translate(startPos);
-	m_deformBody_3->scale(btVector3(2,2,2));
+/*	m_deformBody_3->scale(btVector3(2,2,2));*/
 	phyWorld->addSoftBody(m_deformBody_3);
 
 	initSoftBody(m_deformManualObject_3, m_deformBody_3);

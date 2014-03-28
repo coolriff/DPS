@@ -527,7 +527,7 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,1.5,0));
+		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,2.5,0));
 
 		//run demo after ceate
 		runDeformDome_2 = true;
@@ -541,7 +541,7 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_3(btVector3(0,3,0));
+		dpsSoftbodyHelper->createDeformDemo_3(btVector3(0,10,0));
 
 		//run demo after ceate
 		runDeformDome_3 = true;
@@ -607,7 +607,7 @@ void DPS::demoController(void)
 	}
 	if(runDeformDome_3)
 	{
-		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_2, dpsSoftbodyHelper->m_deformBody_2);
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_3, dpsSoftbodyHelper->m_deformBody_3);
 	}
 }
 

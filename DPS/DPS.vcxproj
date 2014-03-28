@@ -31,6 +31,7 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="LeapListener.h" />
     <ClInclude Include="Mesh\barrel.h" />
+    <ClInclude Include="Mesh\barrelg.h" />
     <ClInclude Include="Mesh\BunnyMesh.h" />
     <ClInclude Include="Mesh\TorusMesh.h" />
     <ClInclude Include="ObjLoader.h" />

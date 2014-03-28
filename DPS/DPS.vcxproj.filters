@@ -92,5 +92,8 @@
     <ClInclude Include="LeapListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh\barrelg.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
