@@ -279,11 +279,11 @@ void DPS::clearScreen(void)
 
 	runSoftbodyDome_1 = false;
  	runSoftbodyDome_2 = false;
-// 	runSoftbodyDome_3 = false;
+ 	runSoftbodyDome_3 = false;
 // 	runSoftbodyDome_4 = false;
 // 	runSoftbodyDome_5 = false;
-// 
-// 	runDeformDome_1 = false;
+
+ 	runDeformDome_1 = false;
 // 	runDeformDome_2 = false;
 // 	runDeformDome_3 = false;
 // 	runDeformDome_4 = false;
@@ -310,6 +310,9 @@ void DPS::GUIeventHandler(void)
 
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
+
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("createDeformDemo_1")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -477,6 +480,36 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runSoftbodyDome_2 = true;
 	}
+	if(mGUI->Command_Softbody_Demo_3)
+	{
+		mGUI->Command_Softbody_Demo_3 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createSoftDemo_3(btVector3(0,3,0));
+
+		//run demo after ceate
+		runSoftbodyDome_3 = true;
+	}
+
+
+	if(mGUI->Command_Deformable_Demo_1)
+	{
+		mGUI->Command_Deformable_Demo_1 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createDeformDemo_1(btVector3(0,3,0));
+
+		//run demo after ceate
+		runDeformDome_1 = true;
+	}
 }
 
 void DPS::demoController(void)
@@ -521,6 +554,16 @@ void DPS::demoController(void)
 	if(runSoftbodyDome_2)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_2, dpsSoftbodyHelper->m_softBody_2);
+	}
+	if(runSoftbodyDome_3)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_softManualObject_3, dpsSoftbodyHelper->m_softBody_3);
+	}
+
+
+	if(runDeformDome_1)
+	{
+		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_1, dpsSoftbodyHelper->m_deformBody_1);
 	}
 }
 
