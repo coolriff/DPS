@@ -312,7 +312,7 @@ void DPS::GUIeventHandler(void)
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
 
-		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("createDeformDemo_1")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{

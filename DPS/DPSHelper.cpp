@@ -158,7 +158,7 @@ void DPSHelper::throwCube(void)
 
 	btCollisionShape* entShape = new btBoxShape(btVector3(1,1,1));
 	//Calculate inertia.
-	btScalar mass = 1;
+	btScalar mass = 5;
 	btVector3 inertia(0,0,0);
 	entShape->calculateLocalInertia(mass, inertia);
 
