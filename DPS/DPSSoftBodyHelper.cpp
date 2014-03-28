@@ -618,7 +618,7 @@ void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 	//load("monkey.obj",&triangles,&indicies);
 
 	m_deformBody_1 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-	m_deformBody_1->setTotalMass(20.0,true);
+	m_deformBody_1->setTotalMass(50.0,true);
 	//m_deformableModel->generateClusters(1000);
 	m_deformBody_1->m_cfg.kSRHR_CL=1.0;	
 	//m_deformableModel->m_cfg.collisions =	btSoftBody::fCollision::CL_RS;

@@ -311,8 +311,14 @@ void DPS::GUIeventHandler(void)
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_1")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_2")->setEnabled(true);
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_3")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_4")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Softbody_Demo_5")->setEnabled(true);
 
 		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_3")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_4")->setEnabled(true);
+		mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -1022,8 +1028,10 @@ bool DPS::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 			{
 				rayObject = iter->movable;
 				rayNode = rayObject->getParentSceneNode();
+				mGUI->miniCameraWindow->setVisible(true);
+				mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Mini_Camera")->setEnabled(false);
+				mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Mini_Camera")->setEnabled(true);
 			}
-
 		}
 	}
 
