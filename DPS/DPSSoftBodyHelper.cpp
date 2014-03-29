@@ -763,6 +763,28 @@ void DPSSoftBodyHelper::createCarWheels(Ogre::ManualObject*& ManualObject, btSof
 }
 
 
+void DPSSoftBodyHelper::createTorus(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler)
+{
+	body = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gVertices, &gIndices[0][0], NUM_TRIANGLES);
+	body->m_cfg.kSRHR_CL=1.0;	
+	body->m_cfg.kCHR=1.0;
+	body->m_cfg.kSHR=1.0;
+	body->m_cfg.kAHR=1.0;
+	body->m_cfg.kPR=50;
+	body->m_cfg.piterations=50;
+	body->m_cfg.collisions |= btSoftBody::fCollision::CL_SS;
+	body->translate(startPos);
+	body->setTotalMass(20.0,true);
+	body->scale(scaler);
+	phyWorld->addSoftBody(body);
+
+	initCar(ManualObject, body);
+
+	Ogre::SceneNode* m_CarWheelNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_CarWheelNode->attachObject(ManualObject);
+}
+
+
 void DPSSoftBodyHelper::createCarBody(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler)
 {
 
@@ -792,7 +814,7 @@ void DPSSoftBodyHelper::createCarBody(Ogre::ManualObject*& ManualObject, btSoftB
 
 
 //base on Bullet demo.
-void DPSSoftBodyHelper::createPlayground_1(const btVector3& startPos)
+void DPSSoftBodyHelper::createPlayground_1(const btVector3& starPosition)
 {
 	btScalar	widthf=8;
 	btScalar	widthr=9;
@@ -805,7 +827,6 @@ void DPSSoftBodyHelper::createPlayground_1(const btVector3& startPos)
 		btVector3(-widthr,-height,-length),	// Rear right
 	};
 
-	btVector3 starPosition(0,10,0);
 	btQuaternion orientation(-SIMD_PI/2,0,0);
 
 	createCarWheels(m_playgroundManualObject_fl, m_playgroundBody_fl, wheels[0], btVector3(0,0,SIMD_HALF_PI), btVector3(2,4,2));
@@ -872,6 +893,13 @@ void DPSSoftBodyHelper::createPlayground_1(const btVector3& startPos)
 	m_playgroundBody_rr->m_clusters[0]->m_ndamping	= 0.05;
 }
 
+
+void DPSSoftBodyHelper::createPlayground_2(void)
+{
+	createTorus(m_playgroundManualObject_2_1, m_playgroundBody_2_1, btVector3(0,3,0), btVector3(0,0,0), btVector3(2,2,2));
+ 	createTorus(m_playgroundManualObject_2_2, m_playgroundBody_2_2, btVector3(0,7,0), btVector3(0,0,0), btVector3(2,2,2));
+// 	createTorus(m_playgroundManualObject_2_3, m_playgroundBody_2_3, btVector3(0,11,0), btVector3(0,0,0), btVector3(2,2,2));
+}
 
 
 

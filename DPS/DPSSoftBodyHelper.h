@@ -17,7 +17,6 @@ public:
 	btSoftBody* createDeformableModel(void);
 	btSoftBody* createMesh(void);
 
-
 	btSoftBody* createBunny(void);
 
 	btScalar DPSSoftBodyHelper::UnitRand();
@@ -102,6 +101,7 @@ public:
 	//playground
 	void createCarWheels(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
 	void createCarBody(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
+	void createTorus(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
 	void initCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body);
 	void updateCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body);
 
@@ -117,7 +117,18 @@ public:
 	btSoftBody* m_playgroundBody_rl;
 	btSoftBody* m_playgroundBody_rr;
 	btSoftBody* m_playgroundBody_1;
-	void createPlayground_1(const btVector3& startPos);
+	void createPlayground_1(const btVector3& starPosition);
+
+
+	Ogre::ManualObject* m_playgroundManualObject_2_1;
+	Ogre::ManualObject* m_playgroundManualObject_2_2;
+	Ogre::ManualObject* m_playgroundManualObject_2_3;
+	btSoftBody* m_playgroundBody_2_1;
+	btSoftBody* m_playgroundBody_2_2;
+	btSoftBody* m_playgroundBody_2_3;
+	void createPlayground_2(void);
+
+
 
 
 	Ogre::ManualObject* m_BuunyManualObject_3;

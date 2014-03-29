@@ -313,6 +313,12 @@ void DPS::clearScreen(void)
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(true);
+
+	mGUI->Command_Disable_Mini_Camera = true;
+	mGUI->Command_Enable_Mini_Camera = false;
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Mini_Camera")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Mini_Camera")->setEnabled(false);
+	mGUI->miniCameraWindow->setVisible(false);
 }
 
 
@@ -579,6 +585,25 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runPlaygroud_1 = true;
 	}
+
+	if(mGUI->Command_Playgroud_2)
+	{
+		mGUI->Command_Playgroud_2 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,40.0f));
+		dpsSoftbodyHelper->createPlayground_2();
+		dpsHelper->createMesh(Ogre::Vector3(0,2,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+ 		dpsHelper->createMesh(Ogre::Vector3(0,10,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+ 		dpsHelper->createMesh(Ogre::Vector3(0,17,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+
+
+		//run demo after ceate
+		runPlaygroud_2 = true;
+	}
 }
 
 void DPS::demoController(void)
@@ -657,6 +682,11 @@ void DPS::demoController(void)
 		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_rl, dpsSoftbodyHelper->m_playgroundBody_rl);
 		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_rr, dpsSoftbodyHelper->m_playgroundBody_rr);
 		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_carBody, dpsSoftbodyHelper->m_playgroundBody_carBody);
+	}
+	if(runPlaygroud_2)
+	{
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_2_1, dpsSoftbodyHelper->m_playgroundBody_2_1);
+ 		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_2_2, dpsSoftbodyHelper->m_playgroundBody_2_2);
 	}
 }
 
