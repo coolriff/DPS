@@ -47,6 +47,7 @@ DPS::DPS(void)
 
 DPS::~DPS(void)
 {
+	deletePhysicsShapes();
 	exitPhysics();
 	leapMotionCleanup();
 }
@@ -82,36 +83,12 @@ void DPS::initPhysics(void)
 
 void DPS::exitPhysics(void)
 {
-	//cleanup in the reverse order of creation/initialization
-	//remove the rigidbodies from the dynamics world and delete them
-	int i;
-	for (i=Globals::phyWorld->getNumCollisionObjects()-1; i>=0 ;i--)
-	{
-		btCollisionObject* obj = Globals::phyWorld->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-		}
-		Globals::phyWorld->removeCollisionObject( obj );
-		delete obj;
-	}
-
-	//delete collision shapes
-	for (int j=0;j<m_collisionShapes.size();j++)
-	{
-		btCollisionShape* shape = m_collisionShapes[j];
-		m_collisionShapes[j] = 0;
-		delete shape;
-	}
-
 	delete Globals::phyWorld;
 	delete m_solver;
 	delete m_broadphase;
 	delete m_dispatcher;
 	delete m_collisionConfiguration;
 	delete Globals::dbgdraw;
-	//texCoords = NULL;
 }
 
 
@@ -177,7 +154,7 @@ void DPS::createScene(void)
 	//LogManager::getSingleton().setLogDetail(LL_BOREME);
 
 	dpsHelper = std::make_shared<DPSHelper>(Globals::phyWorld, mCamera, mSceneMgr);
-	dpsSoftbodyHelper = std::make_shared<DPSSoftBodyHelper>(Globals::phyWorld, mCamera, mSceneMgr);
+	dpsSoftbodyHelper = std::make_shared<DPSSoftBodyHelper>(Globals::phyWorld, mCamera, mSceneMgr, m_collisionShapes);
 
 	dpsHelper->createWorld();
 

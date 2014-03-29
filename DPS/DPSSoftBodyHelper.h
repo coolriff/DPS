@@ -11,7 +11,7 @@
 class DPSSoftBodyHelper
 {
 public:
-	DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr);
+	DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr, btAlignedObjectArray<btCollisionShape*> m_collisionShapes);
 	~DPSSoftBodyHelper(void);
 
 	btSoftBody* createDeformableModel(void);
@@ -159,6 +159,7 @@ public:
 	btSoftRigidDynamicsWorld* phyWorld;
 	Ogre::Camera* mCamera;
 	Ogre::SceneManager* mSceneMgr;
+	btAlignedObjectArray<btCollisionShape*> m_collisionShapes;
 
 	std::vector<float> triangles;
 	std::vector<int> indicies;

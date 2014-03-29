@@ -17,11 +17,12 @@
 #define SIMD_HALF_PI (SIMD_PI * btScalar(0.5))
 
 
-DPSSoftBodyHelper::DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr)
+DPSSoftBodyHelper::DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr, btAlignedObjectArray<btCollisionShape*> m_collisionShapes)
 {
 	this->phyWorld = phyWorld;
 	this->mCamera = mCamera;
 	this->mSceneMgr = mSceneMgr;
+	this->m_collisionShapes = m_collisionShapes;
 }
 
 
@@ -937,7 +938,7 @@ void DPSSoftBodyHelper::createGimpactBarrel(void)
 	btGImpactMeshShape * shape = new btGImpactMeshShape(mesh_interface);
 	shape->setMargin(btScalar(0.1));
 	shape->updateBound();
-	//m_collisionShapes.push_back(shape);
+	m_collisionShapes.push_back(shape);
 	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
 	btVector3 localInertia(0,0,0);
 	//btScalar m_defaultContactProcessingThreshold;
@@ -1001,7 +1002,6 @@ void DPSSoftBodyHelper::createGimpactBarrel(void)
 }
 
 
-
 void DPSSoftBodyHelper::createGimpactBuuny(void)
 {
 	btTransform tr;
@@ -1020,7 +1020,7 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 	shape->setMargin(btScalar(0.1));
 	shape->setLocalScaling(btVector3(3,3,3));
 	shape->updateBound();
-	//m_collisionShapes.push_back(shape);
+	m_collisionShapes.push_back(shape);
 	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
 	btVector3 localInertia(0,0,0);
 	//btScalar m_defaultContactProcessingThreshold;

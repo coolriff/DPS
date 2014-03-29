@@ -87,7 +87,7 @@ class DPS : public BaseApplication
 		btAlignedObjectArray<btSoftRididCollisionAlgorithm*> m_SoftRigidCollisionAlgorithms;
 		btSoftBodyWorldInfo	m_softBodyWorldInfo;
 		//keep the collision shapes, for deletion/cleanup
-		btAlignedObjectArray<btCollisionShape*>		m_collisionShapes;
+		btAlignedObjectArray<btCollisionShape*> m_collisionShapes;
 		btBroadphaseInterface*	m_broadphase;
 		btCollisionDispatcher*	m_dispatcher;
 		btConstraintSolver*	m_solver;
