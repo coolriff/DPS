@@ -903,15 +903,75 @@ void DPSSoftBodyHelper::createPlayground_2(void)
 }
 
 
+void DPSSoftBodyHelper::createPlayground_3(const btVector3& starPosition)
+{
+	triangles.clear();
+	indicies.clear();
+	texCoord.clear();
+
+	Objloader* obj = new Objloader;
+	obj->LoadModel("car",&triangles,&indicies,&texCoord);
+
+	m_playgroundBody_3 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_playgroundBody_3->setTotalMass(50.0,true);
+	m_playgroundBody_3->m_cfg.kSRHR_CL=1.0;	
+	m_playgroundBody_3->m_cfg.viterations=500;
+	m_playgroundBody_3->m_cfg.piterations=500;
+	m_playgroundBody_3->m_cfg.citerations=500;
+	m_playgroundBody_3->m_cfg.diterations=500;
+	m_playgroundBody_3->m_cfg.kPR=500;
+	m_playgroundBody_3->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	m_playgroundBody_3->translate(starPosition);
+	m_playgroundBody_3->scale(btVector3(1,1,1));
+	phyWorld->addSoftBody(m_playgroundBody_3);
+
+	initSoftBody(m_playgroundManualObject_3, m_playgroundBody_3);
+
+	Ogre::SceneNode* m_PlaygroundNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_PlaygroundNode->attachObject(m_playgroundManualObject_3);
+}
+
+
+void DPSSoftBodyHelper::createPlayground_4(const btVector3& starPosition)
+{
+	triangles.clear();
+	indicies.clear();
+	texCoord.clear();
+
+	Objloader* obj = new Objloader;
+	obj->LoadModel("cylinder_high",&triangles,&indicies,&texCoord);
+
+	m_playgroundBody_4 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
+	m_playgroundBody_4->setTotalMass(200.0,true);
+	m_playgroundBody_4->m_cfg.kSRHR_CL=1.0;	
+	m_playgroundBody_4->m_cfg.viterations=500;
+	m_playgroundBody_4->m_cfg.piterations=500;
+	m_playgroundBody_4->m_cfg.citerations=500;
+	m_playgroundBody_4->m_cfg.diterations=500;
+	m_playgroundBody_4->m_cfg.kPR=500;
+	m_playgroundBody_4->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
+	m_playgroundBody_4->translate(starPosition);
+	m_playgroundBody_4->scale(btVector3(1,1,1));
+	phyWorld->addSoftBody(m_playgroundBody_4);
+
+	initSoftBody(m_playgroundManualObject_4, m_playgroundBody_4);
+
+	Ogre::SceneNode* m_PlaygroundNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_PlaygroundNode->attachObject(m_playgroundManualObject_4);
+}
+
+
 btScalar DPSSoftBodyHelper::UnitRand()
 {
 	return (rand()/(btScalar)RAND_MAX);
 }
 
+
 btScalar DPSSoftBodyHelper::SignedUnitRand()
 {
 	return (UnitRand()*2-1);
 }
+
 
 btVector3 DPSSoftBodyHelper::Vector3Rand()
 {

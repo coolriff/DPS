@@ -119,7 +119,6 @@ public:
 	btSoftBody* m_playgroundBody_1;
 	void createPlayground_1(const btVector3& starPosition);
 
-
 	Ogre::ManualObject* m_playgroundManualObject_2_1;
 	Ogre::ManualObject* m_playgroundManualObject_2_2;
 	Ogre::ManualObject* m_playgroundManualObject_2_3;
@@ -128,6 +127,13 @@ public:
 	btSoftBody* m_playgroundBody_2_3;
 	void createPlayground_2(void);
 
+	Ogre::ManualObject* m_playgroundManualObject_3;
+	btSoftBody* m_playgroundBody_3;
+	void createPlayground_3(const btVector3& starPosition);
+
+	Ogre::ManualObject* m_playgroundManualObject_4;
+	btSoftBody* m_playgroundBody_4;
+	void createPlayground_4(const btVector3& starPosition);
 
 
 

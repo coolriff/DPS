@@ -171,15 +171,6 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mGUI->Command_Bullet_Debug_Mode);
 	Globals::dbgdraw->step();
 
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_cloth);
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_SoftBody);
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_deformableModel);
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_bunny);
-	//Globals::app->updateSoftBody(dpsSoftbodyHelper->m_mesh);
-
-	
-	
-
 	Ogre::Vector3 camPos = mCamera->getDerivedPosition();
 
 	if (camPos.y<0.5)
@@ -432,7 +423,7 @@ void DPS::GUIeventHandler(void)
 		clearScreen();
 
 		//create demo
-		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
 		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,2,0));
 		dpsHelper->createMesh(Ogre::Vector3(-8,2,0),1,"Barrel.mesh",Ogre::Vector3(1,1,1));
 
@@ -529,7 +520,6 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runPlaygroud_1 = true;
 	}
-
 	if(mGUI->Command_Playgroud_2)
 	{
 		mGUI->Command_Playgroud_2 = false;
@@ -547,6 +537,40 @@ void DPS::GUIeventHandler(void)
 
 		//run demo after ceate
 		runPlaygroud_2 = true;
+	}
+	if(mGUI->Command_Playgroud_3)
+	{
+		mGUI->Command_Playgroud_3 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
+		dpsSoftbodyHelper->createPlayground_3(btVector3(0,0,0));
+// 		dpsHelper->createMesh(Ogre::Vector3(0,2,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+// 		dpsHelper->createMesh(Ogre::Vector3(0,10,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+// 		dpsHelper->createMesh(Ogre::Vector3(0,17,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+
+		//run demo after ceate
+		runPlaygroud_3 = true;
+	}
+	if(mGUI->Command_Playgroud_4)
+	{
+		mGUI->Command_Playgroud_4 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
+		dpsSoftbodyHelper->createPlayground_4(btVector3(0,10,0));
+		// 		dpsHelper->createMesh(Ogre::Vector3(0,2,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+		// 		dpsHelper->createMesh(Ogre::Vector3(0,10,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+		// 		dpsHelper->createMesh(Ogre::Vector3(0,17,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+
+		//run demo after ceate
+		runPlaygroud_4 = true;
 	}
 }
 
@@ -653,6 +677,14 @@ void DPS::demoController(void)
 	{
 		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_2_1, dpsSoftbodyHelper->m_playgroundBody_2_1);
  		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_2_2, dpsSoftbodyHelper->m_playgroundBody_2_2);
+	}
+	if(runPlaygroud_3)
+	{
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_3, dpsSoftbodyHelper->m_playgroundBody_3);
+	}
+	if(runPlaygroud_4)
+	{
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_4, dpsSoftbodyHelper->m_playgroundBody_4);
 	}
 }
 
