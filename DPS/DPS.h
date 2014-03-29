@@ -152,6 +152,8 @@ class DPS : public BaseApplication
 		bool runPlaygroud_4;
 		bool runPlaygroud_5;
 
+		int playgroundCount;
+
 	protected:
 
 		std::shared_ptr<DPSHelper> dpsHelper;

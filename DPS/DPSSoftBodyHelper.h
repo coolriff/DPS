@@ -102,6 +102,7 @@ public:
 	void createCarWheels(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
 	void createCarBody(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
 	void createTorus(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
+	void createFromMesh(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
 	void initCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body);
 	void updateCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body);
 
@@ -129,7 +130,7 @@ public:
 
 	Ogre::ManualObject* m_playgroundManualObject_3;
 	btSoftBody* m_playgroundBody_3;
-	void createPlayground_3(const btVector3& starPosition);
+	void createPlayground_3(void);
 
 	Ogre::ManualObject* m_playgroundManualObject_4;
 	btSoftBody* m_playgroundBody_4;
