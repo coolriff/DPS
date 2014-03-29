@@ -86,6 +86,7 @@ class DPS : public BaseApplication
 		btAlignedObjectArray<btSoftSoftCollisionAlgorithm*> m_SoftSoftCollisionAlgorithms;
 		btAlignedObjectArray<btSoftRididCollisionAlgorithm*> m_SoftRigidCollisionAlgorithms;
 		btSoftBodyWorldInfo	m_softBodyWorldInfo;
+
 		//keep the collision shapes, for deletion/cleanup
 		btAlignedObjectArray<btCollisionShape*> m_collisionShapes;
 		btBroadphaseInterface*	m_broadphase;
@@ -101,9 +102,6 @@ class DPS : public BaseApplication
 		void deleteOgreEntities(void);
 		void deletePhysicsShapes(void);
 		void GimpactRayCallBack(void);
-// 		void createGimpactBarrel(void);
-// 		void createGimpactBuuny(void);
-// 		void createGimpactTorus(void);
 		bool process_triangle(btCollisionShape * shape, int hitTriangleIndex);
 		void GUIeventHandler(void);
 		void setMiniCamPosition(Ogre::Vector3 camPos);
@@ -128,11 +126,9 @@ class DPS : public BaseApplication
 		Ogre::MovableObject* rayObject;
 		Ogre::SceneNode* rayNode;
 
-
 		bool leapMotionInit(void);
 		void leapMotionUpdate(void);
 		void leapMotionCleanup(void);
-
 
 		bool runClothDome_1;
 		bool runClothDome_2;
@@ -156,12 +152,7 @@ class DPS : public BaseApplication
 		bool runPlaygroud_4;
 		bool runPlaygroud_5;
 
-
 	protected:
-
-		Ogre::ManualObject* m_ManualObject;
-// 		Ogre;;ManualObject* barrelManualObject;
-// 		Ogre;;ManualObject* bunnyManualObject;
 
 		std::shared_ptr<DPSHelper> dpsHelper;
 		std::shared_ptr<DPSSoftBodyHelper> dpsSoftbodyHelper;
@@ -174,13 +165,7 @@ class DPS : public BaseApplication
 		virtual bool mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 		virtual bool mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
-		//void initSoftBody(btSoftBody* body);
-		//void updateSoftBody(btSoftBody* body);
 		bool keyPressed(const OIS::KeyEvent &arg);
-		void ClickFocus(MyGUI::IntPoint mousePos, const OIS::MouseEvent &arg);
-		bool PickEntity(Ogre::RaySceneQuery* mRaySceneQuery, Ogre::Ray &ray, Ogre::Entity **result, Ogre::Vector3 &hitpoint, bool excludeInVisible,Ogre::uint32 mask, const Ogre::String& excludeobject, Ogre::Real max_distance);
-		void GetMeshInformationEx(const Ogre::MeshPtr mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, const Ogre::Vector3 &position, const Ogre::Quaternion &orient, const Ogre::Vector3 &scale);
-
 };
 
 
