@@ -994,9 +994,9 @@ void DPSSoftBodyHelper::createGimpactBarrel(void)
 // 	mLiquidBodyNode->attachObject(m_ManualObject);
 
 	//initSoftBody(m_BuunyManualObject_3, m_BuunyBody_3);
-
-	Ogre::SceneNode* m_deformNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_deformNode->attachObject(m_BuunyManualObject_3);
+// 
+// 	Ogre::SceneNode* m_deformNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+// 	m_deformNode->attachObject(m_BuunyManualObject_3);
 
 
 }
@@ -1032,58 +1032,54 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 	body->translate(btVector3(0,10,0));
 	phyWorld->addRigidBody(body);
 
-// 	m_ManualObject = mSceneMgr->createManualObject("bunny");
-// 	m_ManualObject->setDynamic(true);
-// 
-// 	//m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
-// 	//m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
-// 
-// 	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 
-// 	for (int i = 0; i < 1358; i+=9)
-// 	{
-// 		//node0 = faces[i].m_n[0];
-// 		//node1 = faces[i].m_n[1];
-// 		//node2 = faces[i].m_n[2];
-// 
-// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
-// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
-// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
-// 
-// 
-// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
-// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
-// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
-// 
-// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,0);
-// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-// 
-// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-// 		//m_ManualObject->textureCoord(0,1);
-// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-// 
-// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,1);
-// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-// 
-// 		m_ManualObject->index(i*3);
-// 		m_ManualObject->index(i*3+1);
-// 		m_ManualObject->index(i*3+2);
-// 	}
-// 	// 	m_ManualObject->textureCoord(1,0);
-// 	// 	m_ManualObject->textureCoord(0,0);
-// 	// 	m_ManualObject->textureCoord(0,1);
-// 	// 	m_ManualObject->textureCoord(1,1);
-// 	m_ManualObject->end();
-// 
-// 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-// 	mLiquidBodyNode->attachObject(m_ManualObject);
+	m_BuunyManualObject = mSceneMgr->createManualObject("bunny");
+	m_BuunyManualObject->setDynamic(true);
+
+	//m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
+	//m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
+
+	m_BuunyManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+
+	for (int i = 0; i < 1358; i+=9)
+	{
+		//node0 = faces[i].m_n[0];
+		//node1 = faces[i].m_n[1];
+		//node2 = faces[i].m_n[2];
+
+		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
+		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
+		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
+
+
+		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
+		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
+		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
+
+		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		//m_ManualObject->textureCoord(1,0);
+		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+
+		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		//m_ManualObject->textureCoord(0,1);
+		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+
+		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		//m_ManualObject->textureCoord(1,1);
+		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+
+		m_BuunyManualObject->index(i*3);
+		m_BuunyManualObject->index(i*3+1);
+		m_BuunyManualObject->index(i*3+2);
+	}
+	// 	m_ManualObject->textureCoord(1,0);
+	// 	m_ManualObject->textureCoord(0,0);
+	// 	m_ManualObject->textureCoord(0,1);
+	// 	m_ManualObject->textureCoord(1,1);
+	m_BuunyManualObject->end();
+
+	Ogre::SceneNode* m_BuunyManualNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_BuunyManualNode->attachObject(m_BuunyManualObject);
 }
-
-
-
-
 
 
 void DPSSoftBodyHelper::initSoftBody(Ogre::ManualObject*& m_ManualObject, btSoftBody* body)

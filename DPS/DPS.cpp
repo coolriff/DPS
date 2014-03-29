@@ -4,13 +4,10 @@
 #include <string> 
 #include "BulletCollision/Gimpact/btGImpactShape.h"
 #include "BulletCollision/Gimpact/btGImpactCollisionAlgorithm.h"
-/*#include "Mesh/barrel.h"*/
 #include "Mesh/BunnyMesh.h"
 #include "GUI.h"
 #include <string>
 #include <sstream>
-
-//#include <memory>
 
 const int maxProxies = 32766;
 btRigidBody * hit_body = 0;
@@ -73,13 +70,11 @@ void DPS::initPhysics(void)
 	Globals::phyWorld->getDispatchInfo().m_enableSPU = true;
 	Globals::phyWorld->setGravity(btVector3(0,-10,0));
 	m_softBodyWorldInfo.m_gravity.setValue(0,-10,0);
-	//	clientResetScene();
 	m_softBodyWorldInfo.m_sparsesdf.Initialize();
 
 	dt = evt.timeSinceLastFrame;
-	//mGUI->Simulation_Default = true;
-	//std::vector<float> texCoords = dpsSoftbodyHelper->texCoord;
 }
+
 
 void DPS::exitPhysics(void)
 {
@@ -117,31 +112,6 @@ void DPS::deletePhysicsShapes(void)
 }
 
 
-/*
-void DPS::createCamera(void)
-{
-    // create the camera
-    mCamera = mSceneMgr->createCamera("PlayerCam");
-    // set its position, direction  
-    mCamera->setPosition(Ogre::Vector3(0,10,500));
-    mCamera->lookAt(Ogre::Vector3(0,0,0));
-    // set the near clip distance
-    mCamera->setNearClipDistance(5);
- 
-    mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
-}
-//-------------------------------------------------------------------------------------
-void DPS::createViewports(void)
-{
-    // Create one viewport, entire window
-    Ogre::Viewport* vp = mWindow->addViewport(mCamera);
-    vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-    // Alter the camera aspect ratio to match the viewport
-    mCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));    
-}
-*/
-
-
 void DPS::createScene(void)
 {
 	mGUI->createGUI(1);
@@ -161,13 +131,6 @@ void DPS::createScene(void)
 	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
-
-
-
-
-
-// 	createGimpactBarrel();
-// 	createGimpactBuuny();
 
 	leapMotionInit();
 	setMiniCamPosition(Ogre::Vector3(10,10,10));
@@ -712,142 +675,8 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	{
 		GimpactRayCallBack();
 	}
-// 	if (arg.key == OIS::KC_RIGHT)
-// 	{
-// 
-// 	}
-
 	return BaseApplication::keyPressed(arg);
 }
-
-
-// void DPS::initSoftBody(btSoftBody* body)
-// {
-// 	//manual objects are used to generate new meshes based on raw vertex data
-// 	//this is used for the liquid form
-// 	m_ManualObject = mSceneMgr->createManualObject("liquidBody");
-// 	m_ManualObject->setDynamic(true);
-// 	m_ManualObject->setCastShadows(true);
-// 
-// 	btSoftBody::tNodeArray& nodes(body->m_nodes);
-// 	btSoftBody::tFaceArray& faces(body->m_faces);
-// 
-// 	m_ManualObject->estimateVertexCount(faces.size()*3);
-// 	m_ManualObject->estimateIndexCount(faces.size()*3);
-// 
-// 	//m_ManualObject->begin("CharacterMaterials/LiquidBody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 	//m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 	//m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 
-// 	//btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
-// 
-// 	//http://www.ogre3d.org/tikiwiki/ManualObject
-// 	for (int i = 0; i < faces.size(); ++i)
-// 	{
-// 		//node0 = faces[i].m_n[0];
-// 		//node1 = faces[i].m_n[1];
-// 		//node2 = faces[i].m_n[2];
-// 		
-// 		//problem of rendering texture - DO NOT USE NORMALS IN UPDATE FUNCTION FOR NOW! 
-// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x.x(),body->m_faces[i].m_n[0]->m_x.y(),body->m_faces[i].m_n[0]->m_x.z());
-// 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
-// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-// 		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i],dpsSoftbodyHelper->texCoord[i+1]);
-// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x.x(),body->m_faces[i].m_n[1]->m_x.y(),body->m_faces[i].m_n[1]->m_x.z());
-// 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
-// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-// 		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i+1],dpsSoftbodyHelper->texCoord[i+2]);
-// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x.x(),body->m_faces[i].m_n[2]->m_x.y(),body->m_faces[i].m_n[2]->m_x.z());
-// 		m_ManualObject->colour(Ogre::ColourValue(0.7f,0.7f,0.7f,1.0f));
-// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-// 		//m_ManualObject->textureCoord(dpsSoftbodyHelper->texCoord[i+2],dpsSoftbodyHelper->texCoord[i+3]);
-// // 
-// 		// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
-// 		// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
-// 		// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
-// 		// 
-// 		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
-// 		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
-// 		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
-// 
-// 
-// 
-// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,0);
-// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-// 				
-// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-// 		//m_ManualObject->textureCoord(0,1);
-// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-// 				
-// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,1);
-// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-// 
-// 		m_ManualObject->triangle(i*3,i*3+1,i*3+2);
-// // 		m_ManualObject->triangle(i*3+1);
-// // 		m_ManualObject->triangle(i*3+2);
-// 	}
-// // 	m_ManualObject->textureCoord(1,0);
-// // 	m_ManualObject->textureCoord(0,0);
-// // 	m_ManualObject->textureCoord(0,1);
-// // 	m_ManualObject->textureCoord(1,1);
-// 	m_ManualObject->end();
-// 
-// 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-// 	mLiquidBodyNode->attachObject(m_ManualObject);
-// }
-// 
-// 
-// void DPS::updateSoftBody(btSoftBody* body)
-// {
-// 	//grab the calculated mesh data from the physics body
-// 	btSoftBody::tNodeArray& nodes(body->m_nodes);
-// 	btSoftBody::tFaceArray& faces(body->m_faces);
-// 
-// 	m_ManualObject->beginUpdate(0);
-// /*	btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;*/
-// 	for (int i = 0; i < faces.size(); i++)
-// 	{
-// 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x.x(),body->m_faces[i].m_n[0]->m_x.y(),body->m_faces[i].m_n[0]->m_x.z());
-// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-// 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x.x(),body->m_faces[i].m_n[1]->m_x.y(),body->m_faces[i].m_n[1]->m_x.z());
-// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-// 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x.x(),body->m_faces[i].m_n[2]->m_x.y(),body->m_faces[i].m_n[2]->m_x.z());
-// 		//m_ManualObject->colour(0.5f,0.5f,0.5f);
-// 		// 
-// // 		m_ManualObject->textureCoord(body->m_faces[i].m_n[1]->m_x.x(), body->m_faces[i].m_n[1]->m_x.y(), body->m_faces[i].m_n[1]->m_x.z());
-// // 		m_ManualObject->textureCoord(body->m_faces[i].m_n[2]->m_x.x(), body->m_faces[i].m_n[2]->m_x.y(), body->m_faces[i].m_n[2]->m_x.z());
-// 
-// // 		m_ManualObject->position(body->m_faces[i].m_n[0]->m_x[0],body->m_faces[i].m_n[0]->m_x[1],body->m_faces[i].m_n[0]->m_x[2]);
-// // 		m_ManualObject->position(body->m_faces[i].m_n[1]->m_x[0],body->m_faces[i].m_n[1]->m_x[1],body->m_faces[i].m_n[1]->m_x[2]);
-// // 		m_ManualObject->position(body->m_faces[i].m_n[2]->m_x[0],body->m_faces[i].m_n[2]->m_x[1],body->m_faces[i].m_n[2]->m_x[2]);
-// // 
-// 		m_ManualObject->normal(body->m_faces[i].m_n[0]->m_n[0], body->m_faces[i].m_n[0]->m_n[1], body->m_faces[i].m_n[0]->m_n[2]);
-// 		m_ManualObject->normal(body->m_faces[i].m_n[1]->m_n[0], body->m_faces[i].m_n[1]->m_n[1], body->m_faces[i].m_n[1]->m_n[2]);
-// 		m_ManualObject->normal(body->m_faces[i].m_n[2]->m_n[0], body->m_faces[i].m_n[2]->m_n[1], body->m_faces[i].m_n[2]->m_n[2]);
-// 
-// // 		node0 = faces[i].m_n[0];
-// // 		node1 = faces[i].m_n[1];
-// // 		node2 = faces[i].m_n[2];
-// 				
-// // 		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-// // 		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-// // 				
-// // 		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-// // 		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-// // 				
-// // 		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-// // 		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-// 
-// 		m_ManualObject->index(i*3);
-// 		m_ManualObject->index(i*3+1);
-// 		m_ManualObject->index(i*3+2);
-// 	}
-// 
-// 	m_ManualObject->end();
-// }
 
 
 void DPS::GimpactRayCallBack(void)
@@ -947,161 +776,6 @@ bool DPS::process_triangle(btCollisionShape* shape, int hitTriangleIndex)
 	return true;
 }
 
-// void DPS::createGimpactBarrel(void)
-// {
-// 	btTransform tr;
-// 	tr.setIdentity();
-// 	tr.setOrigin(btVector3(0,0,0));
-// 
-// 	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
-// 		faces_size,
-// 		barrel_ia,
-// 		3*sizeof(int),
-// 		vertices_size,
-// 		(btScalar *) &barrel_va[0][0],
-// 		sizeof(btVector3));
-// 
-// 	btGImpactMeshShape * shape = new btGImpactMeshShape(mesh_interface);
-// 	shape->setMargin(btScalar(0.1));
-// 	shape->updateBound();
-// 	m_collisionShapes.push_back(shape);
-// 	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
-// 	btVector3 localInertia(0,0,0);
-// 	//btScalar m_defaultContactProcessingThreshold;
-// 	shape->calculateLocalInertia(btScalar(20.0),localInertia);
-// 	btDefaultMotionState* myMotionState = new btDefaultMotionState(tr);
-// 	btRigidBody::btRigidBodyConstructionInfo cInfo(btScalar(20.0),myMotionState,shape,localInertia);
-// 	btRigidBody* body = new btRigidBody(cInfo);
-// 	body->setContactProcessingThreshold(btScalar(BT_LARGE_FLOAT));
-// 	//body->translate(btVector3(0,50,0));
-// 	Globals::phyWorld->addRigidBody(body);
-// 
-// 	m_ManualObject = mSceneMgr->createManualObject("barrel");
-// 	m_ManualObject->setDynamic(true);
-// 
-// 	//m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
-// 	//m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
-// 
-// 	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 
-// 	for (int i = 0; i < 83; i++)
-// 	{
-// 		btVector3 face = barrel_va[i];
-// 
-// 		m_ManualObject->position(face.x(),face.y(),face.z());
-// 
-// // 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
-// // 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
-// // 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
-// 
-// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,0);
-// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-// 
-// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-// 		//m_ManualObject->textureCoord(0,1);
-// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-// 
-// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,1);
-// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-// // 
-// // 		m_ManualObject->index(i*3);
-// // 		m_ManualObject->index(i*3+1);
-// // 		m_ManualObject->index(i*3+2);
-// 	}
-// 	// 	m_ManualObject->textureCoord(1,0);
-// 	// 	m_ManualObject->textureCoord(0,0);
-// 	// 	m_ManualObject->textureCoord(0,1);
-// 	// 	m_ManualObject->textureCoord(1,1);
-// 	m_ManualObject->end();
-// 
-// 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-// 	mLiquidBodyNode->attachObject(m_ManualObject);
-// 
-// 	
-// }
-// 
-// 
-// 
-// void DPS::createGimpactBuuny(void)
-// {
-// 	btTransform tr;
-// 	tr.setIdentity();
-// 	tr.setOrigin(btVector3(0,0,0));
-// 
-// 	btTriangleIndexVertexArray * mesh_interface = new btTriangleIndexVertexArray(
-// 		BUNNY_NUM_TRIANGLES,
-// 		&gIndicesBunny[0][0],
-// 		3*sizeof(int),
-// 		BUNNY_NUM_VERTICES,
-// 		(btScalar *) &gVerticesBunny[0],
-// 		sizeof(btScalar)*3);
-// 
-// 	btGImpactMeshShape * shape = new btGImpactMeshShape(mesh_interface);
-// 	shape->setMargin(btScalar(0.1));
-// 	shape->updateBound();
-// 	m_collisionShapes.push_back(shape);
-// 	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
-// 	btVector3 localInertia(0,0,0);
-// 	//btScalar m_defaultContactProcessingThreshold;
-// 	shape->calculateLocalInertia(btScalar(20.0),localInertia);
-// 	btDefaultMotionState* myMotionState = new btDefaultMotionState(tr);
-// 	btRigidBody::btRigidBodyConstructionInfo cInfo(btScalar(20.0),myMotionState,shape,localInertia);
-// 	btRigidBody* body = new btRigidBody(cInfo);
-// 	body->setContactProcessingThreshold(btScalar(BT_LARGE_FLOAT));
-// 	body->translate(btVector3(0,50,0));
-// 	Globals::phyWorld->addRigidBody(body);
-// 
-// 	m_ManualObject = mSceneMgr->createManualObject("bunny");
-// 	m_ManualObject->setDynamic(true);
-// 
-// 	//m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
-// 	//m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
-// 
-// 	m_ManualObject->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-// 
-// 	for (int i = 0; i < 1358; i+=9)
-// 	{
-// 		//node0 = faces[i].m_n[0];
-// 		//node1 = faces[i].m_n[1];
-// 		//node2 = faces[i].m_n[2];
-// 
-// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
-// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
-// 		m_ManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
-// 
-// 
-// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
-// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
-// 		m_ManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
-// 
-// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,0);
-// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-// 
-// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-// 		//m_ManualObject->textureCoord(0,1);
-// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-// 
-// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-// 		//m_ManualObject->textureCoord(1,1);
-// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-// 
-// 		m_ManualObject->index(i*3);
-// 		m_ManualObject->index(i*3+1);
-// 		m_ManualObject->index(i*3+2);
-// 	}
-// 	// 	m_ManualObject->textureCoord(1,0);
-// 	// 	m_ManualObject->textureCoord(0,0);
-// 	// 	m_ManualObject->textureCoord(0,1);
-// 	// 	m_ManualObject->textureCoord(1,1);
-// 	m_ManualObject->end();
-// 
-// 	Ogre::SceneNode* mLiquidBodyNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-// 	mLiquidBodyNode->attachObject(m_ManualObject);
-// }
-
 
 void DPS::deleteOgreEntities(void)
 {
@@ -1172,7 +846,6 @@ bool DPS::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 }
 
 
-
 void DPS::resetCamera(void)
 {
 	mCamera->setPosition(0,5,20);
@@ -1185,7 +858,6 @@ void DPS::resetCamera(Ogre::Vector3 camPos)
 	mCamera->setPosition(camPos);
 	mCamera->lookAt(Ogre::Vector3(camPos.x,camPos.y,-camPos.z));
 }
-
 
 
 void DPS::setMiniCamPosition(Ogre::Vector3 camPos)
@@ -1232,7 +904,6 @@ std::string DPS::convertInt(int number)
 
 void DPS::leapMotionUpdate(void)
 {
-
 	if(leapMotionController.isConnected())
 	{
 		Leap::Frame leapFrameData = leapMotionController.frame();

@@ -131,19 +131,16 @@ public:
 
 
 
-	Ogre::ManualObject* m_BuunyManualObject_3;
-	btSoftBody* m_BuunyBody_3;
+	Ogre::ManualObject* m_BuunyManualObject;
+	btSoftBody* m_BuunyBody;
 	void createGimpactBuuny(void);
-
 
 	void createGimpactBarrel(void);
 
 	void createGimpactTorus(void);
 
-
 	btSoftBody* m_deformableModel;
 	btSoftBody* m_mesh;
-
 	btSoftBody* m_bunny;
 
 	
