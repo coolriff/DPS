@@ -139,9 +139,6 @@ class DPS : public BaseApplication
 		bool runClothDome_5;
 		bool runClothDome_6;
 		bool runClothDome_7;
-		bool runClothDome_8;
-		bool runClothDome_9;
-		bool runClothDome_10;
 
 		bool runDeformDome_1;
 		bool runDeformDome_2;
@@ -150,6 +147,13 @@ class DPS : public BaseApplication
 		bool runDeformDome_5;
 		bool runDeformDome_6;
 		bool runDeformDome_7;
+
+		bool runPlaygroud_1;
+		bool runPlaygroud_2;
+		bool runPlaygroud_3;
+		bool runPlaygroud_4;
+		bool runPlaygroud_5;
+
 
 	protected:
 

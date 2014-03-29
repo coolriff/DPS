@@ -29,9 +29,6 @@ DPS::DPS(void)
 	runClothDome_5 = false;
 	runClothDome_6 = false;
 	runClothDome_7 = false;
-	runClothDome_8 = false;
-	runClothDome_9 = false;
-	runClothDome_10 = false;
 
 	runDeformDome_1 = false;
 	runDeformDome_2 = false;
@@ -40,6 +37,12 @@ DPS::DPS(void)
 	runDeformDome_5 = false;
 	runDeformDome_6 = false;
 	runDeformDome_7 = false;
+
+	runPlaygroud_1 = false;
+	runPlaygroud_2 = false;
+	runPlaygroud_3 = false;
+	runPlaygroud_4 = false;
+	runPlaygroud_5 = false;
 }
 
 DPS::~DPS(void)
@@ -282,7 +285,13 @@ void DPS::clearScreen(void)
 	runDeformDome_6 = false;
 	runDeformDome_7 = false;
 
+	runPlaygroud_1 = false;
+	runPlaygroud_2 = false;
+	runPlaygroud_3 = false;
+	runPlaygroud_4 = false;
+	runPlaygroud_5 = false;
 
+	//enable re click for all demos simply delete all following code.
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
@@ -290,9 +299,6 @@ void DPS::clearScreen(void)
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-// 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-// 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-// 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_1")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_2")->setEnabled(true);
@@ -301,6 +307,12 @@ void DPS::clearScreen(void)
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(true);
+
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(true);
 }
 
 
@@ -309,8 +321,6 @@ void DPS::GUIeventHandler(void)
 	if(mGUI->Command_Clear_Screen)
 	{
 		clearScreen();
-
-
 	}
 	if(mGUI->Command_Enable_FPS)
 	{
@@ -553,10 +563,27 @@ void DPS::GUIeventHandler(void)
 // 		//run demo after ceate
 // 		runDeformDome_7 = true;
 // 	}
+
+
+	if(mGUI->Command_Playgroud_1)
+	{
+		mGUI->Command_Playgroud_1 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,50.0f));
+		dpsSoftbodyHelper->createPlayground_1(btVector3(0,10,0));
+
+		//run demo after ceate
+		runPlaygroud_1 = true;
+	}
 }
 
 void DPS::demoController(void)
 {
+	//cloth demos
 	if(runClothDome_1)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_clothManualObject_1, dpsSoftbodyHelper->m_clothBody_1);
@@ -592,7 +619,7 @@ void DPS::demoController(void)
 	}
 
 
-
+	//deformation
 	if(runDeformDome_1)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_1, dpsSoftbodyHelper->m_deformBody_1);
@@ -622,6 +649,15 @@ void DPS::demoController(void)
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_7, dpsSoftbodyHelper->m_deformBody_7);
 	}
 
+	//playground
+	if(runPlaygroud_1)
+	{
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_fl, dpsSoftbodyHelper->m_playgroundBody_fl);
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_fr, dpsSoftbodyHelper->m_playgroundBody_fr);
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_rl, dpsSoftbodyHelper->m_playgroundBody_rl);
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_rr, dpsSoftbodyHelper->m_playgroundBody_rr);
+		dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_carBody, dpsSoftbodyHelper->m_playgroundBody_carBody);
+	}
 }
 
 
@@ -643,6 +679,11 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	{
 		GimpactRayCallBack();
 	}
+// 	if (arg.key == OIS::KC_RIGHT)
+// 	{
+// 
+// 	}
+
 	return BaseApplication::keyPressed(arg);
 }
 

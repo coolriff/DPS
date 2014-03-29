@@ -99,6 +99,25 @@ public:
 	void createDeformDemo_7(const btVector3& startPos);
 
 
+	//playground
+	void createCarWheels(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
+	void createCarBody(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler);
+	void initCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body);
+	void updateCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body);
+
+	Ogre::ManualObject* m_playgroundManualObject_carBody;
+	Ogre::ManualObject* m_playgroundManualObject_fl;
+	Ogre::ManualObject* m_playgroundManualObject_fr;
+	Ogre::ManualObject* m_playgroundManualObject_rl;
+	Ogre::ManualObject* m_playgroundManualObject_rr;
+	Ogre::ManualObject* m_playgroundManualObject_1;
+	btSoftBody* m_playgroundBody_carBody;
+	btSoftBody* m_playgroundBody_fl;
+	btSoftBody* m_playgroundBody_fr;
+	btSoftBody* m_playgroundBody_rl;
+	btSoftBody* m_playgroundBody_rr;
+	btSoftBody* m_playgroundBody_1;
+	void createPlayground_1(const btVector3& startPos);
 
 
 	Ogre::ManualObject* m_BuunyManualObject_3;
@@ -133,6 +152,7 @@ public:
 	std::vector<float> triangles;
 	std::vector<int> indicies;
 	std::vector<float> texCoord;
+
 
 };
 

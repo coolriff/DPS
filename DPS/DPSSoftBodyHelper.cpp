@@ -14,6 +14,8 @@
 
 #define RAND_MAX 0x7fff
 #define SIMD_PI btScalar(3.1415926535897932384626433832795029)
+#define SIMD_HALF_PI (SIMD_PI * btScalar(0.5))
+
 
 DPSSoftBodyHelper::DPSSoftBodyHelper(btSoftRigidDynamicsWorld* phyWorld, Ogre::Camera* mCamera, Ogre::SceneManager* mSceneMgr)
 {
@@ -515,15 +517,6 @@ void DPSSoftBodyHelper::createClothDemo_7(void)
 }
 
 
-
-
-
-
-
-
-
-
-
 //btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(), gbarrel_va, &gbarrel_ia[0][0], gfaces_size);
 void DPSSoftBodyHelper::createDeformDemo_1(const btVector3& startPos)
 {
@@ -742,6 +735,168 @@ void DPSSoftBodyHelper::createDeformDemo_6(const btVector3& startPos)
 	Ogre::SceneNode* m_softNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	m_softNode->attachObject(m_deformManualObject_6);
 }
+
+
+//playground
+void DPSSoftBodyHelper::createCarWheels(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler)
+{
+	body = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),gVertices,&gIndices[0][0],NUM_TRIANGLES);
+	btSoftBody::Material* pm = body->appendMaterial();
+	pm->m_kLST = 1;
+	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;			
+	body->generateBendingConstraints(2,pm);
+	body->m_cfg.piterations = 2;
+	body->m_cfg.kDF = 1;
+	body->m_cfg.collisions = btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_RS;
+	body->randomizeConstraints();
+	body->scale(scaler);
+	body->rotate(btQuaternion(rotation[0],rotation[1],rotation[2]));
+	body->translate(startPos);
+	body->setTotalMass(50,true);
+	body->generateClusters(64);			
+	phyWorld->addSoftBody(body);
+
+	initCar(ManualObject, body);
+
+	Ogre::SceneNode* m_CarWheelNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_CarWheelNode->attachObject(ManualObject);
+}
+
+
+void DPSSoftBodyHelper::createCarBody(Ogre::ManualObject*& ManualObject, btSoftBody*& body, btVector3& startPos, btVector3& rotation, btVector3& scaler)
+{
+
+	body=btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),gVerticesBunny,&gIndicesBunny[0][0],BUNNY_NUM_TRIANGLES);
+	btSoftBody::Material* pm = body->appendMaterial();
+	pm->m_kLST = 1;
+	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
+ 	body->generateBendingConstraints(2,pm);
+	body->m_cfg.piterations	= 2;
+	body->m_cfg.kDF = 1;
+	body->m_cfg.collisions = btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_RS;
+ 	body->randomizeConstraints();
+	btMatrix3x3	m;
+	m.setEulerZYX(rotation.x(),rotation.y(),rotation.z());
+	body->transform(btTransform(m,startPos));
+	body->scale(scaler);
+	body->setTotalMass(150,true);
+ 	body->generateClusters(1);
+	phyWorld->addSoftBody(body);
+
+	initCar(ManualObject, body);
+
+	Ogre::SceneNode* m_CarNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	m_CarNode->attachObject(ManualObject);
+
+}
+
+
+//base on Bullet demo.
+void DPSSoftBodyHelper::createPlayground_1(const btVector3& startPos)
+{
+	btScalar	widthf=8;
+	btScalar	widthr=9;
+	btScalar	length=8;
+	btScalar	height=4;
+	btVector3	wheels[]=	{
+		btVector3(+widthf,-height,+length),	// Front left
+		btVector3(-widthf,-height,+length),	// Front right
+		btVector3(+widthr,-height,-length),	// Rear left
+		btVector3(-widthr,-height,-length),	// Rear right
+	};
+
+	btVector3 starPosition(0,10,0);
+	btQuaternion orientation(-SIMD_PI/2,0,0);
+
+	createCarWheels(m_playgroundManualObject_fl, m_playgroundBody_fl, wheels[0], btVector3(0,0,SIMD_HALF_PI), btVector3(2,4,2));
+	createCarWheels(m_playgroundManualObject_fr, m_playgroundBody_fr, wheels[1], btVector3(0,0,SIMD_HALF_PI), btVector3(2,4,2));
+	createCarWheels(m_playgroundManualObject_rl, m_playgroundBody_rl, wheels[2], btVector3(0,0,SIMD_HALF_PI), btVector3(2,4,2));
+	createCarWheels(m_playgroundManualObject_rr, m_playgroundBody_rr, wheels[3], btVector3(0,0,SIMD_HALF_PI), btVector3(2,4,2));
+	createCarBody(m_playgroundManualObject_carBody, m_playgroundBody_carBody, btVector3(0,0,0), btVector3(0,0,0), btVector3(8,8,8));
+
+	btSoftBody::LJoint::Specs lspecs;
+	lspecs.cfm = 1;
+	lspecs.erp = 1;
+	lspecs.position	= btVector3(0,0,0);
+
+	lspecs.position = wheels[0];
+	m_playgroundBody_carBody->appendLinearJoint(lspecs,m_playgroundBody_fl);
+
+	lspecs.position = wheels[1];
+	m_playgroundBody_carBody->appendLinearJoint(lspecs,m_playgroundBody_fr);
+
+	lspecs.position = wheels[2];
+	m_playgroundBody_carBody->appendLinearJoint(lspecs,m_playgroundBody_rl);
+
+	lspecs.position = wheels[3];
+	m_playgroundBody_carBody->appendLinearJoint(lspecs,m_playgroundBody_rr);
+
+	btSoftBody::AJoint::Specs aspecs;
+	aspecs.cfm = 1;
+	aspecs.erp = 1;
+	aspecs.axis = btVector3(1,0,0);
+
+	//aspecs.icontrol	= &steercontrol_f;
+	m_playgroundBody_carBody->appendAngularJoint(aspecs,m_playgroundBody_fl);
+	m_playgroundBody_carBody->appendAngularJoint(aspecs,m_playgroundBody_fr);
+
+	//aspecs.icontrol	= &motorcontrol;
+	m_playgroundBody_carBody->appendAngularJoint(aspecs,m_playgroundBody_rl);
+	m_playgroundBody_carBody->appendAngularJoint(aspecs,m_playgroundBody_rr);
+
+	m_playgroundBody_carBody->translate(starPosition);
+	m_playgroundBody_fl->translate(starPosition);
+	m_playgroundBody_fr->translate(starPosition);
+	m_playgroundBody_rl->translate(starPosition);
+	m_playgroundBody_rr->translate(starPosition);
+
+	m_playgroundBody_carBody->rotate(orientation);
+	m_playgroundBody_fl->rotate(orientation);
+	m_playgroundBody_fr->rotate(orientation);
+	m_playgroundBody_rl->rotate(orientation);
+	m_playgroundBody_rr->rotate(orientation);
+
+	m_playgroundBody_fl->m_cfg.piterations	= 1;
+	m_playgroundBody_fr->m_cfg.piterations	= 1;
+	m_playgroundBody_rl->m_cfg.piterations	= 1;
+	m_playgroundBody_rr->m_cfg.piterations	= 1;
+
+	m_playgroundBody_fl->m_clusters[0]->m_matching	= 0.05; 
+	m_playgroundBody_fr->m_clusters[0]->m_matching	= 0.05;
+	m_playgroundBody_rl->m_clusters[0]->m_matching	= 0.05;
+	m_playgroundBody_rr->m_clusters[0]->m_matching	= 0.05;
+
+	m_playgroundBody_fl->m_clusters[0]->m_ndamping	= 0.05;
+	m_playgroundBody_fr->m_clusters[0]->m_ndamping	= 0.05;
+	m_playgroundBody_rl->m_clusters[0]->m_ndamping	= 0.05;
+	m_playgroundBody_rr->m_clusters[0]->m_ndamping	= 0.05;
+}
+
+
+
+
+// 
+// static btSoftBody*	Ctor_ClusterTorus(SoftDemo* pdemo,const btVector3& x,const btVector3& a,const btVector3& s=btVector3(2,2,2))
+// {
+// 	btSoftBody*	psb=btSoftBodyHelpers::CreateFromTriMesh(pdemo->m_softBodyWorldInfo,gVertices,&gIndices[0][0],NUM_TRIANGLES);
+// 	btSoftBody::Material*	pm=psb->appendMaterial();
+// 	pm->m_kLST				=	1;
+// 	pm->m_flags				-=	btSoftBody::fMaterial::DebugDraw;			
+// 	psb->generateBendingConstraints(2,pm);
+// 	psb->m_cfg.piterations	=	2;
+// 	psb->m_cfg.collisions	=	btSoftBody::fCollision::CL_SS+
+// 		btSoftBody::fCollision::CL_RS;
+// 	psb->randomizeConstraints();
+// 	psb->scale(s);
+// 	psb->rotate(btQuaternion(a[0],a[1],a[2]));
+// 	psb->translate(x);
+// 	psb->setTotalMass(50,true);
+// 	psb->generateClusters(64);			
+// 	pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
+// 	return(psb);
+// }
+
+
 
 
 btScalar DPSSoftBodyHelper::UnitRand()
@@ -1012,3 +1167,91 @@ void DPSSoftBodyHelper::updateSoftBody(Ogre::ManualObject*& m_ManualObject, btSo
 	m_ManualObject->end();
 }
 
+void DPSSoftBodyHelper::initCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body)
+{
+			//manual objects are used to generate new meshes based on raw vertex data
+	//this is used for the liquid form
+	m_ManualObject = mSceneMgr->createManualObject();
+
+	/*
+		The following code needs to be run once to setup the vertex buffer with data based on
+		the bullet soft body information.
+	*/
+	btSoftBody::tNodeArray& nodes(body->m_nodes);
+	btSoftBody::tFaceArray& faces(body->m_faces);
+
+	m_ManualObject->estimateVertexCount(faces.size()*3);
+	m_ManualObject->estimateIndexCount(faces.size()*3);
+
+	//http://www.ogre3d.org/tikiwiki/ManualObject
+	//m_ManualObject->begin("FlatVertexColour", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	m_ManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+	for (int i = 0; i < faces.size(); ++i)
+	{
+		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+		node0 = faces[i].m_n[0];
+		node1 = faces[i].m_n[1];
+		node2 = faces[i].m_n[2];
+
+		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.3021f,0.3308f,0.3671f,1.0f));
+		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+
+		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.3021f,0.3308f,0.3671f,1.0f));
+		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+
+		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		m_ManualObject->colour(Ogre::ColourValue(0.3021f,0.3308f,0.3671f,1.0f));
+		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+
+
+
+		m_ManualObject->index(i*3);
+		m_ManualObject->index(i*3+1);
+		m_ManualObject->index(i*3+2);
+	}
+	m_ManualObject->end();
+
+	m_ManualObject->setDynamic(true);
+	m_ManualObject->setCastShadows(true);
+}
+
+void DPSSoftBodyHelper::updateCar(Ogre::ManualObject*& m_ManualObject, btSoftBody*& body)
+{
+	//grab the calculated mesh data from the physics body
+	btSoftBody::tNodeArray& nodes(body->m_nodes);
+	btSoftBody::tFaceArray& faces(body->m_faces);
+
+	float minx, miny, minz, maxx, maxy, maxz;
+	minx = maxx = nodes[0].m_x[0];
+	miny = maxy = nodes[0].m_x[1];
+	minz = maxz = nodes[0].m_x[2];
+
+	m_ManualObject->beginUpdate(0);
+	for (int i = 0; i < faces.size(); i++)
+	{
+		btSoftBody::Node *node0 = 0, *node1 = 0, *node2 = 0;
+		node0 = faces[i].m_n[0];
+		node1 = faces[i].m_n[1];
+		node2 = faces[i].m_n[2];
+
+		m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+		m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+
+		m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+		m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+
+		m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+		m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+		m_ManualObject->index(i*3);
+		m_ManualObject->index(i*3+1);
+		m_ManualObject->index(i*3+2);
+	}
+	m_ManualObject->end();
+}
+
+
+
+
+ 

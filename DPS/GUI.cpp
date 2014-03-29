@@ -17,9 +17,6 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Cloth_Demo_5 = false;
 	Command_Cloth_Demo_6 = false;
 	Command_Cloth_Demo_7 = false;
-	Command_Cloth_Demo_8 = false;
-	Command_Cloth_Demo_9 = false;
-	Command_Cloth_Demo_10 = false;
 	Command_Deformable_Demo_1 = false;
 	Command_Deformable_Demo_2 = false;
 	Command_Deformable_Demo_3 = false;
@@ -27,6 +24,12 @@ GUI::GUI(Ogre::Viewport* vp, Ogre::SceneManager* mSceneMgr, Ogre::RenderWindow* 
 	Command_Deformable_Demo_5 = false;
 	Command_Deformable_Demo_6 = false;
 	Command_Deformable_Demo_7 = false;
+	Command_Playgroud_add = false;
+	Command_Playgroud_1 = false;
+	Command_Playgroud_2 = false;
+	Command_Playgroud_3 = false;
+	Command_Playgroud_4 = false;
+	Command_Playgroud_5 = false;
 	Command_ResetCamera = false;
 	Theme_Choice = 0;
 	Command_SwitchTheme = false;
@@ -183,18 +186,6 @@ void GUI::menuListener(void)
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
-	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10"))
-	{
-		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
-	}
 
 
 
@@ -224,6 +215,32 @@ void GUI::menuListener(void)
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
 	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+
+	//playground
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_add"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4"))
+	{
+		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
+	}
+	if(widget = mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5"))
 	{
 		widget-> eventMouseButtonClick += MyGUI::newDelegate(this, &GUI::selectedMenuItem);
 	}
@@ -387,9 +404,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
 	if(name == "Command_Cloth_Demo_2")
 	{
@@ -402,9 +416,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
 	if(name == "Command_Cloth_Demo_3")
 	{
@@ -417,9 +428,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
 	if(name == "Command_Cloth_Demo_4")
 	{
@@ -432,9 +440,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
 	if(name == "Command_Cloth_Demo_5")
 	{
@@ -447,9 +452,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
 	if(name == "Command_Cloth_Demo_6")
 	{
@@ -462,9 +464,6 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
 	if(name == "Command_Cloth_Demo_7")
 	{
@@ -477,55 +476,8 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
 	}
-	if(name == "Command_Cloth_Demo_8")
-	{
-		Command_Cloth_Demo_8 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
-	}
-	if(name == "Command_Cloth_Demo_9")
-	{
-		Command_Cloth_Demo_9 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(false);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(true);
-	}
-	if(name == "Command_Cloth_Demo_10")
-	{
-		Command_Cloth_Demo_10 = true;
-		defaultState();
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_1")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_2")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_3")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_4")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_5")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_6")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_7")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_8")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_9")->setEnabled(true);
-		mGuiSystem->findWidget<MyGUI::Widget>("Command_Cloth_Demo_10")->setEnabled(false);
-	}
+
 
 
 
@@ -612,6 +564,64 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_5")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_6")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Deformable_Demo_7")->setEnabled(false);
+	}
+
+
+	//playground
+	if(name == "Command_Playgroud_add")
+	{
+		Command_Playgroud_add = true;
+		defaultState();
+	}
+	if(name == "Command_Playgroud_1")
+	{
+		Command_Playgroud_1 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(true);
+	}
+	if(name == "Command_Playgroud_2")
+	{
+		Command_Playgroud_2 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(true);
+	}
+	if(name == "Command_Playgroud_3")
+	{
+		Command_Playgroud_3 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(true);
+	}
+	if(name == "Command_Playgroud_4")
+	{
+		Command_Playgroud_4 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(false);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(true);
+	}
+	if(name == "Command_Playgroud_5")
+	{
+		Command_Playgroud_5 = true;
+		defaultState();
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_1")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_2")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_3")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_4")->setEnabled(true);
+		mGuiSystem->findWidget<MyGUI::Widget>("Command_Playgroud_5")->setEnabled(false);
 	}
 }
 

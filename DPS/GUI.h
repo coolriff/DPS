@@ -30,9 +30,6 @@ public:
 	bool Command_Cloth_Demo_5;
 	bool Command_Cloth_Demo_6;
 	bool Command_Cloth_Demo_7;
-	bool Command_Cloth_Demo_8;
-	bool Command_Cloth_Demo_9;
-	bool Command_Cloth_Demo_10;
 	bool Command_Deformable_Demo_1;
 	bool Command_Deformable_Demo_2;
 	bool Command_Deformable_Demo_3;
@@ -40,6 +37,12 @@ public:
 	bool Command_Deformable_Demo_5;
 	bool Command_Deformable_Demo_6;
 	bool Command_Deformable_Demo_7;
+	bool Command_Playgroud_add;
+	bool Command_Playgroud_1;
+	bool Command_Playgroud_2;
+	bool Command_Playgroud_3;
+	bool Command_Playgroud_4;
+	bool Command_Playgroud_5;
 	bool Command_ResetCamera;
 	size_t Theme_Choice;
 	bool Command_SwitchTheme;
