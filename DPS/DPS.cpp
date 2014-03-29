@@ -276,7 +276,6 @@ void DPS::clearScreen(void)
 	runClothDome_6 = false;
 	runClothDome_7 = false;
 
-
  	runDeformDome_1 = false;
 	runDeformDome_2 = false;
 	runDeformDome_3 = false;
@@ -319,6 +318,8 @@ void DPS::clearScreen(void)
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Mini_Camera")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Mini_Camera")->setEnabled(false);
 	mGUI->miniCameraWindow->setVisible(false);
+
+	solidScreen();
 }
 
 
@@ -555,20 +556,23 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runDeformDome_6 = true;
 	}
-// 	if(mGUI->Command_Deformable_Demo_7)
-// 	{
-// 		mGUI->Command_Deformable_Demo_7 = false;
-// 
-// 		//clean screen before create new demo
-// 		clearScreen();
-// 
-// 		//create demo
-// 		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-// 		dpsSoftbodyHelper->createDeformDemo_7(btVector3(0,1,0));
-// 
-// 		//run demo after ceate
-// 		runDeformDome_7 = true;
-// 	}
+	if(mGUI->Command_Deformable_Demo_7)
+	{
+		mGUI->Command_Deformable_Demo_7 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		dpsSoftbodyHelper->createGimpactBuuny();
+
+		//might not needed. 
+		bulletDebugScreen();
+
+		//run demo after ceate
+		runDeformDome_7 = true;
+	}
 
 
 	if(mGUI->Command_Playgroud_1)
@@ -605,6 +609,28 @@ void DPS::GUIeventHandler(void)
 		runPlaygroud_2 = true;
 	}
 }
+
+
+void DPS::solidScreen(void)
+{
+	vp->getCamera()->setPolygonMode(Ogre::PM_SOLID);
+	mGUI->Command_Bullet_Debug_Mode = false;
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(false);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Points")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode")->setEnabled(true);
+}
+
+
+void DPS::bulletDebugScreen(void)
+{
+	mGUI->Command_Bullet_Debug_Mode = true;
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Points")->setEnabled(true);
+	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Bullet_Debug_Mode")->setEnabled(false);
+}
+
 
 void DPS::demoController(void)
 {
@@ -669,10 +695,10 @@ void DPS::demoController(void)
 	{
 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_6, dpsSoftbodyHelper->m_deformBody_6);
 	}
-	if(runDeformDome_7)
-	{
-		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_7, dpsSoftbodyHelper->m_deformBody_7);
-	}
+// 	if(runDeformDome_7)
+// 	{
+// 		dpsSoftbodyHelper->updateSoftBody(dpsSoftbodyHelper->m_deformManualObject_7, dpsSoftbodyHelper->m_deformBody_7);
+// 	}
 
 	//playground
 	if(runPlaygroud_1)

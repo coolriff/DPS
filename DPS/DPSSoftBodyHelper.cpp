@@ -902,31 +902,6 @@ void DPSSoftBodyHelper::createPlayground_2(void)
 }
 
 
-
-// 
-// static btSoftBody*	Ctor_ClusterTorus(SoftDemo* pdemo,const btVector3& x,const btVector3& a,const btVector3& s=btVector3(2,2,2))
-// {
-// 	btSoftBody*	psb=btSoftBodyHelpers::CreateFromTriMesh(pdemo->m_softBodyWorldInfo,gVertices,&gIndices[0][0],NUM_TRIANGLES);
-// 	btSoftBody::Material*	pm=psb->appendMaterial();
-// 	pm->m_kLST				=	1;
-// 	pm->m_flags				-=	btSoftBody::fMaterial::DebugDraw;			
-// 	psb->generateBendingConstraints(2,pm);
-// 	psb->m_cfg.piterations	=	2;
-// 	psb->m_cfg.collisions	=	btSoftBody::fCollision::CL_SS+
-// 		btSoftBody::fCollision::CL_RS;
-// 	psb->randomizeConstraints();
-// 	psb->scale(s);
-// 	psb->rotate(btQuaternion(a[0],a[1],a[2]));
-// 	psb->translate(x);
-// 	psb->setTotalMass(50,true);
-// 	psb->generateClusters(64);			
-// 	pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
-// 	return(psb);
-// }
-
-
-
-
 btScalar DPSSoftBodyHelper::UnitRand()
 {
 	return (rand()/(btScalar)RAND_MAX);
@@ -1043,6 +1018,7 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 
 	btGImpactMeshShape * shape = new btGImpactMeshShape(mesh_interface);
 	shape->setMargin(btScalar(0.1));
+	shape->setLocalScaling(btVector3(3,3,3));
 	shape->updateBound();
 	//m_collisionShapes.push_back(shape);
 	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
@@ -1053,7 +1029,7 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 	btRigidBody::btRigidBodyConstructionInfo cInfo(btScalar(20.0),myMotionState,shape,localInertia);
 	btRigidBody* body = new btRigidBody(cInfo);
 	body->setContactProcessingThreshold(btScalar(BT_LARGE_FLOAT));
-	body->translate(btVector3(0,50,0));
+	body->translate(btVector3(0,10,0));
 	phyWorld->addRigidBody(body);
 
 // 	m_ManualObject = mSceneMgr->createManualObject("bunny");

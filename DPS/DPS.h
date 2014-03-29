@@ -109,6 +109,8 @@ class DPS : public BaseApplication
 		void setMiniCamPosition(Ogre::Vector3 camPos);
 		std::string convertInt(int number);
 
+		void bulletDebugScreen(void);
+		void solidScreen(void);
 		void demoController(void);
 		void clearScreen(void);
 
