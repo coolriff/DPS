@@ -677,7 +677,7 @@ void DPSSoftBodyHelper::createDeformDemo_4(const btVector3& startPos)
 
 void DPSSoftBodyHelper::createDeformDemo_5(const btVector3& startPos)
 {
-	m_deformBody_5 = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(2,2,2), 100);
+	m_deformBody_5 = btSoftBodyHelpers::CreateEllipsoid(phyWorld->getWorldInfo(), startPos, btVector3(3,3,3), 200);
 	//m_SoftBody->m_cfg.viterations=50;
 	//m_SoftBody->m_cfg.piterations=50;
 	//set the liquid body properties
@@ -948,7 +948,7 @@ void DPSSoftBodyHelper::createPlayground_4(const btVector3& starPosition)
 	obj->LoadModel("cylinder_high",&triangles,&indicies,&texCoord);
 
 	m_playgroundBody_4 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
-	m_playgroundBody_4->setTotalMass(200.0,true);
+	m_playgroundBody_4->setTotalMass(50.0,true);
 	m_playgroundBody_4->m_cfg.kSRHR_CL=1.0;	
 	m_playgroundBody_4->m_cfg.viterations=500;
 	m_playgroundBody_4->m_cfg.piterations=500;
@@ -957,7 +957,7 @@ void DPSSoftBodyHelper::createPlayground_4(const btVector3& starPosition)
 	m_playgroundBody_4->m_cfg.kPR=500;
 	m_playgroundBody_4->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
 	m_playgroundBody_4->translate(starPosition);
-	m_playgroundBody_4->scale(btVector3(1,1,1));
+	m_playgroundBody_4->scale(btVector3(0.7,0.7,0.7));
 	phyWorld->addSoftBody(m_playgroundBody_4);
 
 	initSoftBody(m_playgroundManualObject_4, m_playgroundBody_4);
@@ -1090,7 +1090,7 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 	/*	btRigidBody * body = localCreateRigidBody(btScalar(20.0),tr,shape);*/
 	btVector3 localInertia(0,0,0);
 	//btScalar m_defaultContactProcessingThreshold;
-	shape->calculateLocalInertia(btScalar(20.0),localInertia);
+	shape->calculateLocalInertia(btScalar(5.0),localInertia);
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(tr);
 	btRigidBody::btRigidBodyConstructionInfo cInfo(btScalar(20.0),myMotionState,shape,localInertia);
 	btRigidBody* body = new btRigidBody(cInfo);
@@ -1104,47 +1104,47 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 	//m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
 	//m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);
 
-	m_BuunyManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
-
-	for (int i = 0; i < 1358; i+=9)
-	{
-		//node0 = faces[i].m_n[0];
-		//node1 = faces[i].m_n[1];
-		//node2 = faces[i].m_n[2];
-
-		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
-		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
-		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
-
-
-		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
-		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
-		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
-
-		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
-		//m_ManualObject->textureCoord(1,0);
-		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
-
-		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
-		//m_ManualObject->textureCoord(0,1);
-		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
-
-		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
-		//m_ManualObject->textureCoord(1,1);
-		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
-
-		m_BuunyManualObject->index(i*3);
-		m_BuunyManualObject->index(i*3+1);
-		m_BuunyManualObject->index(i*3+2);
-	}
-	// 	m_ManualObject->textureCoord(1,0);
-	// 	m_ManualObject->textureCoord(0,0);
-	// 	m_ManualObject->textureCoord(0,1);
-	// 	m_ManualObject->textureCoord(1,1);
-	m_BuunyManualObject->end();
-
-	Ogre::SceneNode* m_BuunyManualNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
-	m_BuunyManualNode->attachObject(m_BuunyManualObject);
+// 	m_BuunyManualObject->begin("softbody", Ogre::RenderOperation::OT_TRIANGLE_LIST);
+// 
+// 	for (int i = 0; i < 1358; i+=9)
+// 	{
+// 		//node0 = faces[i].m_n[0];
+// 		//node1 = faces[i].m_n[1];
+// 		//node2 = faces[i].m_n[2];
+// 
+// 		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i],gVerticesBunny[i+1],gVerticesBunny[i+2]));
+// 		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i+3],gVerticesBunny[i+4],gVerticesBunny[i+5]));
+// 		m_BuunyManualObject->position(Ogre::Vector3(gVerticesBunny[i+6],gVerticesBunny[i+7],gVerticesBunny[i+8]));
+// 
+// 
+// 		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i][0],gIndicesBunny[i][1],gIndicesBunny[i][2]));
+// 		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i+1][0],gIndicesBunny[i+1][1],gIndicesBunny[i+1][2]));
+// 		m_BuunyManualObject->normal(Ogre::Vector3(gIndicesBunny[i+2][0],gIndicesBunny[i+2][1],gIndicesBunny[i+2][2]));
+// 
+// 		//m_ManualObject->position(node0->m_x[0], node0->m_x[1], node0->m_x[2]);
+// 		//m_ManualObject->textureCoord(1,0);
+// 		//m_ManualObject->normal(node0->m_n[0], node0->m_n[1], node0->m_n[2]);
+// 
+// 		//m_ManualObject->position(node1->m_x[0], node1->m_x[1], node1->m_x[2]);
+// 		//m_ManualObject->textureCoord(0,1);
+// 		//m_ManualObject->normal(node1->m_n[0], node1->m_n[1], node1->m_n[2]);
+// 
+// 		//m_ManualObject->position(node2->m_x[0], node2->m_x[1], node2->m_x[2]);
+// 		//m_ManualObject->textureCoord(1,1);
+// 		//m_ManualObject->normal(node2->m_n[0], node2->m_n[1], node2->m_n[2]);
+// 
+// 		m_BuunyManualObject->index(i*3);
+// 		m_BuunyManualObject->index(i*3+1);
+// 		m_BuunyManualObject->index(i*3+2);
+// 	}
+// 	// 	m_ManualObject->textureCoord(1,0);
+// 	// 	m_ManualObject->textureCoord(0,0);
+// 	// 	m_ManualObject->textureCoord(0,1);
+// 	// 	m_ManualObject->textureCoord(1,1);
+// 	m_BuunyManualObject->end();
+// 
+// 	Ogre::SceneNode* m_BuunyManualNode = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+// 	m_BuunyManualNode->attachObject(m_BuunyManualObject);
 }
 
 

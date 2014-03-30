@@ -252,6 +252,7 @@ void DPS::clearScreen(void)
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Mini_Camera")->setEnabled(false);
 	mGUI->miniCameraWindow->setVisible(false);
 
+
 	solidScreen();
 }
 
@@ -408,8 +409,8 @@ void DPS::GUIeventHandler(void)
 		clearScreen();
 
 		//create demo
-		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
-		dpsSoftbodyHelper->createDeformDemo_1(btVector3(3,1,0));
+		resetCamera(Ogre::Vector3(0.0f,6.0f,40.0f));
+		dpsSoftbodyHelper->createDeformDemo_1(btVector3(2,1,0));
 		//dpsHelper->createCube(Ogre::Vector3(-5,1.5,0),Ogre::Vector3(4,4,4),1);
 		dpsHelper->createMesh(Ogre::Vector3(-3,1,0),20,"softcube.mesh",Ogre::Vector3(2,2,2));
 
@@ -455,7 +456,7 @@ void DPS::GUIeventHandler(void)
 		clearScreen();
 
 		//create demo
-		resetCamera(Ogre::Vector3(0.0f,6.0f,20.0f));
+		resetCamera(Ogre::Vector3(0.0f,6.0f,40.0f));
 		dpsSoftbodyHelper->createDeformDemo_4(btVector3(0,3,0));
 
 		//run demo after ceate
@@ -590,10 +591,11 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
-		dpsSoftbodyHelper->createPlayground_4(btVector3(0,10,0));
-		// 		dpsHelper->createMesh(Ogre::Vector3(0,2,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
-		// 		dpsHelper->createMesh(Ogre::Vector3(0,10,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
-		// 		dpsHelper->createMesh(Ogre::Vector3(0,17,0),10,"defCube.mesh",Ogre::Vector3(10,2,10));
+		dpsSoftbodyHelper->createPlayground_4(btVector3(8,7,0));
+		dpsHelper->createMesh(Ogre::Vector3(-8,5,0),50,"cylinder_high.mesh",Ogre::Vector3(0.7,0.7,0.7));
+		dpsHelper->createMesh(Ogre::Vector3(-8,50,0),400,"defCube.mesh",Ogre::Vector3(10,2,10));
+		dpsHelper->createMesh(Ogre::Vector3(6,50,0),400,"defCube.mesh",Ogre::Vector3(10,2,10));
+
 
 		//run demo after ceate
 		runPlaygroud_4 = true;
