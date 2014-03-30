@@ -600,6 +600,30 @@ void DPS::GUIeventHandler(void)
 		//run demo after ceate
 		runPlaygroud_4 = true;
 	}
+	if(mGUI->Command_Playgroud_5)
+	{
+		mGUI->Command_Playgroud_5 = false;
+
+		//clean screen before create new demo
+		clearScreen();
+
+		//create demo
+		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
+
+		//dpsSoftbodyHelper->createPlayground_4(btVector3(8,7,0));
+
+		//dpsHelper->createMesh(Ogre::Vector3(-8,5,0),50,"cylinder_high.mesh",Ogre::Vector3(0.7,0.7,0.7));
+
+		for(int i = 0; i<500 ;i++)
+		{
+			dpsHelper->createMesh(Ogre::Vector3(-10,i,0),1,"defCube.mesh",Ogre::Vector3(1,1,1));
+			dpsHelper->createMesh(Ogre::Vector3(10,i,0),1,"defCube.mesh",Ogre::Vector3(1,1,1));
+		}
+
+
+		//run demo after ceate
+		runPlaygroud_5 = true;
+	}
 }
 
 
