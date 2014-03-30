@@ -364,7 +364,7 @@ void DPSHelper::createMesh(Ogre::Vector3 position, btScalar mass, std::string na
 	//Create Ogre stuff.
 	Ogre::Entity* ogreHeadEntity = mSceneMgr->createEntity(name);
 	Ogre::SceneNode* ogreHeadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position, rot);
-	setColor(ogreHeadEntity, Ogre::Vector3(0.4402f,0.4408f,0.4471f));
+	setColor(ogreHeadEntity, Ogre::Vector3(0.6f,0.6f,0.6f));
 	ogreHeadNode->setScale(scaler);
 	ogreHeadEntity->setCastShadows(true);
 

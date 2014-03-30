@@ -550,25 +550,31 @@ void DPS::GUIeventHandler(void)
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
 		dpsSoftbodyHelper->createPlayground_3();
+		dpsHelper->createMesh(Ogre::Vector3(-10,0.1,0),50,"car.mesh",Ogre::Vector3(1,1,1));
+		//createFromMesh(m_playgroundManualObject_3, m_playgroundBody_3, btVector3(0,0,0), btVector3(0,0,0), btVector3(1,1,1));
 
 		if (playgroundCount == 0)
 		{
-			dpsHelper->createMesh(Ogre::Vector3(5,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+			dpsHelper->createMesh(Ogre::Vector3(-5,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+			dpsHelper->createMesh(Ogre::Vector3(15,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
 			playgroundCount++;
 		}
 		else if(playgroundCount == 1)
 		{
-			dpsHelper->createMesh(Ogre::Vector3(0,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+			dpsHelper->createMesh(Ogre::Vector3(-10,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+			dpsHelper->createMesh(Ogre::Vector3(10,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
 			playgroundCount++;
 		}
 		else if (playgroundCount == 2)
 		{
-			dpsHelper->createMesh(Ogre::Vector3(-5,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+			dpsHelper->createMesh(Ogre::Vector3(-15,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
+			dpsHelper->createMesh(Ogre::Vector3(5,50,0),50,"defCube.mesh",Ogre::Vector3(10,2,10));
 			playgroundCount++;
 		}
 		else if(playgroundCount == 3)
 		{
-			dpsHelper->createMesh(Ogre::Vector3(0,50,0),50,"defCube.mesh",Ogre::Vector3(2,10,10));
+			dpsHelper->createMesh(Ogre::Vector3(-10,50,0),50,"defCube.mesh",Ogre::Vector3(2,10,10));
+			dpsHelper->createMesh(Ogre::Vector3(10,50,0),50,"defCube.mesh",Ogre::Vector3(2,10,10));
 			playgroundCount = 0;
 		}
 

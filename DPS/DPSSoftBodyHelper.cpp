@@ -934,7 +934,7 @@ void DPSSoftBodyHelper::createPlayground_2(void)
 
 void DPSSoftBodyHelper::createPlayground_3(void)
 {
-	createFromMesh(m_playgroundManualObject_3, m_playgroundBody_3, btVector3(0,0,0), btVector3(0,0,0), btVector3(1,1,1));
+	createFromMesh(m_playgroundManualObject_3, m_playgroundBody_3, btVector3(10,0.1,0), btVector3(0,0,0), btVector3(1,1,1));
 }
 
 
