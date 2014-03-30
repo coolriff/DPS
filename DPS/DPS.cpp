@@ -427,7 +427,7 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,10.0f,40.0f));
-		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,2,0));
+		dpsSoftbodyHelper->createDeformDemo_2(btVector3(0,7,0));
 		dpsHelper->createMesh(Ogre::Vector3(-8,2,0),1,"Barrel.mesh",Ogre::Vector3(1,1,1));
 
 		//run demo after ceate

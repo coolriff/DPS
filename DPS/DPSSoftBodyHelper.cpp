@@ -566,8 +566,8 @@ void DPSSoftBodyHelper::createDeformDemo_2(const btVector3& startPos)
 	texCoord.clear();
 
 	Objloader* obj = new Objloader;
-	obj->LoadModel("b8",&triangles,&indicies,&texCoord);
-	//load("monkey.obj",&triangles,&indicies);
+	obj->LoadModel("cylinder_high",&triangles,&indicies,&texCoord);
+	//load("b8",&triangles,&indicies);
 
 	m_deformBody_2 = btSoftBodyHelpers::CreateFromTriMesh(phyWorld->getWorldInfo(),&(triangles[0]),&(indicies[0]),indicies.size()/3,true);
 	m_deformBody_2->setTotalMass(50.0,true);
@@ -579,17 +579,9 @@ void DPSSoftBodyHelper::createDeformDemo_2(const btVector3& startPos)
 	m_deformBody_2->m_cfg.citerations=500;
 	m_deformBody_2->m_cfg.diterations=500;
 	m_deformBody_2->m_cfg.kPR=500;
-
-
-	// 	btSoftBody::Material* pm = m_softBody_3->appendMaterial();
-	// 	pm->m_kLST = 0.5;
-	// 	pm->m_flags -= btSoftBody::fMaterial::DebugDraw;
-	// 	m_softBody_3->generateBendingConstraints(2,pm);
-	// 	m_softBody_3->m_cfg.piterations	=	2;
-	// 	m_softBody_3->m_cfg.kDF			=	0.5;
 	m_deformBody_2->m_cfg.collisions	= btSoftBody::fCollision::SDF_RS + btSoftBody::fCollision::CL_SS + btSoftBody::fCollision::CL_SELF;
 	m_deformBody_2->translate(startPos);
-	m_deformBody_2->scale(btVector3(2,2,2));
+	m_deformBody_2->scale(btVector3(0.7,0.7,0.7));
 	phyWorld->addSoftBody(m_deformBody_2);
 
 	initSoftBody(m_deformManualObject_2, m_deformBody_2);
