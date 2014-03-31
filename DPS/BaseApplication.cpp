@@ -219,9 +219,19 @@ bool BaseApplication::setup(void)
     bool carryOn = configure();
     if (!carryOn) return false;
 
-    chooseSceneManager();
+	chooseSceneManager();
+
+	loadResources();
+
+	oculus.setupOculus();
+	oculus.setupOgre(mSceneMgr, mWindow);
+
+	oculus.getCameraNode()->setPosition(0.0f,1.7f,10.0f);
+
+
+
     createCamera();
-    createViewports();
+//    createViewports();
 
 	//create GUI
 	mGUI = new GUI(vp, mSceneMgr, mWindow);
@@ -232,7 +242,7 @@ bool BaseApplication::setup(void)
     // Create any resource listeners (for loading screens)
     createResourceListener();
     // Load resources
-    loadResources();
+
 
     // Create the scene
     createScene();

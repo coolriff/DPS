@@ -629,7 +629,7 @@ void DPS::GUIeventHandler(void)
 
 void DPS::solidScreen(void)
 {
-	vp->getCamera()->setPolygonMode(Ogre::PM_SOLID);
+	//vp->getCamera()->setPolygonMode(Ogre::PM_SOLID);
 	mGUI->Command_Bullet_Debug_Mode = false;
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(false);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);

@@ -34,6 +34,8 @@ This source file is part of the
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
 
+#include "OgreOculus.h"
+
 //GUI
 #include "GUI.h"
 
@@ -98,6 +100,7 @@ protected:
     OIS::Keyboard* mKeyboard;
 
 	GUI* mGUI;
+	Oculus oculus;
 };
 
 #endif // #ifndef __BaseApplication_h_
