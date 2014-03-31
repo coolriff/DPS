@@ -254,6 +254,9 @@ bool BaseApplication::setup(void)
 //-------------------------------------------------------------------------------------
 bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+	oculus.getCameraNode()->setPosition(mCamera->getPosition());
+	oculus.getCameraNode()->setOrientation(mCamera->getOrientationForViewUpdate() * oculus.getOrientation());
+
     if(mWindow->isClosed())
         return false;
 
