@@ -295,7 +295,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Solid")
 	{
 		Command_Bullet_Debug_Mode = false;
-		vp->getCamera()->setPolygonMode(Ogre::PM_SOLID);
+		//vp->getCamera()->setPolygonMode(Ogre::PM_SOLID);
 
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(false);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
@@ -305,7 +305,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Wireframe")
 	{
 		Command_Bullet_Debug_Mode = false;
-		vp->getCamera()->setPolygonMode(Ogre::PM_WIREFRAME);
+		//vp->getCamera()->setPolygonMode(Ogre::PM_WIREFRAME);
 
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(false);
@@ -315,7 +315,7 @@ void GUI::selectedMenuItem(MyGUI::Widget* sender)
 	if(name == "Command_Points")
 	{
 		Command_Bullet_Debug_Mode = false;
-		vp->getCamera()->setPolygonMode(Ogre::PM_POINTS);
+		//vp->getCamera()->setPolygonMode(Ogre::PM_POINTS);
 
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Solid")->setEnabled(true);
 		mGuiSystem->findWidget<MyGUI::Widget>("Command_Wireframe")->setEnabled(true);
