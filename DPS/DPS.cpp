@@ -410,7 +410,7 @@ void DPS::GUIeventHandler(void)
 
 		//create demo
 		resetCamera(Ogre::Vector3(0.0f,6.0f,40.0f));
-		dpsSoftbodyHelper->createDeformDemo_1(btVector3(2,1,0));
+		dpsSoftbodyHelper->createDeformDemo_1(btVector3(2,1.1,0));
 		//dpsHelper->createCube(Ogre::Vector3(-5,1.5,0),Ogre::Vector3(4,4,4),1);
 		dpsHelper->createMesh(Ogre::Vector3(-3,1,0),20,"softcube.mesh",Ogre::Vector3(2,2,2));
 
