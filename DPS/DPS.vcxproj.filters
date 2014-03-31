@@ -45,6 +45,9 @@
     <ClCompile Include="LeapListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OgreOculus.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApplication.h">
@@ -94,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="Mesh\barrelg.h">
       <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="euler.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="OgreOculus.h">
+      <Filter>External</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
