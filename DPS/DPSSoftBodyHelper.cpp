@@ -1090,8 +1090,8 @@ void DPSSoftBodyHelper::createGimpactBuuny(void)
 	body->translate(btVector3(0,10,0));
 	phyWorld->addRigidBody(body);
 
-	m_BuunyManualObject = mSceneMgr->createManualObject("bunny");
-	m_BuunyManualObject->setDynamic(true);
+// 	m_BuunyManualObject = mSceneMgr->createManualObject("bunny");
+// 	m_BuunyManualObject->setDynamic(true);
 
 	//m_ManualObject->estimateVertexCount(BUNNY_NUM_VERTICES);
 	//m_ManualObject->estimateIndexCount(BUNNY_NUM_INDICES);

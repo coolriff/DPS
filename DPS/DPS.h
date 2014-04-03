@@ -115,6 +115,11 @@ class DPS : public BaseApplication
 		Ogre::FrameEvent evt;
 		double dt;
 
+		int maxProxies;
+		btRigidBody *hit_body;
+		btVector3 hit_rel_pos;
+		btVector3 shot_imp;
+
 		int leapMotionCounter;
 		std::string fingerName_0;
 		std::string fingerName_1;

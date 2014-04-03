@@ -9,11 +9,6 @@
 #include <string>
 #include <sstream>
 
-const int maxProxies = 32766;
-btRigidBody * hit_body = 0;
-btVector3 hit_rel_pos;
-btVector3 shot_imp = btVector3(0,0,0);
-
 DPS::DPS(void)
 {
 	initPhysics();
@@ -42,6 +37,9 @@ DPS::DPS(void)
 	runPlaygroud_5 = false;
 
 	playgroundCount = 0;
+	maxProxies = 32766;
+	hit_rel_pos = btVector3(0,0,0);
+	shot_imp = btVector3(0,0,0);
 }
 
 DPS::~DPS(void)
