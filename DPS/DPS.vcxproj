@@ -13,11 +13,13 @@
   <ItemGroup>
     <ClCompile Include="BaseApplication.cpp" />
     <ClCompile Include="BtOgre.cpp" />
+    <ClCompile Include="BtOgreSoftBody.cpp" />
     <ClCompile Include="DPS.cpp" />
     <ClCompile Include="DPSHelper.cpp" />
     <ClCompile Include="DPSSoftBodyHelper.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="LeapListener.cpp" />
+    <ClCompile Include="MeshUtils.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,11 +27,13 @@
     <ClInclude Include="BtOgreExtras.h" />
     <ClInclude Include="BtOgreGP.h" />
     <ClInclude Include="BtOgrePG.h" />
+    <ClInclude Include="BtOgreSoftBody.h" />
     <ClInclude Include="DPS.h" />
     <ClInclude Include="DPSHelper.h" />
     <ClInclude Include="DPSSoftBodyHelper.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="LeapListener.h" />
+    <ClInclude Include="meshutils.h" />
     <ClInclude Include="Mesh\barrel.h" />
     <ClInclude Include="Mesh\barrelg.h" />
     <ClInclude Include="Mesh\BunnyMesh.h" />
@@ -37,6 +41,7 @@
     <ClInclude Include="ObjLoader.h" />
     <ClInclude Include="RenderBox.h" />
     <ClInclude Include="RenderBoxScene.h" />
+    <ClInclude Include="Uncopyable.h" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

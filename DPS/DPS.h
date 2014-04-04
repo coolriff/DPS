@@ -14,6 +14,7 @@
 #include <BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h>
 #include "Leap.h"
 #include "LeapListener.h"
+#include "BtOgreSoftBody.h"
 
 class DPS;
 class btBroadphaseInterface;
@@ -37,6 +38,7 @@ namespace Globals
 	DPS* app;
 	btSoftRigidDynamicsWorld* phyWorld;
     BtOgre::DebugDrawer* dbgdraw;
+	BtOgre::BtOgreSoftBody *softBody;
 }
 
 class DPS : public BaseApplication

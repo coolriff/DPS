@@ -45,6 +45,12 @@
     <ClCompile Include="LeapListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BtOgreSoftBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseApplication.h">
@@ -94,6 +100,15 @@
     </ClInclude>
     <ClInclude Include="Mesh\barrelg.h">
       <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BtOgreSoftBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="meshutils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Uncopyable.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

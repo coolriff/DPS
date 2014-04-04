@@ -8,6 +8,7 @@
 #include "GUI.h"
 #include <string>
 #include <sstream>
+#include "MeshUtils.h"
 
 DPS::DPS(void)
 {
@@ -133,7 +134,52 @@ void DPS::createScene(void)
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 
 	leapMotionInit();
-	setMiniCamPosition(Ogre::Vector3(10,10,10));
+	setMiniCamPosition(Ogre::Vector3(0 ,0.1,0));
+
+	// Put in your own Ogre mesh here if you like
+	Ogre::Entity *ogreMeshEntity = mSceneMgr->createEntity("ogreMeshEntity", "car.mesh");
+	Ogre::Vector3 pos2 = Ogre::Vector3(-10,0.1,0);
+	Ogre::Quaternion rot2 = Ogre::Quaternion::IDENTITY;
+	Ogre::SceneNode* node = mSceneMgr->getRootSceneNode()->createChildSceneNode("node", pos2, rot2);
+	node->attachObject(ogreMeshEntity);
+	//node->roll(Ogre::Degree(-10));
+
+	// Softbody
+	m_softBodyWorldInfo.air_density		=	(btScalar)1.2;
+	m_softBodyWorldInfo.m_gravity.setValue(0,-9.81,0);
+	m_softBodyWorldInfo.m_dispatcher = m_dispatcher;
+	m_softBodyWorldInfo.m_sparsesdf.Reset();
+	m_softBodyWorldInfo.m_broadphase = m_broadphase;
+	m_softBodyWorldInfo.m_sparsesdf.Initialize();
+
+	Globals::softBody = new BtOgre::BtOgreSoftBody(&m_softBodyWorldInfo);
+
+	Ogre::MeshPtr myMesh = ogreMeshEntity->getMesh();
+	MeshData MyMeshData = *(MeshUtils::getMeshData(myMesh));
+
+	unsigned long* indices = new unsigned long[MyMeshData.triangleCount*3];
+	MeshUtils::meshBuffersToArrays(myMesh, MyMeshData.vertices, indices);
+	btSoftBody*	psb = Globals::softBody->create(ogreMeshEntity, 
+		MyMeshData.vertexCount, 
+		MyMeshData.vertices,
+		MyMeshData.triangleCount*3,
+		(unsigned int*)indices);
+
+	btSoftBody::Material*	pm=psb->appendMaterial();
+	pm->m_kLST				=	0.1;
+	psb->m_cfg.piterations	=	2;
+	psb->m_cfg.kDF			=	0.5;
+	psb->m_cfg.collisions	|=	btSoftBody::fCollision::VF_SS;
+	psb->generateClusters(0);
+	//enable cluster collision between soft body and rigid body
+	//psb->m_cfg.collisions = btSoftBody::fCollision::CL_RS;
+	psb->randomizeConstraints();
+	psb->setTotalMass(50,true); 
+
+	Globals::phyWorld->addSoftBody(psb);
+
+	//dpsHelper->createMesh(Ogre::Vector3(-20,0.1,0),50,"car.mesh",Ogre::Vector3(1,1,1));
+	dpsSoftbodyHelper->createFromMesh(dpsSoftbodyHelper->m_playgroundManualObject_3, dpsSoftbodyHelper->m_playgroundBody_3, btVector3(10,0.1,0), btVector3(0,0,0), btVector3(1,1,1));
 }
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -182,6 +228,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	{
 		leapMotionUpdate();
 	}
+
+	Globals::softBody->updateOgreMesh();
+	dpsSoftbodyHelper->updateCar(dpsSoftbodyHelper->m_playgroundManualObject_3, dpsSoftbodyHelper->m_playgroundBody_3);
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
