@@ -356,6 +356,7 @@ Ogre::Vector3 DPS::ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocati
 
 void DPS::GameCA(int timeLine, Ogre::Real Time)
 {
+	//houses
 	if(timeLine > 0 && timeLine < 300)
 	{
 		camPos = mCamera->getPosition();
@@ -365,14 +366,62 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->lookAt(Ogre::Vector3(2000.0f,50.0f,1715.0f));
 	}
 
+	if (timeLine == 300)
+	{
+		mCamera->setPosition(Ogre::Vector3(264,452,2268));
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
 
-	if(timeLine > 300 && timeLine < 600 )
+	//hilltop
+	if(timeLine > 300 && timeLine < 420 )
 	{
 		camPos = mCamera->getPosition();
-		targetPos = mSinbadNode->getPosition();
+		targetPos = Ogre::Vector3(237,452,2037);
 		camLerpPos = ogreLerp(camPos, targetPos, Time);
 		mCamera->setPosition(camLerpPos);
-		mCamera->lookAt(targetPos);
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
+	if (timeLine == 420)
+	{
+		mCamera->setPosition(Ogre::Vector3(237,452,2037));
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
+
+	if(timeLine > 420 && timeLine < 540 )
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(314,452,1984);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
+	if (timeLine == 540)
+	{
+		mCamera->setPosition(Ogre::Vector3(314,452,1984));
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
+
+	if(timeLine > 540 && timeLine < 660 )
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(237,452,1890);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
+
+	if (timeLine == 660)
+	{
+		mCamera->setPosition(Ogre::Vector3(237,452,1890));
+		mCamera->lookAt(mSinbadNode->getPosition());
+	}
+	if(timeLine > 660 && timeLine < 840 )
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(223,455,1966);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(mSinbadNode->getPosition());
 	}
 
 }
