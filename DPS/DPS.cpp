@@ -8,12 +8,13 @@
 #include "GUI.h"
 #include <string>
 #include <sstream>
+#include <Terrain/OgreTerrain.h>
+#include <Terrain/OgreTerrainGroup.h>
 
 DPS::DPS(void)
 {
 	initPhysics();
 	rayNode = nullptr;
-	leapMotionCounter = 0;
 	runClothDome_1 = false;
 	runClothDome_2 = false;
 	runClothDome_3 = false;
@@ -40,13 +41,20 @@ DPS::DPS(void)
 	maxProxies = 32766;
 	hit_rel_pos = btVector3(0,0,0);
 	shot_imp = btVector3(0,0,0);
+	timeLine = 0;
+
+	
+	mTerrainGlobals = 0;
+	mTerrainGroup = 0;
+	mTerrainsImported = false;
+	mInfoLabel =  0;
+
 }
 
 DPS::~DPS(void)
 {
 	deletePhysicsShapes();
 	exitPhysics();
-	leapMotionCleanup();
 }
 
 void DPS::initPhysics(void)
@@ -117,27 +125,304 @@ void DPS::createScene(void)
 	mGUI->createGUI(1);
 
 	// Basic Ogre stuff.
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.7f,0.7f,0.5f));
-	mCamera->setPosition(Ogre::Vector3(0,5,20));
-	mCamera->lookAt(Ogre::Vector3(0,5,-10));
-	mCamera->setNearClipDistance(0.05f);
+	//mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
+// 	mCamera->setPosition(Ogre::Vector3(0,5,20));
+// 	mCamera->lookAt(Ogre::Vector3(0,5,-10));
+// 	mCamera->setNearClipDistance(0.05f);
 	//LogManager::getSingleton().setLogDetail(LL_BOREME);
+
+
+
 
 	dpsHelper = std::make_shared<DPSHelper>(Globals::phyWorld, mCamera, mSceneMgr);
 	dpsSoftbodyHelper = std::make_shared<DPSSoftBodyHelper>(Globals::phyWorld, mCamera, mSceneMgr, m_collisionShapes);
 
-	dpsHelper->createWorld();
+
+// 	dpsHelper->createWorld();
+	//Create Ogre stuff.
+	Ogre::Vector3 lightdir(0.55, -0.3, 0.75);
+	lightdir.normalise();
+	Ogre::Light* light = mSceneMgr->createLight("tstLight");
+	light->setType(Ogre::Light::LT_DIRECTIONAL);
+	light->setDirection(lightdir);
+	light->setDiffuseColour(Ogre::ColourValue::White);
+	//light->setSpecularColour(Ogre::ColourValue(0.4, 0.4, 0.4));
+
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
+	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
+
+	mTerrainGroup = OGRE_NEW Ogre::TerrainGroup(mSceneMgr, Ogre::Terrain::ALIGN_X_Z, 513, 12000.0f);
+	mTerrainGroup->setFilenameConvention(Ogre::String("BasicTutorial3Terrain"), Ogre::String("dat"));
+	mTerrainGroup->setOrigin(Ogre::Vector3::ZERO);
+
+	configureTerrainDefaults(light);
+
+	for (long x = 0; x <= 0; ++x)
+		for (long y = 0; y <= 0; ++y)
+			defineTerrain(x, y);
+
+	// sync load since we want everything in place when we start
+	mTerrainGroup->loadAllTerrains(true);
+
+	if (mTerrainsImported)
+	{
+		Ogre::TerrainGroup::TerrainIterator ti = mTerrainGroup->getTerrainIterator();
+		while(ti.hasMoreElements())
+		{
+			Ogre::Terrain* t = ti.getNext()->instance;
+			initBlendMaps(t);
+		}
+	}
+
+	mTerrainGroup->freeTemporaryResources();
+
+// 	Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
+// 
+// 	entGround ->setMaterialName("Examples/Wood");
+// 	entGround ->setCastShadows(false);
+
+	btCollisionShape* shape = new btBoxShape (btVector3(5000,1,5000));
+	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(0,-1,0)));
+	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(
+		0,                  // mass
+		motionState,        // initial position
+		shape,              // collision shape of body
+		btVector3(0,0,0)    // local inertia
+		);
+	btRigidBody *GroundBody = new btRigidBody(rigidBodyCI);
+	Globals::phyWorld->addRigidBody(GroundBody);
+
+// 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
+
+	//mSceneMgr->setSkyBox(true, "Examples/MorningSkyBox");
+	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 5000);
+
+	//dpsHelper->createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
+	//dpsHelper->createDirectionLight("mainLight1",Ogre::Vector3(0,50,-3),Ogre::Vector3(0,0,0));
 
 	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 
-	leapMotionInit();
+// 	leapMotionInit();
 	setMiniCamPosition(Ogre::Vector3(10,10,10));
+
+
+	// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  GAME CA $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	GameCALoadModel();
+
+	// Set the camera to look at our handiwork
+	mCamera->setPosition(Ogre::Vector3(1645.0f,94.0f,2520.0f));
+	mCamera->setNearClipDistance(0.05f);
+
+
 }
+
+
+
+void DPS::GameCALoadModel(void)
+{
+	Ogre::Vector3 pos = Ogre::Vector3(1500,200,2000);
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$  RZR  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+	Ogre::Entity* RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
+	Ogre::SceneNode* entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
+	entRZR_001->attachObject(RZR_001);
+
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$  Robot  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	// Create the entity
+	mEntity = mSceneMgr->createEntity("Robot", "robot.mesh");
+
+	// Create the scene node
+	mNode = mSceneMgr->getRootSceneNode()->
+		createChildSceneNode("RobotNode", Ogre::Vector3(604.0f, 16.0f, 4245.0f),rot);
+	mNode->attachObject(mEntity);
+
+	// Create the walking list
+	mWalkList.push_back(Ogre::Vector3(1235.0f,  16.0f, 3334.0f ));
+	mWalkList.push_back(Ogre::Vector3(1526.0f,  16.0f, 3328.0f));
+
+	// Create objects so we can see movement
+	Ogre::Entity *ent;
+	Ogre::SceneNode *node;
+
+	ent = mSceneMgr->createEntity("Knot1", "knot.mesh");
+	node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot1Node",
+		Ogre::Vector3(0.0f, -10.0f,  25.0f));
+	node->attachObject(ent);
+	node->setScale(0.1f, 0.1f, 0.1f);
+
+	ent = mSceneMgr->createEntity("Knot2", "knot.mesh");
+	node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot2Node",
+		Ogre::Vector3(550.0f, -10.0f,  50.0f));
+	node->attachObject(ent);
+	node->setScale(0.1f, 0.1f, 0.1f);
+
+	ent = mSceneMgr->createEntity("Knot3", "knot.mesh");
+	node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot3Node",
+		Ogre::Vector3(-100.0f, -10.0f,-200.0f));
+	node->attachObject(ent);
+	node->setScale(0.1f, 0.1f, 0.1f);
+
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$  tudorhouse  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	Ogre::Vector3 mTerrainPos = Ogre::Vector3(0,0,0);
+
+	Ogre::Entity* e1= mSceneMgr->createEntity("tudorhouse.mesh");
+	Ogre::Vector3 entPos1 = Ogre::Vector3(mTerrainPos.x + 2043, 65, mTerrainPos.z + 1715);
+	Ogre::SceneNode* sn1 = mSceneMgr->getRootSceneNode()->createChildSceneNode(entPos1, rot);
+	sn1->setScale(Vector3(0.12, 0.12, 0.12));
+	sn1->attachObject(e1);
+
+	Ogre::Entity* e2= mSceneMgr->createEntity("tudorhouse.mesh");
+	Ogre::Vector3 entPos2 = Ogre::Vector3(mTerrainPos.x + 1850, 65, mTerrainPos.z + 1478);
+	Ogre::SceneNode* sn2 = mSceneMgr->getRootSceneNode()->createChildSceneNode(entPos2, rot);
+	sn2->setScale(Vector3(0.12, 0.12, 0.12));
+	sn2->attachObject(e2);
+
+	Ogre::Entity* e3= mSceneMgr->createEntity("tudorhouse.mesh");
+	Ogre::Vector3 entPos3 = Ogre::Vector3(mTerrainPos.x + 1970, 85, mTerrainPos.z + 2180);
+	Ogre::SceneNode* sn3 = mSceneMgr->getRootSceneNode()->createChildSceneNode(entPos3, rot);
+	sn3->setScale(Vector3(0.12, 0.12, 0.12));
+	sn3->attachObject(e3);
+
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$  Sinbad  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+	mSinbadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(223,452,1976));
+	mBodyEnt = mSceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
+	mSinbadNode->attachObject(mBodyEnt);
+	mSinbadNode->yaw(Ogre::Degree(180));
+
+	// create swords and attach to sheath
+	LogManager::getSingleton().logMessage("Creating swords");
+	mSword1 = mSceneMgr->createEntity("SinbadSword1", "Sword.mesh");
+	mSword2 = mSceneMgr->createEntity("SinbadSword2", "Sword.mesh");
+	mBodyEnt->attachObjectToBone("Sheath.L", mSword1);
+	mBodyEnt->attachObjectToBone("Sheath.R", mSword2);
+
+	LogManager::getSingleton().logMessage("Creating the chains");
+	// create a couple of ribbon trails for the swords, just for fun
+	NameValuePairList params;
+	params["numberOfChains"] = "2";
+	params["maxElements"] = "80";
+	mSwordTrail = (RibbonTrail*)mSceneMgr->createMovableObject("RibbonTrail", &params);
+	mSwordTrail->setMaterialName("Examples/LightRibbonTrail");
+	mSwordTrail->setTrailLength(20);
+	mSwordTrail->setVisible(false);
+	mSceneMgr->getRootSceneNode()->attachObject(mSwordTrail);
+
+
+	for (int i = 0; i < 2; i++)
+	{
+		mSwordTrail->setInitialColour(i, 1, 0.8, 0);
+		mSwordTrail->setColourChange(i, 0.75, 1.25, 1.25, 1.25);
+		mSwordTrail->setWidthChange(i, 1);
+		mSwordTrail->setInitialWidth(i, 0.5);
+	}
+}
+
+
+bool DPS::nextLocation(void){
+
+	if (mWalkList.empty()) return false;
+	mDestination = mWalkList.front();  // this gets the front of the deque
+	mWalkList.pop_front();             // this removes the front of the deque
+	mDirection = mDestination - mNode->getPosition();
+	mDistance = mDirection.normalise();
+	return true;
+}
+
+void DPS::createFrameListener(void){
+	BaseApplication::createFrameListener();
+
+	// Set idle animation
+	mAnimationState = mEntity->getAnimationState("Idle");
+	mAnimationState->setLoop(true);
+	mAnimationState->setEnabled(true);
+
+	// Set default values for variables
+	mWalkSpeed = 35.0f;
+	mDirection = Ogre::Vector3::ZERO;
+}
+
+Ogre::Vector3 DPS::ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocation, Ogre::Real Time)
+{
+	Ogre::Vector3 mDest; 
+	mDest.x = srcLocation.x + (destLocation.x - srcLocation.x) * Time;
+	mDest.y = srcLocation.y + (destLocation.y - srcLocation.y) * Time;
+	mDest.z = srcLocation.z + (destLocation.z - srcLocation.z) * Time;
+	return mDest;
+}
+
+void DPS::GameCA(int timeLine, Ogre::Real Time)
+{
+	if(timeLine > 0 && timeLine < 300)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(1399.0f,90.0f,1311.0f);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(Ogre::Vector3(2000.0f,50.0f,1715.0f));
+	}
+
+
+	if(timeLine > 300 && timeLine < 600 )
+	{
+		camPos = mCamera->getPosition();
+		targetPos = mSinbadNode->getPosition();
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(targetPos);
+	}
+
+}
+
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+	if (mDirection == Ogre::Vector3::ZERO) {
+		if (nextLocation()) {
+			// Set walking animation
+			mAnimationState = mEntity->getAnimationState("Walk");
+			mAnimationState->setLoop(true);
+			mAnimationState->setEnabled(true);				
+		}//if
+	}else{
+		Ogre::Real move = mWalkSpeed * evt.timeSinceLastFrame;
+		mDistance -= move;
+		if (mDistance <= 0.0f){                 
+			mNode->setPosition(mDestination);
+			mDirection = Ogre::Vector3::ZERO;				
+			// Set animation based on if the robot has another point to walk to. 
+			if (!nextLocation()){
+				// Set Idle animation                     
+				mAnimationState = mEntity->getAnimationState("Idle");
+				mAnimationState->setLoop(true);
+				mAnimationState->setEnabled(true);
+			}else{
+				// Rotation Code will go here later
+				Ogre::Vector3 src = mNode->getOrientation() * Ogre::Vector3::UNIT_X;
+				if ((1.0f + src.dotProduct(mDirection)) < 0.0001f) {
+					mNode->yaw(Ogre::Degree(180));						
+				}else{
+					Ogre::Quaternion quat = src.getRotationTo(mDirection);
+					mNode->rotate(quat);
+				} // else
+			}//else
+		}else{
+			mNode->translate(mDirection * move);
+		} // else
+	} // if
+
+
+	mAnimationState->addTime(evt.timeSinceLastFrame);
+
+	times = evt.timeSinceLastFrame;
+
+	++timeLine;
+
+	GameCA(timeLine, times);
+
 	if(mGUI->Simulation_Stop)
 	{
 		dt = 0;
@@ -171,32 +456,191 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	Globals::dbgdraw->setDebugMode(mGUI->Command_Bullet_Debug_Mode);
 	Globals::dbgdraw->step();
 
-	Ogre::Vector3 camPos = mCamera->getDerivedPosition();
+// 	Ogre::Vector3 camPos = mCamera->getDerivedPosition();
+// 
+// 	if (camPos.y<0.5)
+// 	{
+// 		mCamera->setPosition(camPos.x, 0.5, camPos.z);
+// 	}
 
-	if (camPos.y<0.5)
-	{
-		mCamera->setPosition(camPos.x, 0.5, camPos.z);
-	}
-
-	if(leapMotionRunning)
-	{
-		leapMotionUpdate();
-	}
+// 	if(leapMotionRunning)
+// 	{
+// 		leapMotionUpdate();
+// 	}
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
+
+
+// ------------------------------- Seek -----------------------------------
+// 
+//  Given a target, this behavior returns a steering force which will
+//  direct the agent towards the target
+// ------------------------------------------------------------------------
+// void DPS::seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
+// {
+// 	Ogre::Vector3 mAgentPosition      = mGlobalResource->LocalPlayerObjectScene->getInventoryPosition();
+// 	Ogre::Quaternion mAgentOrientation   = mGlobalResource->LocalPlayerObjectScene->getInventoryOrientation();
+// 	Ogre::Vector3 mVectorToTarget      = TargetPosition - mAgentPosition; // A-B = B->A
+// 	mAgentPosition.normalise();
+// 	mAgentOrientation.normalise();
+// 
+// 	Ogre::Vector3 mAgentHeading      = mAgentOrientation * mAgentPosition;
+// 	Ogre::Vector3 mTargetHeading      = TargetOrientation * TargetPosition;
+// 	mAgentHeading.normalise();
+// 	mTargetHeading.normalise();
+// 
+// 	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
+// 	Ogre::Vector3 mAgentVO      = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
+// 	Ogre::Vector3 mTargetVO      = TargetOrientation * Ogre::Vector3::UNIT_Y;
+// 
+// 	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
+// 	Ogre::Vector3 mSteeringForce = mAgentOrientation.Inverse() * mVectorToTarget;
+// 	mSteeringForce.normalise();
+// 
+// 	float mYaw      = mSteeringForce.x;
+// 	float mPitch   = mSteeringForce.y;
+// 	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
+// 
+// 	clsSystemControls::getSingleton().setPitchControl( mPitch );
+// 	clsSystemControls::getSingleton().setYawControl( mYaw );
+// 	clsSystemControls::getSingleton().setRollControl( mRoll );
+// 
+// } // Seek
+// 
+// 
+// ----------------------------- Flee -------------------------------------
+// 
+//  Does the opposite of Seek
+// ------------------------------------------------------------------------
+// void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
+// {
+// 	Ogre::Vector3 mAgentPosition      = mGlobalResource->LocalPlayerObjectScene->getInventoryPosition();
+// 	Ogre::Quaternion mAgentOrientation   = mGlobalResource->LocalPlayerObjectScene->getInventoryOrientation();
+// 	Ogre::Vector3 mVectorToTarget      = TargetPosition - mAgentPosition; // A-B = B->A
+// 	mAgentPosition.normalise();
+// 	mAgentOrientation.normalise();
+// 
+// 	Ogre::Vector3 mAgentHeading      = mAgentOrientation * mAgentPosition;
+// 	Ogre::Vector3 mTargetHeading      = TargetOrientation * TargetPosition;
+// 	mAgentHeading.normalise();
+// 	mTargetHeading.normalise();
+// 
+// 	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
+// 	Ogre::Vector3 mAgentVO      = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
+// 	Ogre::Vector3 mTargetVO      = TargetOrientation * Ogre::Vector3::UNIT_Y;
+// 
+// 	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
+// 	Ogre::Vector3 mSteeringForce = mAgentOrientation * mVectorToTarget;
+// 	mSteeringForce.normalise();
+// 
+// 	float mYaw      = mSteeringForce.x;
+// 	float mPitch   = mSteeringForce.y;
+// 	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
+// 
+// 	clsSystemControls::getSingleton().setPitchControl( mPitch );
+// 	clsSystemControls::getSingleton().setYawControl( mYaw );
+// 	clsSystemControls::getSingleton().setRollControl( mRoll );
+// 
+// } // Flee
+
+void DPS::configureTerrainDefaults(Ogre::Light* light)
+{
+	// Configure global
+	mTerrainGlobals->setMaxPixelError(8);
+	// testing composite map
+	mTerrainGlobals->setCompositeMapDistance(3000);
+
+	// Important to set these so that the terrain knows what to use for derived (non-realtime) data
+	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
+	mTerrainGlobals->setCompositeMapAmbient(mSceneMgr->getAmbientLight());
+	mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
+
+	// Configure default import settings for if we use imported image
+	Ogre::Terrain::ImportData& defaultimp = mTerrainGroup->getDefaultImportSettings();
+	defaultimp.terrainSize = 513;
+	defaultimp.worldSize = 12000.0f;
+	defaultimp.inputScale = 600;
+	defaultimp.minBatchSize = 33;
+	defaultimp.maxBatchSize = 65;
+	// textures
+	defaultimp.layerList.resize(3);
+	defaultimp.layerList[0].worldSize = 100;
+	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_diffusespecular.dds");
+	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_normalheight.dds");
+	defaultimp.layerList[1].worldSize = 30;
+	defaultimp.layerList[1].textureNames.push_back("grass_green-01_diffusespecular.dds");
+	defaultimp.layerList[1].textureNames.push_back("grass_green-01_normalheight.dds");
+	defaultimp.layerList[2].worldSize = 200;
+	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_diffusespecular.dds");
+	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
+}
+
+void DPS::defineTerrain(long x, long y)
+{
+	Ogre::String filename = mTerrainGroup->generateFilename(x, y);
+	if (Ogre::ResourceGroupManager::getSingleton().resourceExists(mTerrainGroup->getResourceGroup(), filename))
+	{
+		mTerrainGroup->defineTerrain(x, y);
+	}
+	else
+	{
+		Ogre::Image img;
+		getTerrainImage(x % 2 != 0, y % 2 != 0, img);
+		mTerrainGroup->defineTerrain(x, y, &img);
+		mTerrainsImported = true;
+	}
+}
+
+void DPS::initBlendMaps(Ogre::Terrain* terrain)
+{
+	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
+	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
+	Ogre::Real minHeight0 = 70;
+	Ogre::Real fadeDist0 = 40;
+	Ogre::Real minHeight1 = 70;
+	Ogre::Real fadeDist1 = 15;
+	float* pBlend0 = blendMap0->getBlendPointer();
+	float* pBlend1 = blendMap1->getBlendPointer();
+	for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y)
+	{
+		for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x)
+		{
+			Ogre::Real tx, ty;
+
+			blendMap0->convertImageToTerrainSpace(x, y, &tx, &ty);
+			Ogre::Real height = terrain->getHeightAtTerrainPosition(tx, ty);
+			Ogre::Real val = (height - minHeight0) / fadeDist0;
+			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+			*pBlend0++ = val;
+
+			val = (height - minHeight1) / fadeDist1;
+			val = Ogre::Math::Clamp(val, (Ogre::Real)0, (Ogre::Real)1);
+			*pBlend1++ = val;
+		}
+	}
+	blendMap0->dirty();
+	blendMap1->dirty();
+	blendMap0->update();
+	blendMap1->update();
+}
+
+void DPS::getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
+{
+	img.load("terrain.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	if (flipX)
+		img.flipAroundY();
+	if (flipY)
+		img.flipAroundX();
+}
+
 
 void DPS::clearScreen(void)
 {
 	mGUI->Command_Clear_Screen = false;
 
-	leapMotionCleanup();
-
 	deletePhysicsShapes();
 	deleteOgreEntities();
-
-	leapMotionRunning = false;
-	leapMotionInit();
 
 	//stop demos loops
 	runClothDome_1 = false;
@@ -753,109 +1197,7 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	{
 		dpsHelper->createOgreHead();
 	}
-	if (arg.key == OIS::KC_SPACE) 
-	{
-		GimpactRayCallBack();
-	}
 	return BaseApplication::keyPressed(arg);
-}
-
-
-void DPS::GimpactRayCallBack(void)
-{
-	Ogre::Vector3 camPos = mCamera->getPosition();
-	Ogre::Vector3 viewPos = mCamera->getDirection();
-	btVector3 to = btVector3(viewPos.x,viewPos.y,viewPos.z);
-	to.normalize();
-	to *= 1000;
-	MyClosestRayResultCallback rayCallback(btVector3(camPos.x,camPos.y,camPos.z), to);
-	Globals::phyWorld->rayTest(btVector3(camPos.x,camPos.y,camPos.z), to, rayCallback);
-
-	if (rayCallback.hasHit())
-	{
-		btVector3 hit = rayCallback.m_hitPointWorld;
-		btCollisionObject obj = *rayCallback.m_collisionObject;
-		//downcast
-		btRigidBody* body = btRigidBody::upcast(&obj);
-		if (body)
-		{
-			hit_body = body;
-			if (rayCallback.m_hitTriangleShape)
-			{
-				bool triangle_ok = process_triangle(hit_body->getCollisionShape(),
-					rayCallback.m_hitTriangleIndex);
-			}
-		}
-	}
-}
-
-
-// base on Bullet engine forum Example
-bool DPS::process_triangle(btCollisionShape* shape, int hitTriangleIndex)
-{
-	btStridingMeshInterface * meshInterface = NULL;
-
-	if (shape->getShapeType() == GIMPACT_SHAPE_PROXYTYPE)
-	{
-		meshInterface = (static_cast<btGImpactMeshShape*>(shape))->getMeshInterface();
-	}
-	else if (shape->getShapeType() == TRIANGLE_MESH_SHAPE_PROXYTYPE)
-	{
-		meshInterface = (static_cast<btBvhTriangleMeshShape*>(shape))->getMeshInterface();
-	}
-	else
-	{
-		return false;
-	}
-
-	if (!meshInterface) return false;
-
-	unsigned char *vertexbase;
-	int numverts;
-	PHY_ScalarType type;
-	int stride;
-	unsigned char *indexbase;
-	int indexstride;
-	int numfaces;
-	PHY_ScalarType indicestype;
-
-	meshInterface->getLockedVertexIndexBase(
-		&vertexbase,
-		numverts,
-		type,
-		stride,
-		&indexbase,
-		indexstride,
-		numfaces,
-		indicestype,
-		0);
-
-	unsigned int * gfxbase = (unsigned int*)(indexbase+hitTriangleIndex*indexstride);
-	const btVector3 & meshScaling = shape->getLocalScaling();
-	btVector3 triangle_v[3];
-
-	for (int j=2;j>=0;j--)
-	{
-		int graphicsindex = indicestype==PHY_SHORT?((unsigned short*)gfxbase)[j]:gfxbase[j];
-
-		btScalar * graphicsbase = (btScalar*)(vertexbase+graphicsindex*stride);
-
-		if (shape->getShapeType() == GIMPACT_SHAPE_PROXYTYPE)
-		{
-			graphicsbase[0] *= btScalar(0.85);
-			graphicsbase[1] *= btScalar(0.85);
-			graphicsbase[2] *= btScalar(0.85);
-		}
-	}
-
-	meshInterface->unLockVertexBase(0);
-
-	if (shape->getShapeType() == GIMPACT_SHAPE_PROXYTYPE)
-	{
-		btGImpactMeshShape * gimp_shape = static_cast<btGImpactMeshShape*>(shape);
-		gimp_shape->postUpdate();
-	}
-	return true;
 }
 
 
@@ -947,178 +1289,6 @@ void DPS::setMiniCamPosition(Ogre::Vector3 camPos)
 	miniCam->setPosition(10+camPos);
 	miniCam->lookAt(camPos);
 	miniCam->setNearClipDistance(5);
-}
-
-
-bool DPS::leapMotionInit(void)
-{
-	leapMotionController.addListener(leapMotionListener);
-
-	fingerName_0 = "finger_" + convertInt(leapMotionCounter);
-	fingerName_1 = "finger_" + convertInt(leapMotionCounter+1);
-
-	dpsHelper->createLeapMotionSphere_0(fingerName_0,Ogre::Vector3(-12.f,100.0f,0.0f));
- 	dpsHelper->createLeapMotionSphere_1(fingerName_1,Ogre::Vector3(-9.f,100.0f,0.0f));
-
-	leapMotionRunning = true;
-	leapMotionCounter += 2;
-
-	return true;
-}
-
-
-std::string DPS::convertInt(int number)
-{
-	if (number == 0)
-		return "0";
-	std::string temp="";
-	std::string returnValue="";
-	while (number>0)
-	{
-		temp+=number%10+48;
-		number/=10;
-	}
-	for (int i=0;i<temp.length();i++)
-		returnValue+=temp[temp.length()-i-1];
-	return returnValue;
-}
-
-
-void DPS::leapMotionUpdate(void)
-{
-	if(leapMotionController.isConnected())
-	{
-		Leap::Frame leapFrameData = leapMotionController.frame();
-		Leap::Hand leapHand = leapFrameData.hands().rightmost();
-
-		Leap::FingerList fingerListNow = leapFrameData.hands()[0].fingers();
-		std::vector<Ogre::Vector3> fingerPositions;
-
-		for(int i = 0; i < fingerListNow.count(); i++)
-		{
-			Leap::Vector fp = fingerListNow[i].tipPosition();
-			fingerPositions.push_back(Ogre::Vector3(fp.x, fp.y, fp.z));
-		}
-
-		if(fingerPositions.size() == 1)
-		{
-			//finger 1
-			Leap::Finger finger0 = leapHand.fingers()[0];
-			Leap::Vector fp0 = finger0.tipPosition();
-
-			if (fp0.y < 105)
-			{
-				fp0.y = 105;
-			}
-
-			mSceneMgr->getSceneNode(fingerName_0)->setPosition(Ogre::Vector3(fp0.x * 0.2,(fp0.y-100) * 0.2,fp0.z * 0.2));
-			Ogre::Vector3 absPos0 = dpsHelper->sphereNode_0->_getDerivedPosition();
-			Ogre::Quaternion absQuat0 = dpsHelper->sphereNode_0->_getDerivedOrientation();
-
-			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
-			tr0.setOrigin(btVector3(absPos0.x,absPos0.y,absPos0.z));
-			tr0.setRotation(btQuaternion(absQuat0.x, absQuat0.y, absQuat0.z, absQuat0.w));
-			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->activate(true);
-			dpsHelper->sphereBody_0->setWorldTransform(tr0);
-
-			//finger 2
-			mSceneMgr->getSceneNode(fingerName_1)->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
-			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
-			tr1.setOrigin(btVector3(-9.f,100.0f,0.0f));
-			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->setWorldTransform(tr1);
-		}
-
-		if(fingerPositions.size() == 2)
-		{
-			//finger 1
-			Leap::Finger finger0 = leapHand.fingers()[0];
-			Leap::Vector fp0 = finger0.tipPosition();
-
-			if (fp0.y < 105)
-			{
-				fp0.y = 105;
-			}
-
-			mSceneMgr->getSceneNode(fingerName_0)->setPosition(Ogre::Vector3(fp0.x * 0.2,(fp0.y-100) * 0.2,fp0.z * 0.2));
-			Ogre::Vector3 absPos0 = dpsHelper->sphereNode_0->_getDerivedPosition();
-			Ogre::Quaternion absQuat0 = dpsHelper->sphereNode_0->_getDerivedOrientation();
-
-			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
-			tr0.setOrigin(btVector3(absPos0.x,absPos0.y,absPos0.z));
-			tr0.setRotation(btQuaternion(absQuat0.x, absQuat0.y, absQuat0.z, absQuat0.w));
-			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->activate(true);
-			dpsHelper->sphereBody_0->setWorldTransform(tr0);
-
-			//finger 2
-			Leap::Finger finger1 = leapHand.fingers()[1];
-			Leap::Vector fp1 = finger1.tipPosition();
-
-			if (fp1.y < 105)
-			{
-				fp1.y = 105;
-			}
-
-			mSceneMgr->getSceneNode(fingerName_1)->setPosition(Ogre::Vector3(fp1.x * 0.2,(fp1.y-100) * 0.2,fp1.z * 0.2));
-			Ogre::Vector3 absPos1 = dpsHelper->sphereNode_1->_getDerivedPosition();
-			Ogre::Quaternion absQuat1 = dpsHelper->sphereNode_1->_getDerivedOrientation();
-
-			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
-			tr1.setOrigin(btVector3(absPos1.x,absPos1.y,absPos1.z));
-			tr1.setRotation(btQuaternion(absQuat1.x, absQuat1.y, absQuat1.z, absQuat1.w));
-			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->activate(true);
-			dpsHelper->sphereBody_1->setWorldTransform(tr1);
-		}
-
-		if(leapFrameData.hands().isEmpty() || fingerPositions.size() > 2)
-		{
-			mSceneMgr->getSceneNode(fingerName_0)->setPosition(Ogre::Vector3(-12.f,100.0f,0.0f));
-			mSceneMgr->getSceneNode(fingerName_1)->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
-
-			btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
-			tr0.setOrigin(btVector3(-12.f,100.0f,0.0f));
-			dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_0->setWorldTransform(tr0);
-
-			btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
-			tr1.setOrigin(btVector3(-9.f,100.0f,0.0f));
-			dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
-			dpsHelper->sphereBody_1->setWorldTransform(tr1);
-		}
-	}
-	else
-	{
-		mSceneMgr->getSceneNode(fingerName_0)->setPosition(Ogre::Vector3(-12.f,100.0f,0.0f));
-		mSceneMgr->getSceneNode(fingerName_1)->setPosition(Ogre::Vector3(-9.f,100.0f,0.0f));
-
-		btTransform tr0 = dpsHelper->sphereBody_0->getWorldTransform();
-		tr0.setOrigin(btVector3(-12.f,100.0f,0.0f));
-		dpsHelper->sphereBody_0->applyCentralForce(btVector3(0,0,0));
-		dpsHelper->sphereBody_0->setLinearVelocity(btVector3(0,0,0));
-		dpsHelper->sphereBody_0->setWorldTransform(tr0);
-
-		btTransform tr1 = dpsHelper->sphereBody_1->getWorldTransform();
-		tr1.setOrigin(btVector3(-9.f,100.0f,0.0f));
-		dpsHelper->sphereBody_1->applyCentralForce(btVector3(0,0,0));
-		dpsHelper->sphereBody_1->setLinearVelocity(btVector3(0,0,0));
-		dpsHelper->sphereBody_1->setWorldTransform(tr1);
-	}
-}
-
-
-void DPS::leapMotionCleanup(void)
-{
-	leapMotionController.removeListener(leapMotionListener);
-	leapMotionRunning = false;
 }
 
 
