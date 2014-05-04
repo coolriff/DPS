@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\DPS\Dependencies\LeapSDK\include;C:\DPS\Dependencies\MyGUI_3.2.0\MyGUIEngine\include;C:\DPS\Dependencies\MyGUI_3.2.0\Platforms\Ogre\OgrePlatform\include;C:\DPS\Dependencies\glm-0.9.4.3\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\DPS\Dependencies\LeapSDK\lib\x86;C:\DPS\Dependencies\MyGUI_3.2.0\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\DPS\Dependencies\OpenCV2.0\include\opencv;C:\DPS\Dependencies\LeapSDK\include;C:\DPS\Dependencies\MyGUI_3.2.0\MyGUIEngine\include;C:\DPS\Dependencies\MyGUI_3.2.0\Platforms\Ogre\OgrePlatform\include;C:\DPS\Dependencies\glm-0.9.4.3\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\DPS\DPS\DPS\OpenCV;C:\DPS\Dependencies\LeapSDK\lib\x86;C:\DPS\Dependencies\MyGUI_3.2.0\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -119,7 +119,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>./Bullet;$(OGRE_HOME)\lib\$(Configuration);$(OGRE_HOME)\boost\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OgreMain.lib;OIS.lib;OgreTerrain.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;MyGUIEngine.lib;MyGUI.OgrePlatform.lib;Leap.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;OIS.lib;OgreTerrain.lib;BulletCollision.lib;BulletDynamics.lib;BulletSoftBody.lib;LinearMath.lib;MyGUIEngine.lib;MyGUI.OgrePlatform.lib;Leap.lib;cv200.lib;cxcore200.lib;highgui200.lib;ml200.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>

@@ -49,12 +49,17 @@ DPS::DPS(void)
 	mTerrainsImported = false;
 	mInfoLabel =  0;
 
+	mVideoFrame   = NULL;
+	mVideoCapture = NULL;
+
 }
 
 DPS::~DPS(void)
 {
 	deletePhysicsShapes();
 	exitPhysics();
+	cvReleaseCapture(&mVideoCapture);
+	cvDestroyWindow("video");
 }
 
 void DPS::initPhysics(void)
@@ -214,6 +219,22 @@ void DPS::createScene(void)
 	// Set the camera to look at our handiwork
 	mCamera->setPosition(Ogre::Vector3(1645.0f,94.0f,2520.0f));
 	mCamera->setNearClipDistance(0.05f);
+
+
+	//** Setup OpenCV for reading an video
+	mVideoCapture = cvCreateFileCapture("..\\media\\test.avi");
+	createVideoTexture();
+	
+	//** Implementing a video screen
+	mVideoScreen = new Ogre::Rectangle2D(true);
+	mVideoScreen->setCorners(-0.5f, 1.0f, 0.5f, -1.0f);
+	mVideoScreen->setBoundingBox(Ogre::AxisAlignedBox(-100000.0f * Ogre::Vector3::UNIT_SCALE, 100000.0f * Ogre::Vector3::UNIT_SCALE));
+	mVideoScreen->setMaterial( material->getName() );
+    // Attach it to a SceneNode
+	Ogre::SceneNode* videoScreenNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("VideoScreenNode");
+	videoScreenNode->attachObject(mVideoScreen);
+
+	mCameraMan->setStyle(OgreBites::CS_ORBIT);
 
 
 }
@@ -464,6 +485,16 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	} // if
 
 
+	if(!mVideoFrame)
+	{
+		return false;
+	}
+	else
+	{
+		updateVideoTexture();
+	}
+
+
 	mAnimationState->addTime(evt.timeSinceLastFrame);
 
 	times = evt.timeSinceLastFrame;
@@ -518,6 +549,80 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 // 	}
 
 	return BaseApplication::frameRenderingQueued(evt);
+}
+
+
+void DPS::createVideoTexture(void)
+{
+	mVideoFrame = cvQueryFrame(mVideoCapture);
+	if(!mVideoFrame)
+	{
+		return;
+	}
+
+	// Implementing a video texture
+	texture = Ogre::TextureManager::getSingleton().createManual(
+		"VideoTexture",      // name
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+		Ogre::TEX_TYPE_2D,   // type
+		mVideoFrame->width,  // width
+		mVideoFrame->height, // height
+		0,                   // number of mipmaps
+		Ogre::PF_B8G8R8A8,   // pixel format
+		Ogre::TU_DYNAMIC_WRITE_ONLY_DISCARDABLE // usage, for textures updated very often
+		);
+	// Get the pixel buffer
+	pixelBuffer = texture->getBuffer();
+	// Lock the pixel buffer and get a pixel box
+	unsigned char* buffer = static_cast<unsigned char*>(
+		pixelBuffer->lock(0, mVideoFrame->width*mVideoFrame->height*4, Ogre::HardwareBuffer::HBL_DISCARD) );
+	for(int y = 0; y < mVideoFrame->height; ++y)
+	{
+		for(int x = 0; x < mVideoFrame->width; ++x)
+		{
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 0 ] = mVideoFrame->imageData[ ((y*mVideoFrame->width)+x)*3 + 0 ]; // B
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 1 ] = mVideoFrame->imageData[ ((y*mVideoFrame->width)+x)*3 + 1 ]; // G
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 2 ] = mVideoFrame->imageData[ ((y*mVideoFrame->width)+x)*3 + 2 ]; // R
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 3 ] = 255;                                                        // A
+		}
+	}
+	// Unlock the pixel buffer
+	pixelBuffer->unlock();
+
+	// Create a materail using the texture
+	material = Ogre::MaterialManager::getSingleton().create(
+		"VideoTextureMaterial", // name
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	material->getTechnique(0)->getPass(0)->createTextureUnitState("VideoTexture");
+	material->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
+	material->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
+	material->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+}
+
+//-------------------------------------------------------------------------------------
+void DPS::updateVideoTexture(void)
+{
+	mVideoFrame = cvQueryFrame(mVideoCapture);
+	if(!mVideoFrame)
+	{
+		return;
+	}
+
+	// Lock the pixel buffer
+	unsigned char* buffer = static_cast<unsigned char*>(
+		pixelBuffer->lock(0, mVideoFrame->width*mVideoFrame->height*4, Ogre::HardwareBuffer::HBL_DISCARD) );
+	for(int y = 0; y < mVideoFrame->height; ++y)
+	{
+		for(int x = 0; x < mVideoFrame->width; ++x)
+		{
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 0 ] = mVideoFrame->imageData[ ((y*mVideoFrame->width)+x)*3 + 0 ]; // B
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 1 ] = mVideoFrame->imageData[ ((y*mVideoFrame->width)+x)*3 + 1 ]; // G
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 2 ] = mVideoFrame->imageData[ ((y*mVideoFrame->width)+x)*3 + 2 ]; // R
+			buffer[ ((y*mVideoFrame->width)+x)*4 + 3 ] = 255;                                                        // A
+		}
+	}
+	// Unlock the pixel buffer
+	pixelBuffer->unlock();
 }
 
 

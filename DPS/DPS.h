@@ -27,6 +27,14 @@
 #include "Leap.h"
 #include "LeapListener.h"
 
+#include <cv.h>
+#include <cxcore.h>
+#include <highgui.h>
+#include <OgreHardwarePixelBuffer.h>
+
+#include "stdint.h"
+#include "stdafx.h"
+
 class DPS;
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -209,8 +217,18 @@ class DPS : public BaseApplication
 		ParticleSystem* ps2;
 		ParticleSystem* ps3;
 
+		Ogre::Rectangle2D* mVideoScreen;
+		Ogre::MaterialPtr material;
+		Ogre::TexturePtr texture;
+		Ogre::HardwarePixelBufferSharedPtr pixelBuffer;
+		IplImage*  mVideoFrame;
+		CvCapture* mVideoCapture;
+
 		int timeLine;
 		void GameCA(int timeLine, Ogre::Real Time);
+
+		void createVideoTexture(void);
+		void updateVideoTexture(void);
 
 		void GameCALoadModel(void);
 		virtual bool nextLocation(void);
