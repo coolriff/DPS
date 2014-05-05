@@ -644,8 +644,8 @@ void GUI::defaultState(void)
 void GUI::createMiniCamera(Ogre::Camera* miniCam)
 {
 	const MyGUI::IntSize& size = MyGUI::RenderManager::getInstance().getViewSize();
-	miniCameraWindow = MyGUI::Gui::getInstance().createWidget<MyGUI::Window>("WindowCS", MyGUI::IntCoord(size.width - 360, size.height - 270, 360, 270), MyGUI::Align::Right|MyGUI::Align::Bottom, "Overlapped");
-	miniCameraWindow->setCaption("Camera View");
+	miniCameraWindow = MyGUI::Gui::getInstance().createWidget<MyGUI::Window>("WindowCS", MyGUI::IntCoord(size.width - 480, size.height - 360, 480, 360), MyGUI::Align::Right|MyGUI::Align::Bottom, "Overlapped");
+	//miniCameraWindow->setCaption("Camera View");
 	miniCameraWindow->setMinSize(MyGUI::IntSize(100, 100));
 	miniCameraWindow->setMaxSize(MyGUI::IntSize(1920, 540));
 	miniCameraWindow->setVisible(false);

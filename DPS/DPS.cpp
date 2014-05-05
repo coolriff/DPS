@@ -48,7 +48,7 @@ DPS::DPS(void)
 	mTerrainGroup = 0;
 	mTerrainsImported = false;
 	mInfoLabel =  0;
-
+	fireBallCount = 0;
 }
 
 DPS::~DPS(void)
@@ -407,6 +407,16 @@ void DPS::GameCALoadModel(void)
 		mSwordTrail->setWidthChange(i, 1);
 		mSwordTrail->setInitialWidth(i, 0.5);
 	}
+
+	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+	//Ogre::Vector3 pos = Ogre::Vector3(123,200,1776);
+	//Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *entDrangon = mSceneMgr->createEntity("Dragon","dragon.mesh");
+	entDrangon->setCastShadows(true);
+	dragon = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(123,752,1776),rot);
+	dragon->attachObject(entDrangon);
+	dragon->setVisible(false);
 }
 
 
@@ -475,17 +485,17 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(Ogre::Vector3(264,452,2268));
 		mCamera->lookAt(mSinbadNode->getPosition());
 
-		rect1 = new Rectangle2D(true);
-		rect1->setCorners(-1.0, 1.0, 1.0, -1.0);
-		rect1->setMaterial("Examples/2D-1");
-		rect1->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
-
-		AxisAlignedBox *aabb1 = new AxisAlignedBox();
-		aabb1->setInfinite();
-
-		rect1->setBoundingBox(*aabb1);                             
-		photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode1");             
-		photoNode1->attachObject(rect1);
+// 		rect1 = new Rectangle2D(true);
+// 		rect1->setCorners(-1.0, 1.0, 1.0, -1.0);
+// 		rect1->setMaterial("Examples/2D-1");
+// 		rect1->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+// 
+// 		AxisAlignedBox *aabb1 = new AxisAlignedBox();
+// 		aabb1->setInfinite();
+// 
+// 		rect1->setBoundingBox(*aabb1);                             
+// 		photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode1");             
+// 		photoNode1->attachObject(rect1);
 	}
 
 	//hilltop
@@ -501,8 +511,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		mCamera->setPosition(Ogre::Vector3(237,452,2037));
 		mCamera->lookAt(mSinbadNode->getPosition());
-		//backNode->setVisible(false);
-		delete rect1;
+/*		delete rect1;*/
 	}
 
 	if(timeLine > 420 && timeLine < 540 )
@@ -702,11 +711,6 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		}
 	}
 
-// 	if (timeLine = 900)
-// 	{
-// 		rect2->setMaterial("Examples/spaceship-1");
-// 	}
-
 	if (timeLine > 3380 && timeLine < 3420)
 	{
 		if(timeLine % 2 == 1)
@@ -719,10 +723,362 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		}
 	}
 
+
 	if (timeLine == 3420)
 	{
 		delete rect2;
+		dpsHelper->createFire(Ogre::Vector3(2020.0f,35.0f,1715.0f),"fire1",0);
+
+		ps1 = mSceneMgr->createParticleSystem("Aureola", "Examples/Aureola");
+		pNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+		pNode1->attachObject(ps1);
+		pNode1->setPosition(Vector3(223,652,1976));
 	}
+
+	if (timeLine > 3420 && timeLine < 3720)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(-272,262,1584);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(2889,365,1834);
+	}
+
+	if (timeLine > 3720 && timeLine < 4140)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(-272,300,1584);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(223,576,1970);
+	}
+
+	if (timeLine > 4140 && timeLine < 4260)
+	{
+		if(timeLine % 2 == 1)
+		{
+			dragon->setVisible(true);
+		}
+		else
+		{
+			dragon->setVisible(false);
+		}
+	}
+	if (timeLine == 4260)
+	{
+		dragon->setVisible(true);
+		//dragon->yaw(Ogre::Degree(180));
+	}
+
+	if (timeLine > 4260 && timeLine < 4560)
+	{
+		if (timeLine < 4500)
+		{
+			if(timeLine % 2 == 1)
+			{
+				dragon->setVisible(true);
+			}
+			else
+			{
+				dragon->setVisible(false);
+			}
+		}
+		if (timeLine == 4500)
+		{
+			dragon->setVisible(true);
+			pNode1->setVisible(false);
+		}
+
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(187,712,1839);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(260,742,2017);
+	}
+
+	if (timeLine > 4560 && timeLine < 4800)
+	{
+		if (timeLine < 4620)
+		{
+			dragon->yaw(Ogre::Degree(-1));
+		}
+
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(-57,787,2017);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(60,729,1948);
+	}
+	 
+	if (timeLine > 4800 && timeLine < 5100)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(67,729,1943);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(156,686,1894);
+	}
+
+	if (timeLine == 5100)
+	{
+		mCamera->setPosition(Ogre::Vector3(67,729,1943));
+		mCamera->lookAt(213,815,1882);
+		miniCam->setPosition(mCamera->getDerivedPosition());
+		miniCam->lookAt(mCamera->getDirection());
+	}
+
+	if (timeLine > 5100 && timeLine < 5160)
+	{		
+		if (timeLine == 5105)
+		{
+			miniCam->lookAt(151,815,1789);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5110)
+		{
+			miniCam->lookAt(161,815,1810);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5115)
+		{
+			miniCam->lookAt(175,815,1825);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5120)
+		{
+			miniCam->lookAt(197,815,1857);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5125)
+		{
+			miniCam->lookAt(213,815,1882);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5135)
+		{
+			miniCam->lookAt(151,804,1789);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5140)
+		{
+			miniCam->lookAt(161,804,1810);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5145)
+		{
+			miniCam->lookAt(175,804,1825);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5150)
+		{
+			miniCam->lookAt(197,804,1857);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5155)
+		{
+			miniCam->lookAt(213,804,1882);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+	}
+
+	if (timeLine > 5160 && timeLine < 5400)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(55,782,2272);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(399,675,1732);
+	}
+
+	if (timeLine > 5400 && timeLine < 5700)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(2094,7,1332);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(1900,70,1358);
+	}
+
+	if (timeLine == 5700)
+	{
+		miniCam->setPosition(Ogre::Vector3(67,729,1943));
+		miniCam->lookAt(213,815,1882);
+	}
+
+	if (timeLine > 5700 && timeLine < 5760)
+	{
+		if (timeLine == 5705)
+		{
+			miniCam->lookAt(151,815,1789);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5710)
+		{
+			miniCam->lookAt(161,815,1810);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5715)
+		{
+			miniCam->lookAt(175,815,1825);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5720)
+		{
+			miniCam->lookAt(197,815,1857);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5725)
+		{
+			miniCam->lookAt(213,815,1882);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5730)
+		{
+			miniCam->lookAt(151,804,1789);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5735)
+		{
+			miniCam->lookAt(161,804,1810);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5740)
+		{
+			miniCam->lookAt(175,804,1825);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5745)
+		{
+			miniCam->lookAt(197,804,1857);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+
+		if (timeLine == 5750)
+		{
+			miniCam->lookAt(213,804,1882);
+
+			fireBallName = "fire+"+ convertInt(fireBallCount);
+			dpsHelper->createFireBall(miniCam->getDerivedPosition(),miniCam->getDirection(),fireBallName);
+			fireBallCount++;
+		}
+	}
+
+	if (timeLine == 6000)
+	{
+		dpsHelper->createFire(Ogre::Vector3(2423,2412,615),"dropFire_1",1);
+		setMiniCamPosition(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
+		mGUI->miniCameraWindow->setVisible(true);
+		mCamera->setPosition((mSceneMgr->getSceneNode("dropFire_1")->getPosition()+100));
+		mCamera->lookAt(2423,412,615);
+	}
+
+
+	if (timeLine > 6000 && timeLine < 7200)
+	{
+		setMiniCamPosition(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
+
+		Ogre::Vector3 pos = mSceneMgr->getSceneNode("dropFire_1")->getPosition();
+
+		if (timeLine > 6000 && timeLine < 6300)
+		{
+			mCamera->setPosition(pos.z+30,pos.y-30,pos.z+30);
+			mCamera->lookAt(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
+		}
+
+		if (timeLine > 6300 && timeLine < 6600)
+		{
+			mCamera->setPosition(pos.z-30,pos.y-30,pos.z-30);
+			mCamera->lookAt(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
+		}
+
+		if (timeLine > 6600 && timeLine < 6900)
+		{
+			mCamera->setPosition(pos.z-30,pos.y+30,pos.z-30);
+			mCamera->lookAt(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
+		}
+
+		if (timeLine > 6900 && timeLine < 7200)
+		{
+			mCamera->setPosition(pos.z-50,pos.y+50,pos.z-50);
+			mCamera->lookAt(2423,412,615);
+		}
+	}
+
+
 
 
 		
@@ -1540,7 +1896,11 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 {
 	if (arg.key == OIS::KC_1) 
 	{
-		dpsHelper->throwSphere();
+		//dpsHelper->throwSphere();
+		fireBallName = "fire+"+ convertInt(fireBallCount);
+		dpsHelper->createFireBall(mCamera->getDerivedPosition(),mCamera->getDirection(),fireBallName);
+		//dpsHelper->createFireBall(Ogre::Vector3(67,729,1943),Ogre::Vector3(70,749,1920),fireBallName);
+		fireBallCount++;
 	}
 	if (arg.key == OIS::KC_2) 
 	{
@@ -1549,6 +1909,14 @@ bool DPS::keyPressed(const OIS::KeyEvent &arg)
 	if (arg.key == OIS::KC_3) 
 	{
 		dpsHelper->createOgreHead();
+	}
+	if (arg.key == OIS::KC_4) 
+	{
+		dragon->yaw(Ogre::Degree(1));
+	}
+	if (arg.key == OIS::KC_5) 
+	{
+		dragon->yaw(Ogre::Degree(-1));
 	}
 	return BaseApplication::keyPressed(arg);
 }
@@ -1639,11 +2007,26 @@ void DPS::resetCamera(Ogre::Vector3 camPos)
 
 void DPS::setMiniCamPosition(Ogre::Vector3 camPos)
 {
-	miniCam->setPosition(10+camPos);
+	miniCam->setPosition(50+camPos);
 	miniCam->lookAt(camPos);
 	miniCam->setNearClipDistance(5);
 }
 
+std::string DPS::convertInt(int number)
+{
+	if (number == 0)
+		return "0";
+	std::string temp="";
+	std::string returnValue="";
+	while (number>0)
+	{
+		temp+=number%10+48;
+		number/=10;
+	}
+	for (int i=0;i<temp.length();i++)
+		returnValue+=temp[temp.length()-i-1];
+	return returnValue;
+}
 
 
 

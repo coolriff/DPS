@@ -205,11 +205,20 @@ class DPS : public BaseApplication
 		Ogre::Real mVerticalVelocity;     // for jumping
 		Ogre::Real mTimer;                // general timer to see how long animations have been playing
 
-		ParticleSystem* fireOnCube_1;
-		ParticleSystem* fireOnCube_2;
-		ParticleSystem* ps;
+		ParticleSystem* fire_1;
+		ParticleSystem* fire_2;
+		ParticleSystem* ps1;
 		ParticleSystem* ps2;
 		ParticleSystem* ps3;
+		int fireBallCount;
+		std::string fireBallName;
+
+		Ogre::SceneNode* pNode1;
+		Ogre::SceneNode* pNode2;
+		Ogre::SceneNode* pNode3;
+		Ogre::SceneNode* pNode4;
+
+		Ogre::SceneNode* dragon;
 
 		Ogre::Rectangle2D* rect1;
 		Ogre::Rectangle2D* rect2;
@@ -217,8 +226,8 @@ class DPS : public BaseApplication
 		Ogre::Rectangle2D* rect4;
 		Ogre::SceneNode* photoNode1;
 		Ogre::SceneNode* photoNode2;
-		std::string photoName_1;
-		std::string photoName_2;
+		Ogre::SceneNode* photoNode3;
+		Ogre::SceneNode* photoNode4;
 
 		Ogre::Entity* RZR_001;
 		Ogre::Entity* razor1;
@@ -229,6 +238,10 @@ class DPS : public BaseApplication
 		Ogre::SceneNode* entRazor1;
 		Ogre::SceneNode* entRazor2;
 		Ogre::SceneNode* entRazor3;
+
+		Ogre::SceneNode* p1;
+		Ogre::SceneNode* p2;
+		Ogre::SceneNode* p3;
 
 
 

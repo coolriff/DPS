@@ -27,6 +27,8 @@ class DPSHelper
 		void createSphere(Ogre::Vector3 position, btScalar mass);
 		void createMesh(Ogre::Vector3 position, btScalar mass,std::string name, Ogre::Vector3 scaler);
 		void createFixedSphere(Ogre::Vector3 position, btScalar mass);
+		void createFireBall(Ogre::Vector3 position, Ogre::Vector3 directions, std::string name);
+		void createFire(Ogre::Vector3 position, std::string name, btScalar mass);
 
 		Ogre::SceneNode* sphereNode_0;
 		btRigidBody* sphereBody_0;

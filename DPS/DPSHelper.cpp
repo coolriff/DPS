@@ -1,4 +1,5 @@
 #include "DPSHelper.h"
+#include "ExampleApplication.h"
 
 using namespace std;
 
@@ -122,22 +123,6 @@ btRigidBody* DPSHelper::throwSphere(void)
 	phyWorld->addRigidBody(entBody);
 	
 	sphereNode->attachObject(ent);
-
-// 	Ogre::Vector3 pos = mCamera->getDerivedPosition();
-// 
-// 	btTransform transform;
-// 	transform.setIdentity();
-// 	transform.setOrigin(btVector3(pos.x,pos.y,pos.z));
-// 	btDefaultMotionState* motionState=new btDefaultMotionState(transform);
-// 	btSphereShape* sphereShape=new btSphereShape(1);
-// 	btVector3 inertia(0,0,0);
-// 	btScalar mass = 1;
-// 	sphereShape->calculateLocalInertia(mass,inertia);
-// 	Ogre::Vector3 thro = mCamera->getDirection() * 100;
-// 	btRigidBody::btRigidBodyConstructionInfo info(mass,motionState,sphereShape,inertia);
-// 	btRigidBody* body=new btRigidBody(info);
-// 	body->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
-// 	phyWorld->addRigidBody(body);
 
 	return entBody;
 }
@@ -414,6 +399,67 @@ void DPSHelper::createFixedSphere(Ogre::Vector3 position, btScalar mass)
 	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
 	entBody->setFriction(0.8f);
 	phyWorld->addRigidBody(entBody);
+
+	sphereNode->attachObject(ent);
+}
+
+void DPSHelper::createFireBall(Ogre::Vector3 position, Ogre::Vector3 directions, std::string name)
+{
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
+	setColor(ent, Ogre::Vector3(1.0f,0.0f,0.0f));
+	ent->setCastShadows(true);
+
+	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(position,rot);
+	sphereNode->setScale(Ogre::Vector3(2.0f,2.0f,2.0f));
+
+	btCollisionShape* entShape = new btSphereShape(2);
+	//Calculate inertia.
+	btScalar mass = 1;
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	Ogre::Vector3 thro = directions * 100;
+	entBody->setLinearVelocity(btVector3(thro.x,thro.y,thro.z));
+	phyWorld->addRigidBody(entBody);
+
+	ParticleSystem* fire = mSceneMgr->createParticleSystem(name, "Examples/Smoke");
+	sphereNode->attachObject(fire);
+
+	sphereNode->attachObject(ent);
+}
+
+void DPSHelper::createFire(Ogre::Vector3 position, std::string name, btScalar mass)
+{
+	Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
+	Ogre::Entity *ent = mSceneMgr->createEntity("defSphere.mesh");
+	setColor(ent, Ogre::Vector3(1.0f,0.0f,0.0f));
+	ent->setCastShadows(true);
+
+	Ogre::SceneNode* sphereNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(name,position,rot);
+	sphereNode->setScale(Ogre::Vector3(2.0f,2.0f,2.0f));
+
+	btCollisionShape* entShape = new btSphereShape(2);
+	//Calculate inertia.
+	//btScalar mass = 0;
+	btVector3 inertia(0,0,0);
+	entShape->calculateLocalInertia(mass, inertia);
+
+	//Create BtOgre MotionState (connects Ogre and Bullet).
+	BtOgre::RigidBodyState* entState = new BtOgre::RigidBodyState(sphereNode);
+
+	//Create the Body.
+	btRigidBody* entBody = new btRigidBody(mass, entState, entShape, inertia);
+	phyWorld->addRigidBody(entBody);
+
+	ParticleSystem* fire = mSceneMgr->createParticleSystem(name, "Examples/Smoke");
+	sphereNode->attachObject(fire);
+
 
 	sphereNode->attachObject(ent);
 }
