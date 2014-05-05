@@ -27,6 +27,8 @@
 #include "Leap.h"
 #include "LeapListener.h"
 
+#include <OgreHardwarePixelBuffer.h>
+
 class DPS;
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -209,6 +211,27 @@ class DPS : public BaseApplication
 		ParticleSystem* ps2;
 		ParticleSystem* ps3;
 
+		Ogre::Rectangle2D* rect1;
+		Ogre::Rectangle2D* rect2;
+		Ogre::Rectangle2D* rect3;
+		Ogre::Rectangle2D* rect4;
+		Ogre::SceneNode* photoNode1;
+		Ogre::SceneNode* photoNode2;
+		std::string photoName_1;
+		std::string photoName_2;
+
+		Ogre::Entity* RZR_001;
+		Ogre::Entity* razor1;
+		Ogre::Entity* razor2;
+		Ogre::Entity* razor3;
+
+		Ogre::SceneNode* entRZR_001;
+		Ogre::SceneNode* entRazor1;
+		Ogre::SceneNode* entRazor2;
+		Ogre::SceneNode* entRazor3;
+
+
+
 		int timeLine;
 		void GameCA(int timeLine, Ogre::Real Time);
 
@@ -220,11 +243,20 @@ class DPS : public BaseApplication
 		void configureTerrainDefaults(Ogre::Light* light);
 		void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img);
 		Ogre::Vector3 ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocation, Ogre::Real Time);
+		//void addPhoto(void);
 
 		Ogre::Vector3 camLerpPos;
+		Ogre::Vector3 camLerpPos1;
+		Ogre::Vector3 camLerpPos2;
+		Ogre::Vector3 camLerpPos3;
 		Ogre::Vector3 camPos;
-		Ogre::Vector3 startPos;
-		Ogre::Vector3 endPos;
+		Ogre::Vector3 startPos1;
+		Ogre::Vector3 startPos2;
+		Ogre::Vector3 startPos3;
+		Ogre::Vector3 endPos1;
+		Ogre::Vector3 endPos2;
+		Ogre::Vector3 endPos3;
+
 		Ogre::Vector3 targetPos;
 		Ogre::Real times;
 		Ogre::TerrainGlobalOptions* mTerrainGlobals;

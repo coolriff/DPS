@@ -647,6 +647,7 @@ void GUI::createMiniCamera(Ogre::Camera* miniCam)
 	miniCameraWindow = MyGUI::Gui::getInstance().createWidget<MyGUI::Window>("WindowCS", MyGUI::IntCoord(size.width - 360, size.height - 270, 360, 270), MyGUI::Align::Right|MyGUI::Align::Bottom, "Overlapped");
 	miniCameraWindow->setCaption("Camera View");
 	miniCameraWindow->setMinSize(MyGUI::IntSize(100, 100));
+	miniCameraWindow->setMaxSize(MyGUI::IntSize(1920, 540));
 	miniCameraWindow->setVisible(false);
 	MyGUI::Canvas* canvas = miniCameraWindow->createWidget<MyGUI::Canvas>("Canvas", MyGUI::IntCoord(0, 0, miniCameraWindow->getClientCoord().width, miniCameraWindow->getClientCoord().height), MyGUI::Align::Stretch);
 	canvas->setPointer("hand");

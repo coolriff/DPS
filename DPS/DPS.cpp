@@ -227,9 +227,97 @@ void DPS::GameCALoadModel(void)
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  RZR  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-	Ogre::Entity* RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
-	Ogre::SceneNode* entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
+	RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
+	entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
 	entRZR_001->attachObject(RZR_001);
+
+	razor1 = mSceneMgr->createEntity("Razor1", "razor.mesh");
+	entRazor1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	entRazor1->attachObject(razor1);
+
+	// create a particle system with 200 quota, then set its material and dimensions
+	ParticleSystem* thrusters1 = mSceneMgr->createParticleSystem(25);
+	thrusters1->setMaterialName("Examples/Flare");
+	thrusters1->setDefaultDimensions(25, 25);
+
+	// create two emitters for our thruster particle system
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		ParticleEmitter* emitter = thrusters1->addEmitter("Point");  // add a point emitter
+
+		// set the emitter properties
+		emitter->setAngle(Degree(3));
+		emitter->setTimeToLive(0.5);
+		emitter->setEmissionRate(25);
+		emitter->setParticleVelocity(25);
+		emitter->setDirection(Vector3::NEGATIVE_UNIT_Z);
+		emitter->setColour(ColourValue::White, ColourValue::Red);
+		emitter->setPosition(Vector3(i == 0 ? 5.7 : -18, 0, 0));
+	}
+
+	// attach our thruster particles to the rear of the ship
+	Ogre::SceneNode* thrusterParticles1 = entRazor1->createChildSceneNode(Vector3(0, 6.5, -67));
+	thrusterParticles1->attachObject(thrusters1);
+
+
+	razor2 = mSceneMgr->createEntity("Razor2", "razor.mesh");
+	entRazor2 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	entRazor2->attachObject(razor2);
+
+	// create a particle system with 200 quota, then set its material and dimensions
+	ParticleSystem* thrusters2 = mSceneMgr->createParticleSystem(25);
+	thrusters2->setMaterialName("Examples/Flare");
+	thrusters2->setDefaultDimensions(25, 25);
+
+	// create two emitters for our thruster particle system
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		ParticleEmitter* emitter = thrusters2->addEmitter("Point");  // add a point emitter
+
+		// set the emitter properties
+		emitter->setAngle(Degree(3));
+		emitter->setTimeToLive(0.5);
+		emitter->setEmissionRate(25);
+		emitter->setParticleVelocity(25);
+		emitter->setDirection(Vector3::NEGATIVE_UNIT_Z);
+		emitter->setColour(ColourValue::White, ColourValue::Red);
+		emitter->setPosition(Vector3(i == 0 ? 5.7 : -18, 0, 0));
+	}
+
+	// attach our thruster particles to the rear of the ship
+	Ogre::SceneNode* thrusterParticles2 = entRazor2->createChildSceneNode(Vector3(0, 6.5, -67));
+	thrusterParticles2->attachObject(thrusters2);
+
+
+
+
+	razor3 = mSceneMgr->createEntity("Razor", "razor.mesh");
+	entRazor3 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+	entRazor3->attachObject(razor3);
+
+	// create a particle system with 200 quota, then set its material and dimensions
+	ParticleSystem* thrusters3 = mSceneMgr->createParticleSystem(25);
+	thrusters3->setMaterialName("Examples/Flare");
+	thrusters3->setDefaultDimensions(25, 25);
+
+	// create two emitters for our thruster particle system
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		ParticleEmitter* emitter = thrusters3->addEmitter("Point");  // add a point emitter
+
+		// set the emitter properties
+		emitter->setAngle(Degree(3));
+		emitter->setTimeToLive(0.5);
+		emitter->setEmissionRate(25);
+		emitter->setParticleVelocity(25);
+		emitter->setDirection(Vector3::NEGATIVE_UNIT_Z);
+		emitter->setColour(ColourValue::White, ColourValue::Red);
+		emitter->setPosition(Vector3(i == 0 ? 5.7 : -18, 0, 0));
+	}
+
+	// attach our thruster particles to the rear of the ship
+	Ogre::SceneNode* thrusterParticles3 = entRazor3->createChildSceneNode(Vector3(0, 6.5, -67));
+	thrusterParticles3->attachObject(thrusters3);
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  Robot  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	// Create the entity
@@ -354,9 +442,25 @@ Ogre::Vector3 DPS::ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocati
 	return mDest;
 }
 
+// void DPS::addPhoto(void)
+// {
+// 	rect = new Rectangle2D(true);
+// 	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
+// 	rect->setMaterial("Examples/2D-1");
+// 	rect->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+// 
+// 	AxisAlignedBox *aabb = new AxisAlignedBox();
+// 	aabb->setInfinite();
+// 
+// 	rect->setBoundingBox(*aabb);                             
+// 	photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode");             
+// 	photoNode1->attachObject(rect);
+// }
+
+
 void DPS::GameCA(int timeLine, Ogre::Real Time)
 {
-	//houses
+
 	if(timeLine > 0 && timeLine < 300)
 	{
 		camPos = mCamera->getPosition();
@@ -370,6 +474,18 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		mCamera->setPosition(Ogre::Vector3(264,452,2268));
 		mCamera->lookAt(mSinbadNode->getPosition());
+
+		rect1 = new Rectangle2D(true);
+		rect1->setCorners(-1.0, 1.0, 1.0, -1.0);
+		rect1->setMaterial("Examples/2D-1");
+		rect1->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+
+		AxisAlignedBox *aabb1 = new AxisAlignedBox();
+		aabb1->setInfinite();
+
+		rect1->setBoundingBox(*aabb1);                             
+		photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode1");             
+		photoNode1->attachObject(rect1);
 	}
 
 	//hilltop
@@ -385,6 +501,8 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		mCamera->setPosition(Ogre::Vector3(237,452,2037));
 		mCamera->lookAt(mSinbadNode->getPosition());
+		//backNode->setVisible(false);
+		delete rect1;
 	}
 
 	if(timeLine > 420 && timeLine < 540 )
@@ -423,6 +541,192 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(camLerpPos);
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
+
+	//robot
+	if (timeLine == 840)
+	{
+		mCamera->setPosition(mNode->getPosition().x+30,mNode->getPosition().y+20,mNode->getPosition().z);
+		mCamera->lookAt(mNode->getPosition().x-3,mNode->getPosition().y+20,mNode->getPosition().z);
+	}
+	if(timeLine > 840 && timeLine < 1800 )
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(mNode->getPosition().x+30,mNode->getPosition().y+80,mNode->getPosition().z);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(mNode->getPosition().x,mNode->getPosition().y+80,mNode->getPosition().z);
+	}
+	if(timeLine > 1800 && timeLine < 2400 )
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(mNode->getPosition().x-30,mNode->getPosition().y+80,mNode->getPosition().z);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(mNode->getPosition().x,mNode->getPosition().y+80,mNode->getPosition().z);
+	}
+
+	//plane
+	if (timeLine == 2400)
+	{
+		entRazor1->setPosition(2123,412,-1682);
+		entRazor2->setPosition(2423,412,-1382);
+		entRazor3->setPosition(1823,412,-1382);
+
+		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z-150);
+		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z+150);
+
+		//entRazor1->setOrientation(0.157583,0.00680658,0.986582,0.0426457);
+		entRazor1->setDirection(mCamera->getDerivedDirection());
+		entRazor1->setOrientation(mCamera->getDerivedOrientation());
+
+		entRazor1->yaw(Ogre::Degree(180));
+
+
+	}
+	if (timeLine > 2400 && timeLine < 2640)
+	{
+		startPos1 = entRazor1->getPosition();
+		startPos2 = entRazor2->getPosition();
+		startPos3 = entRazor3->getPosition();
+
+		endPos1 = Ogre::Vector3(2123,412,315);
+		endPos2 = Ogre::Vector3(2423,412,615);
+		endPos3 = Ogre::Vector3(1823,412,615);
+
+		camLerpPos1 = ogreLerp(startPos1, endPos1, Time);
+		camLerpPos2 = ogreLerp(startPos2, endPos2, Time);
+		camLerpPos3 = ogreLerp(startPos3, endPos3, Time);
+
+		entRazor1->setPosition(camLerpPos1);
+		entRazor2->setPosition(camLerpPos2);
+		entRazor3->setPosition(camLerpPos3);
+
+		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y+80,entRazor1->getPosition().z-300);
+		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z+300);
+	}
+
+	if (timeLine == 2640)
+	{
+		entRazor1->setPosition(2123,412,-1682);
+		entRazor2->setPosition(2423,412,-1382);
+		entRazor3->setPosition(1823,412,-1382);
+
+		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z-150);
+		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z+150);
+
+		//entRazor1->setOrientation(0.157583,0.00680658,0.986582,0.0426457);
+		entRazor1->setDirection(mCamera->getDerivedDirection());
+		entRazor1->setOrientation(mCamera->getDerivedOrientation());
+
+		entRazor1->yaw(Ogre::Degree(180));
+
+
+	}
+
+	if (timeLine > 2640 && timeLine < 2880)
+	{
+		startPos1 = entRazor1->getPosition();
+		startPos2 = entRazor2->getPosition();
+		startPos3 = entRazor3->getPosition();
+
+		endPos1 = Ogre::Vector3(2123,412,315);
+		endPos2 = Ogre::Vector3(2423,412,615);
+		endPos3 = Ogre::Vector3(1823,412,615);
+
+		camLerpPos1 = ogreLerp(startPos1, endPos1, Time);
+		camLerpPos2 = ogreLerp(startPos2, endPos2, Time);
+		camLerpPos3 = ogreLerp(startPos3, endPos3, Time);
+
+		entRazor1->setPosition(camLerpPos1);
+		entRazor2->setPosition(camLerpPos2);
+		entRazor3->setPosition(camLerpPos3);
+
+		mCamera->setPosition(1432,372,154);
+		mCamera->lookAt(entRazor1->getPosition());
+	}
+
+	if (timeLine == 2880)
+	{
+		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y+100,entRazor1->getPosition().z-300);
+		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y-50,entRazor1->getPosition().z+300);
+	}
+
+	if (timeLine > 2880 && timeLine < 3000)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(entRazor1->getPosition().x,entRazor1->getPosition().y-100,entRazor1->getPosition().z-300);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y-50,entRazor1->getPosition().z+300);
+	}
+
+	if (timeLine == 3000)
+	{
+		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y,entRazor1->getPosition().z-150);
+	}
+
+	if (timeLine > 3000 && timeLine < 3120)
+	{
+		camPos = mCamera->getPosition();
+		targetPos = Ogre::Vector3(entRazor1->getPosition().x,entRazor1->getPosition().y,entRazor1->getPosition().z+150);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y,entRazor1->getPosition().z+300);
+	}
+	if (timeLine == 3120)
+	{
+		rect2 = new Rectangle2D(true);
+		rect2->setCorners(-1.0, 1.0, 1.0, -1.0);
+		rect2->setMaterial("Examples/spaceship-1");
+		rect2->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+
+		AxisAlignedBox *aabb2 = new AxisAlignedBox();
+		aabb2->setInfinite();
+
+		rect2->setBoundingBox(*aabb2);                             
+		photoNode2 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode2");             
+		photoNode2->attachObject(rect2);
+
+		mCamera->lookAt(2000.0f,50.0f,1715.0f);
+	}
+
+	if (timeLine > 3280 && timeLine < 3320)
+	{
+		if(timeLine % 2 == 1)
+		{
+			rect2->setMaterial("Examples/spaceship-2");
+		}
+		else
+		{
+			rect2->setMaterial("Examples/spaceship-1");
+		}
+	}
+
+// 	if (timeLine = 900)
+// 	{
+// 		rect2->setMaterial("Examples/spaceship-1");
+// 	}
+
+	if (timeLine > 3380 && timeLine < 3420)
+	{
+		if(timeLine % 2 == 1)
+		{
+			rect2->setMaterial("Examples/spaceship-2");
+		}
+		else
+		{
+			rect2->setMaterial("Examples/spaceship-1");
+		}
+	}
+
+	if (timeLine == 3420)
+	{
+		delete rect2;
+	}
+
+
+		
+
 
 }
 
