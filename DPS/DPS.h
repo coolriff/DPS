@@ -243,6 +243,8 @@ class DPS : public BaseApplication
 		Ogre::SceneNode* p2;
 		Ogre::SceneNode* p3;
 
+		bool changeTime;
+
 
 
 		int timeLine;

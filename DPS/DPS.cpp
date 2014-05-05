@@ -42,7 +42,7 @@ DPS::DPS(void)
 	hit_rel_pos = btVector3(0,0,0);
 	shot_imp = btVector3(0,0,0);
 	timeLine = 0;
-
+	changeTime = false;
 	
 	mTerrainGlobals = 0;
 	mTerrainGroup = 0;
@@ -471,7 +471,7 @@ Ogre::Vector3 DPS::ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocati
 void DPS::GameCA(int timeLine, Ogre::Real Time)
 {
 
-	if(timeLine > 0 && timeLine < 300)
+	if(timeLine > 0 && timeLine < 180)
 	{
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(1399.0f,90.0f,1311.0f);
@@ -480,7 +480,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->lookAt(Ogre::Vector3(2000.0f,50.0f,1715.0f));
 	}
 
-	if (timeLine == 300)
+	if (timeLine == 180)
 	{
 		mCamera->setPosition(Ogre::Vector3(264,452,2268));
 		mCamera->lookAt(mSinbadNode->getPosition());
@@ -499,7 +499,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	}
 
 	//hilltop
-	if(timeLine > 300 && timeLine < 420 )
+	if(timeLine > 180 && timeLine < 240 )
 	{
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(237,452,2037);
@@ -507,14 +507,14 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(camLerpPos);
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
-	if (timeLine == 420)
+	if (timeLine == 240)
 	{
 		mCamera->setPosition(Ogre::Vector3(237,452,2037));
 		mCamera->lookAt(mSinbadNode->getPosition());
 /*		delete rect1;*/
 	}
 
-	if(timeLine > 420 && timeLine < 540 )
+	if(timeLine > 240 && timeLine < 360 )
 	{
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(314,452,1984);
@@ -522,13 +522,13 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(camLerpPos);
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
-	if (timeLine == 540)
+	if (timeLine == 360)
 	{
 		mCamera->setPosition(Ogre::Vector3(314,452,1984));
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
 
-	if(timeLine > 540 && timeLine < 660 )
+	if(timeLine > 360 && timeLine < 480 )
 	{
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(237,452,1890);
@@ -537,12 +537,12 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
 
-	if (timeLine == 660)
+	if (timeLine == 480)
 	{
 		mCamera->setPosition(Ogre::Vector3(237,452,1890));
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
-	if(timeLine > 660 && timeLine < 840 )
+	if(timeLine > 480 && timeLine < 660 )
 	{
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(223,455,1966);
@@ -556,6 +556,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		mCamera->setPosition(mNode->getPosition().x+30,mNode->getPosition().y+20,mNode->getPosition().z);
 		mCamera->lookAt(mNode->getPosition().x-3,mNode->getPosition().y+20,mNode->getPosition().z);
+
 	}
 	if(timeLine > 840 && timeLine < 1800 )
 	{
