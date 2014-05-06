@@ -574,6 +574,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(mNode->getPosition().x+30,mNode->getPosition().y+20,mNode->getPosition().z);
 		mCamera->lookAt(mNode->getPosition().x-3,mNode->getPosition().y+20,mNode->getPosition().z);
 
+		startPos1 = Ogre::Vector3(537,181,4784);
+
+		entRazor1->setPosition(startPos1);
+		entRazor2->setPosition(startPos1);
+		entRazor3->setPosition(startPos1);
 	}
 	if(timeLine > 840 && timeLine < 1800 )
 	{
@@ -582,7 +587,46 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		camLerpPos = ogreLerp(camPos, targetPos, Time);
 		mCamera->setPosition(camLerpPos);
 		mCamera->lookAt(mNode->getPosition().x,mNode->getPosition().y+80,mNode->getPosition().z);
+
+		if (timeLine > 960 && timeLine < 1200)
+		{
+			startPos1 = entRazor1->getPosition();
+			endPos1 = Ogre::Vector3(738,727,-4073);
+			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
+			entRazor1->setPosition(camLerpPos1);
+		}
+
+
+		if (timeLine > 1300 && timeLine < 1500)
+		{
+			startPos1 = entRazor2->getPosition();
+			endPos1 = Ogre::Vector3(738,727,-4073);
+			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
+			entRazor2->setPosition(camLerpPos1);
+		}
+
+		if (timeLine > 1600 && timeLine < 1800)
+		{
+			startPos1 = entRazor3->getPosition();
+			endPos1 = Ogre::Vector3(738,727,-4073);
+			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
+			entRazor3->setPosition(camLerpPos1);
+		}
 	}
+
+	if (timeLine == 1800)
+	{
+
+		startPos1 = Ogre::Vector3(374,145,3576);
+		startPos2 = Ogre::Vector3(316,173,3133);
+
+		entRazor1->setPosition(startPos1);
+		entRazor2->setPosition(startPos2);
+
+		entRazor1->yaw(-(Degree(90)));
+		entRazor2->yaw(-(Degree(90)));
+	}
+
 	if(timeLine > 1800 && timeLine < 2400 )
 	{
 		camPos = mCamera->getPosition();
@@ -590,6 +634,28 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		camLerpPos = ogreLerp(camPos, targetPos, Time);
 		mCamera->setPosition(camLerpPos);
 		mCamera->lookAt(mNode->getPosition().x,mNode->getPosition().y+80,mNode->getPosition().z);
+
+		if (timeLine > 1900 && timeLine < 2100)
+		{
+			startPos1 = entRazor1->getPosition();
+			endPos1 = Ogre::Vector3(12371,1865,4072);
+			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
+			entRazor1->setPosition(camLerpPos1);
+		}
+
+		if (timeLine > 2200 && timeLine < 2400)
+		{
+			startPos1 = entRazor2->getPosition();
+			endPos1 = Ogre::Vector3(12371,1865,4072);
+			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
+			entRazor2->setPosition(camLerpPos1);
+		}
+
+		if (timeLine == 2399)
+		{
+			entRazor1->yaw(Degree(90));
+			entRazor2->yaw(Degree(90));
+		}
 	}
 
 	//plane
