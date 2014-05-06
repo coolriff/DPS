@@ -487,18 +487,6 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		mCamera->setPosition(Ogre::Vector3(264,452,2268));
 		mCamera->lookAt(mSinbadNode->getPosition());
-
-// 		rect1 = new Rectangle2D(true);
-// 		rect1->setCorners(-1.0, 1.0, 1.0, -1.0);
-// 		rect1->setMaterial("Examples/2D-1");
-// 		rect1->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
-// 
-// 		AxisAlignedBox *aabb1 = new AxisAlignedBox();
-// 		aabb1->setInfinite();
-// 
-// 		rect1->setBoundingBox(*aabb1);                             
-// 		photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode1");             
-// 		photoNode1->attachObject(rect1);
 	}
 
 	//hilltop
@@ -554,9 +542,35 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->lookAt(mSinbadNode->getPosition());
 	}
 
+	if (timeLine == 660)
+	{
+		rect1 = new Rectangle2D(true);
+		rect1->setCorners(-1.0, 1.0, 1.0, -1.0);
+		rect1->setMaterial("Examples/2D-1");
+		rect1->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+
+		AxisAlignedBox *aabb1 = new AxisAlignedBox();
+		aabb1->setInfinite();
+
+		rect1->setBoundingBox(*aabb1);                             
+		photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode1");             
+		photoNode1->attachObject(rect1);
+	}
+
+	if (timeLine == 720)
+	{
+		rect1->setMaterial("Examples/2D-2");
+	}
+
+	if (timeLine == 780)
+	{
+		rect1->setMaterial("Examples/2D-3");
+	}
+
 	//robot
 	if (timeLine == 840)
 	{
+		delete rect1;
 		mCamera->setPosition(mNode->getPosition().x+30,mNode->getPosition().y+20,mNode->getPosition().z);
 		mCamera->lookAt(mNode->getPosition().x-3,mNode->getPosition().y+20,mNode->getPosition().z);
 
