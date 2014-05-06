@@ -111,7 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\DPS\Dependencies\bullet-2.82-r2704\src;C:\DPS\Dependencies\bullet-2.82-r2704\src\BulletCollision\CollisionDispatch;$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DPS\Dependencies\irrKlang-1.4.0\include;C:\DPS\Dependencies\bullet-2.82-r2704\src;C:\DPS\Dependencies\bullet-2.82-r2704\src\BulletCollision\CollisionDispatch;$(OGRE_HOME)\include;$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\Samples\Common\include;$(OGRE_HOME)\boost</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

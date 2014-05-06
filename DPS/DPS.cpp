@@ -124,15 +124,7 @@ void DPS::createScene(void)
 {
 	mGUI->createGUI(1);
 
-	// Basic Ogre stuff.
-	//mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
-// 	mCamera->setPosition(Ogre::Vector3(0,5,20));
-// 	mCamera->lookAt(Ogre::Vector3(0,5,-10));
-// 	mCamera->setNearClipDistance(0.05f);
-	//LogManager::getSingleton().setLogDetail(LL_BOREME);
-
-
-
+	soundEngine = createIrrKlangDevice();
 
 	dpsHelper = std::make_shared<DPSHelper>(Globals::phyWorld, mCamera, mSceneMgr);
 	dpsSoftbodyHelper = std::make_shared<DPSSoftBodyHelper>(Globals::phyWorld, mCamera, mSceneMgr, m_collisionShapes);
@@ -217,8 +209,6 @@ void DPS::createScene(void)
 
 
 }
-
-
 
 void DPS::GameCALoadModel(void)
 {
@@ -476,6 +466,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if(timeLine > 0 && timeLine < 180)
 	{
+		if (timeLine == 10)
+		{
+			soundEngine->play2D("Wind.mp3",true);
+		}
+
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(1399.0f,90.0f,1311.0f);
 		camLerpPos = ogreLerp(camPos, targetPos, Time);
@@ -554,16 +549,19 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		rect1->setBoundingBox(*aabb1);                             
 		photoNode1 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode1");             
 		photoNode1->attachObject(rect1);
+		soundEngine->play2D("Right Cross.mp3");
 	}
 
 	if (timeLine == 720)
 	{
 		rect1->setMaterial("Examples/2D-2");
+		soundEngine->play2D("Right Cross.mp3");
 	}
 
 	if (timeLine == 780)
 	{
 		rect1->setMaterial("Examples/2D-3");
+		soundEngine->play2D("Right Cross.mp3");
 	}
 
 	//robot
@@ -578,9 +576,16 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		entRazor1->setPosition(startPos1);
 		entRazor2->setPosition(startPos1);
 		entRazor3->setPosition(startPos1);
+
+		soundEngine->play2D("Robot Arm Moving.mp3");
 	}
 	if(timeLine > 840 && timeLine < 1800 )
 	{
+		if (timeLine % 60 == 0)
+		{
+			soundEngine->play2D("Robot Arm Moving.mp3");
+		}
+		
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(mNode->getPosition().x+30,mNode->getPosition().y+80,mNode->getPosition().z);
 		camLerpPos = ogreLerp(camPos, targetPos, Time);
@@ -589,6 +594,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine > 960 && timeLine < 1200)
 		{
+			if (timeLine == 980)
+			{
+				soundEngine->play2D("Arrow Left To Right.mp3");
+			}
 			startPos1 = entRazor1->getPosition();
 			endPos1 = Ogre::Vector3(738,727,-4073);
 			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
@@ -598,6 +607,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine > 1300 && timeLine < 1500)
 		{
+			if (timeLine == 1320)
+			{
+				soundEngine->play2D("Arrow Left To Right.mp3");
+			}
 			startPos1 = entRazor2->getPosition();
 			endPos1 = Ogre::Vector3(738,727,-4073);
 			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
@@ -606,6 +619,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine > 1600 && timeLine < 1800)
 		{
+			if (timeLine == 1620)
+			{
+				soundEngine->play2D("Arrow Left To Right.mp3");
+			}
 			startPos1 = entRazor3->getPosition();
 			endPos1 = Ogre::Vector3(738,727,-4073);
 			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
@@ -628,6 +645,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if(timeLine > 1800 && timeLine < 2400 )
 	{
+		if (timeLine % 60 == 0)
+		{
+			soundEngine->play2D("Robot Arm Moving.mp3");
+		}
+
 		camPos = mCamera->getPosition();
 		targetPos = Ogre::Vector3(mNode->getPosition().x-30,mNode->getPosition().y+80,mNode->getPosition().z);
 		camLerpPos = ogreLerp(camPos, targetPos, Time);
@@ -636,6 +658,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine > 1900 && timeLine < 2100)
 		{
+			if (timeLine == 1920)
+			{
+				soundEngine->play2D("Arrow Left To Right.mp3");
+			}
 			startPos1 = entRazor1->getPosition();
 			endPos1 = Ogre::Vector3(12371,1865,4072);
 			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
@@ -644,6 +670,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine > 2200 && timeLine < 2400)
 		{
+			if (timeLine == 2220)
+			{
+				soundEngine->play2D("Arrow Left To Right.mp3");
+			}
 			startPos1 = entRazor2->getPosition();
 			endPos1 = Ogre::Vector3(12371,1865,4072);
 			camLerpPos1 = ogreLerp(startPos1, endPos1, Time * 0.5);
@@ -677,6 +707,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	}
 	if (timeLine > 2400 && timeLine < 2640)
 	{
+		if (timeLine == 2420)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		startPos1 = entRazor1->getPosition();
 		startPos2 = entRazor2->getPosition();
 		startPos3 = entRazor3->getPosition();
@@ -717,6 +751,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 2640 && timeLine < 2880)
 	{
+		if (timeLine == 2660)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		startPos1 = entRazor1->getPosition();
 		startPos2 = entRazor2->getPosition();
 		startPos3 = entRazor3->getPosition();
@@ -782,6 +820,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->lookAt(2000.0f,50.0f,1715.0f);
 	}
 
+	if (timeLine == 3280)
+	{
+		soundEngine->play2D("Laser_Cannom.mp3");
+	}
+
 	if (timeLine > 3280 && timeLine < 3320)
 	{
 		if(timeLine % 2 == 1)
@@ -792,6 +835,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		{
 			rect2->setMaterial("Examples/spaceship-1");
 		}
+	}
+
+	if (timeLine == 3380)
+	{
+		soundEngine->play2D("Laser_Cannom.mp3");
 	}
 
 	if (timeLine > 3380 && timeLine < 3420)
@@ -851,6 +899,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		dragon->setVisible(true);
 		//dragon->yaw(Ogre::Degree(180));
+		soundEngine->play2D("Dragon Roaring.wav");
 	}
 
 	if (timeLine > 4260 && timeLine < 4560)
@@ -870,6 +919,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		{
 			dragon->setVisible(true);
 			pNode1->setVisible(false);
+			soundEngine->play2D("Thunder.mp3");
 		}
 
 		camPos = mCamera->getPosition();
@@ -914,6 +964,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{		
 		if (timeLine == 5105)
 		{
+			soundEngine->play2D("Small Fireball.mp3");
 			miniCam->lookAt(151,815,1789);
 
 			fireBallName = "fire+"+ convertInt(fireBallCount);
@@ -932,6 +983,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine == 5115)
 		{
+			soundEngine->play2D("Small Fireball.mp3");
 			miniCam->lookAt(175,815,1825);
 
 			fireBallName = "fire+"+ convertInt(fireBallCount);
@@ -950,6 +1002,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine == 5125)
 		{
+			soundEngine->play2D("Small Fireball.mp3");
 			miniCam->lookAt(213,815,1882);
 
 			fireBallName = "fire+"+ convertInt(fireBallCount);
@@ -968,6 +1021,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine == 5140)
 		{
+			soundEngine->play2D("Small Fireball.mp3");
 			miniCam->lookAt(161,804,1810);
 
 			fireBallName = "fire+"+ convertInt(fireBallCount);
@@ -986,6 +1040,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine == 5150)
 		{
+			soundEngine->play2D("Small Fireball.mp3");
 			miniCam->lookAt(197,804,1857);
 
 			fireBallName = "fire+"+ convertInt(fireBallCount);
@@ -1125,8 +1180,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mGUI->miniCameraWindow->setVisible(true);
 		mCamera->setPosition((mSceneMgr->getSceneNode("dropFire_1")->getPosition()+100));
 		mCamera->lookAt(2423,412,615);
+
+		soundEngine->play2D("brush_fire.mp3");
 	}
 
+	//fire ball drop
 	if (timeLine > 6000 && timeLine < 7200)
 	{
 		setMiniCamPosition(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
@@ -1156,6 +1214,15 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 			mCamera->setPosition(pos.z-50,pos.y+50,pos.z+50);
 			mCamera->lookAt(2423,412,615);
 		}
+		if (timeLine == 6600)
+		{
+			soundEngine->play2D("brush_fire.mp3");
+		}
+	}
+
+	if (timeLine == 7200)
+	{
+		soundEngine->play2D("Bomb 2.mp3");
 	}
 
 	if (timeLine > 7200 && timeLine < 7260)
@@ -1177,6 +1244,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 7440 && timeLine < 7540)
 	{
+		if (timeLine == 7460)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		entRazor1->setOrientation(mCamera->getOrientation());
 		entRazor1->yaw(Degree(180));
 		setMiniCamPosition(entRazor1->getPosition());
@@ -1193,6 +1264,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 7540 && timeLine < 7640)
 	{
+		if (timeLine == 7560)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		entRazor1->setOrientation(mCamera->getOrientation());
 		entRazor1->yaw(Degree(180));
 		setMiniCamPosition(entRazor1->getPosition());
@@ -1209,6 +1284,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 7640 && timeLine < 7740)
 	{
+		if (timeLine == 7660)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		entRazor1->setOrientation(mCamera->getOrientation());
 		entRazor1->yaw(Degree(180));
 		setMiniCamPosition(entRazor1->getPosition());
@@ -1225,6 +1304,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 7740 && timeLine < 7840)
 	{
+		if (timeLine == 7760)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		entRazor1->setOrientation(mCamera->getOrientation());
 		entRazor1->yaw(Degree(180));
 		setMiniCamPosition(entRazor1->getPosition());
@@ -1241,6 +1324,10 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 7840 && timeLine < 7940)
 	{
+		if (timeLine == 7860)
+		{
+			soundEngine->play2D("Arrow Left To Right.mp3");
+		}
 		entRazor1->setOrientation(mCamera->getOrientation());
 		entRazor1->yaw(Degree(180));
 		mGUI->miniCameraWindow->setVisible(false);
@@ -1273,6 +1360,13 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	if (timeLine == 8180)
 	{
 		rect3->setMaterial("Examples/todo2");
+		soundEngine->play2D("Oh Understanding.mp3");
+	}
+
+	if (timeLine == 8300)
+	{
+		soundEngine->play2D("Cowboy.mp3");
+		//soundEngine->play2D("graf.mp3");
 	}
 
 	if (timeLine == 12000)

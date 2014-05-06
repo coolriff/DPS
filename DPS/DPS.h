@@ -29,6 +29,11 @@
 
 #include <OgreHardwarePixelBuffer.h>
 
+#include <irrKlang.h>
+using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
+
 class DPS;
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -245,7 +250,7 @@ class DPS : public BaseApplication
 
 		bool changeTime;
 
-
+		ISoundEngine* soundEngine;
 
 		int timeLine;
 		void GameCA(int timeLine, Ogre::Real Time);
