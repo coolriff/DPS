@@ -129,16 +129,12 @@ void DPS::createScene(void)
 	dpsHelper = std::make_shared<DPSHelper>(Globals::phyWorld, mCamera, mSceneMgr);
 	dpsSoftbodyHelper = std::make_shared<DPSSoftBodyHelper>(Globals::phyWorld, mCamera, mSceneMgr, m_collisionShapes);
 
-
-// 	dpsHelper->createWorld();
-	//Create Ogre stuff.
 	Ogre::Vector3 lightdir(0.55, -0.3, 0.75);
 	lightdir.normalise();
 	Ogre::Light* light = mSceneMgr->createLight("tstLight");
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 	light->setDirection(lightdir);
 	light->setDiffuseColour(Ogre::ColourValue::White);
-	//light->setSpecularColour(Ogre::ColourValue(0.4, 0.4, 0.4));
 
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.2, 0.2, 0.2));
 	mTerrainGlobals = OGRE_NEW Ogre::TerrainGlobalOptions();
@@ -153,7 +149,6 @@ void DPS::createScene(void)
 		for (long y = 0; y <= 0; ++y)
 			defineTerrain(x, y);
 
-	// sync load since we want everything in place when we start
 	mTerrainGroup->loadAllTerrains(true);
 
 	if (mTerrainsImported)
@@ -168,11 +163,6 @@ void DPS::createScene(void)
 
 	mTerrainGroup->freeTemporaryResources();
 
-// 	Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
-// 
-// 	entGround ->setMaterialName("Examples/Wood");
-// 	entGround ->setCastShadows(false);
-
 	btCollisionShape* shape = new btBoxShape (btVector3(5000,1,5000));
 	btDefaultMotionState* motionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1), btVector3(0,-1,0)));
 	btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(
@@ -184,26 +174,15 @@ void DPS::createScene(void)
 	btRigidBody *GroundBody = new btRigidBody(rigidBodyCI);
 	Globals::phyWorld->addRigidBody(GroundBody);
 
-// 	mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
-
-	//mSceneMgr->setSkyBox(true, "Examples/MorningSkyBox");
 	mSceneMgr->setSkyBox(true, "Examples/SpaceSkyBox", 5000);
 
-	//dpsHelper->createDirectionLight("mainLight",Ogre::Vector3(60,180,100),Ogre::Vector3(-60,-80,-100));
-	//dpsHelper->createDirectionLight("mainLight1",Ogre::Vector3(0,50,-3),Ogre::Vector3(0,0,0));
-
-	// Debug drawing
 	Globals::dbgdraw = new BtOgre::DebugDrawer(mSceneMgr->getRootSceneNode(), Globals::phyWorld);
 	Globals::phyWorld->setDebugDrawer(Globals::dbgdraw);
 
-// 	leapMotionInit();
 	setMiniCamPosition(Ogre::Vector3(10,10,10));
 
-
-	// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  GAME CA $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	GameCALoadModel();
 
-	// Set the camera to look at our handiwork
 	mCamera->setPosition(Ogre::Vector3(1645.0f,94.0f,2520.0f));
 	mCamera->setNearClipDistance(0.05f);
 
@@ -217,25 +196,18 @@ void DPS::GameCALoadModel(void)
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  RZR  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-// 	RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
-// 	entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
-// 	entRZR_001->attachObject(RZR_001);
-
 	razor1 = mSceneMgr->createEntity("Razor1", "razor.mesh");
 	entRazor1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	entRazor1->attachObject(razor1);
 
-	// create a particle system with 200 quota, then set its material and dimensions
 	ParticleSystem* thrusters1 = mSceneMgr->createParticleSystem(25);
 	thrusters1->setMaterialName("Examples/Flare");
 	thrusters1->setDefaultDimensions(25, 25);
 
-	// create two emitters for our thruster particle system
 	for (unsigned int i = 0; i < 2; i++)
 	{
-		ParticleEmitter* emitter = thrusters1->addEmitter("Point");  // add a point emitter
+		ParticleEmitter* emitter = thrusters1->addEmitter("Point");
 
-		// set the emitter properties
 		emitter->setAngle(Degree(3));
 		emitter->setTimeToLive(0.5);
 		emitter->setEmissionRate(25);
@@ -245,7 +217,6 @@ void DPS::GameCALoadModel(void)
 		emitter->setPosition(Vector3(i == 0 ? 5.7 : -18, 0, 0));
 	}
 
-	// attach our thruster particles to the rear of the ship
 	Ogre::SceneNode* thrusterParticles1 = entRazor1->createChildSceneNode(Vector3(0, 6.5, -67));
 	thrusterParticles1->attachObject(thrusters1);
 
@@ -254,17 +225,13 @@ void DPS::GameCALoadModel(void)
 	entRazor2 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	entRazor2->attachObject(razor2);
 
-	// create a particle system with 200 quota, then set its material and dimensions
 	ParticleSystem* thrusters2 = mSceneMgr->createParticleSystem(25);
 	thrusters2->setMaterialName("Examples/Flare");
 	thrusters2->setDefaultDimensions(25, 25);
 
-	// create two emitters for our thruster particle system
 	for (unsigned int i = 0; i < 2; i++)
 	{
-		ParticleEmitter* emitter = thrusters2->addEmitter("Point");  // add a point emitter
-
-		// set the emitter properties
+		ParticleEmitter* emitter = thrusters2->addEmitter("Point");
 		emitter->setAngle(Degree(3));
 		emitter->setTimeToLive(0.5);
 		emitter->setEmissionRate(25);
@@ -274,28 +241,21 @@ void DPS::GameCALoadModel(void)
 		emitter->setPosition(Vector3(i == 0 ? 5.7 : -18, 0, 0));
 	}
 
-	// attach our thruster particles to the rear of the ship
 	Ogre::SceneNode* thrusterParticles2 = entRazor2->createChildSceneNode(Vector3(0, 6.5, -67));
 	thrusterParticles2->attachObject(thrusters2);
-
-
-
 
 	razor3 = mSceneMgr->createEntity("Razor", "razor.mesh");
 	entRazor3 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 	entRazor3->attachObject(razor3);
 
-	// create a particle system with 200 quota, then set its material and dimensions
 	ParticleSystem* thrusters3 = mSceneMgr->createParticleSystem(25);
 	thrusters3->setMaterialName("Examples/Flare");
 	thrusters3->setDefaultDimensions(25, 25);
 
-	// create two emitters for our thruster particle system
 	for (unsigned int i = 0; i < 2; i++)
 	{
-		ParticleEmitter* emitter = thrusters3->addEmitter("Point");  // add a point emitter
+		ParticleEmitter* emitter = thrusters3->addEmitter("Point");
 
-		// set the emitter properties
 		emitter->setAngle(Degree(3));
 		emitter->setTimeToLive(0.5);
 		emitter->setEmissionRate(25);
@@ -305,24 +265,18 @@ void DPS::GameCALoadModel(void)
 		emitter->setPosition(Vector3(i == 0 ? 5.7 : -18, 0, 0));
 	}
 
-	// attach our thruster particles to the rear of the ship
 	Ogre::SceneNode* thrusterParticles3 = entRazor3->createChildSceneNode(Vector3(0, 6.5, -67));
 	thrusterParticles3->attachObject(thrusters3);
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  Robot  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-	// Create the entity
-	mEntity = mSceneMgr->createEntity("Robot", "robot.mesh");
 
-	// Create the scene node
-	mNode = mSceneMgr->getRootSceneNode()->
-		createChildSceneNode("RobotNode", Ogre::Vector3(604.0f, 16.0f, 4245.0f),rot);
+	mEntity = mSceneMgr->createEntity("Robot", "robot.mesh");
+	mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(604.0f, 16.0f, 4245.0f),rot);
 	mNode->attachObject(mEntity);
 
-	// Create the walking list
 	mWalkList.push_back(Ogre::Vector3(1235.0f,  16.0f, 3334.0f ));
 	mWalkList.push_back(Ogre::Vector3(1526.0f,  16.0f, 3328.0f));
 
-	// Create objects so we can see movement
 	Ogre::Entity *ent;
 	Ogre::SceneNode *node;
 
@@ -345,6 +299,7 @@ void DPS::GameCALoadModel(void)
 	node->setScale(0.1f, 0.1f, 0.1f);
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  tudorhouse  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
 	Ogre::Vector3 mTerrainPos = Ogre::Vector3(0,0,0);
 
 	Ogre::Entity* e1= mSceneMgr->createEntity("tudorhouse.mesh");
@@ -366,12 +321,12 @@ void DPS::GameCALoadModel(void)
 	sn3->attachObject(e3);
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  Sinbad  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
 	mSinbadNode = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(223,452,1976));
 	mBodyEnt = mSceneMgr->createEntity("SinbadBody", "Sinbad.mesh");
 	mSinbadNode->attachObject(mBodyEnt);
 	mSinbadNode->yaw(Ogre::Degree(180));
 
-	// create swords and attach to sheath
 	LogManager::getSingleton().logMessage("Creating swords");
 	mSword1 = mSceneMgr->createEntity("SinbadSword1", "Sword.mesh");
 	mSword2 = mSceneMgr->createEntity("SinbadSword2", "Sword.mesh");
@@ -379,7 +334,6 @@ void DPS::GameCALoadModel(void)
 	mBodyEnt->attachObjectToBone("Sheath.R", mSword2);
 
 	LogManager::getSingleton().logMessage("Creating the chains");
-	// create a couple of ribbon trails for the swords, just for fun
 	NameValuePairList params;
 	params["numberOfChains"] = "2";
 	params["maxElements"] = "80";
@@ -400,8 +354,6 @@ void DPS::GameCALoadModel(void)
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-	//Ogre::Vector3 pos = Ogre::Vector3(123,200,1776);
-	//Ogre::Quaternion rot = Ogre::Quaternion::IDENTITY;
 	Ogre::Entity *entDrangon = mSceneMgr->createEntity("Dragon","dragon.mesh");
 	entDrangon->setCastShadows(true);
 	dragon = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(123,752,1776),rot);
@@ -413,8 +365,8 @@ void DPS::GameCALoadModel(void)
 bool DPS::nextLocation(void){
 
 	if (mWalkList.empty()) return false;
-	mDestination = mWalkList.front();  // this gets the front of the deque
-	mWalkList.pop_front();             // this removes the front of the deque
+	mDestination = mWalkList.front();
+	mWalkList.pop_front(); 
 	mDirection = mDestination - mNode->getPosition();
 	mDistance = mDirection.normalise();
 	return true;
@@ -424,12 +376,10 @@ bool DPS::nextLocation(void){
 void DPS::createFrameListener(void){
 	BaseApplication::createFrameListener();
 
-	// Set idle animation
 	mAnimationState = mEntity->getAnimationState("Idle");
 	mAnimationState->setLoop(true);
 	mAnimationState->setEnabled(true);
 
-	// Set default values for variables
 	mWalkSpeed = 35.0f;
 	mDirection = Ogre::Vector3::ZERO;
 }
@@ -697,7 +647,6 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z-150);
 		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z+150);
 
-		//entRazor1->setOrientation(0.157583,0.00680658,0.986582,0.0426457);
 		entRazor1->setDirection(mCamera->getDerivedDirection());
 		entRazor1->setOrientation(mCamera->getDerivedOrientation());
 
@@ -740,7 +689,6 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		mCamera->setPosition(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z-150);
 		mCamera->lookAt(entRazor1->getPosition().x,entRazor1->getPosition().y+50,entRazor1->getPosition().z+150);
 
-		//entRazor1->setOrientation(0.157583,0.00680658,0.986582,0.0426457);
 		entRazor1->setDirection(mCamera->getDerivedDirection());
 		entRazor1->setOrientation(mCamera->getDerivedOrientation());
 
@@ -898,7 +846,6 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	if (timeLine == 4260)
 	{
 		dragon->setVisible(true);
-		//dragon->yaw(Ogre::Degree(180));
 		soundEngine->play2D("Dragon Roaring.wav");
 	}
 
@@ -1376,16 +1323,11 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 }
 
 
-// ------------------------------- Seek -----------------------------------
-// 
-//  Given a target, this behavior returns a steering force which will
-//  direct the agent towards the target
-// ------------------------------------------------------------------------
 void DPS::seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 {
 	Ogre::Vector3 mAgentPosition = mCamera->getDerivedPosition();
 	Ogre::Quaternion mAgentOrientation = mCamera->getDerivedOrientation();
-	Ogre::Vector3 mVectorToTarget = TargetPosition - mAgentPosition; // A-B = B->A
+	Ogre::Vector3 mVectorToTarget = TargetPosition - mAgentPosition;
 	mAgentPosition.normalise();
 	mAgentOrientation.normalise();
 
@@ -1394,11 +1336,9 @@ void DPS::seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 	mAgentHeading.normalise();
 	mTargetHeading.normalise();
 
-	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
 	Ogre::Vector3 mAgentVO = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
 	Ogre::Vector3 mTargetVO = TargetOrientation * Ogre::Vector3::UNIT_Y;
 
-	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
 	Ogre::Vector3 mSteeringForce = mAgentOrientation.Inverse() * mVectorToTarget;
 	mSteeringForce.normalise();
 
@@ -1407,17 +1347,13 @@ void DPS::seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 	float mRoll = mTargetVO.getRotationTo(mAgentVO).getRoll().valueRadians();
 
 	mCamera->setPosition(mAgentPosition.x+mYaw,mAgentPosition.y+mPitch,mAgentPosition.z+mRoll);
-} // Seek
+}
 
-// ----------------------------- Flee -------------------------------------
-// 
-//  Does the opposite of Seek
-// ------------------------------------------------------------------------
 void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 {
 	Ogre::Vector3 mAgentPosition = mCamera->getDerivedPosition();
 	Ogre::Quaternion mAgentOrientation = mCamera->getDerivedOrientation();
-	Ogre::Vector3 mVectorToTarget = TargetPosition - mAgentPosition; // A-B = B->A
+	Ogre::Vector3 mVectorToTarget = TargetPosition - mAgentPosition;
 	mAgentPosition.normalise();
 	mAgentOrientation.normalise();
 
@@ -1426,11 +1362,9 @@ void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 	mAgentHeading.normalise();
 	mTargetHeading.normalise();
 
-	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
 	Ogre::Vector3 mAgentVO = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
 	Ogre::Vector3 mTargetVO = TargetOrientation * Ogre::Vector3::UNIT_Y;
 
-	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
 	Ogre::Vector3 mSteeringForce = mAgentOrientation * mVectorToTarget;
 	mSteeringForce.normalise();
 
@@ -1439,46 +1373,53 @@ void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
 
 	mCamera->setPosition(mYaw,mPitch,mRoll);
-} // Flee
+}
 
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
 
-	if (mDirection == Ogre::Vector3::ZERO) {
-		if (nextLocation()) {
-			// Set walking animation
+	if (mDirection == Ogre::Vector3::ZERO) 
+	{
+		if (nextLocation()) 
+		{
 			mAnimationState = mEntity->getAnimationState("Walk");
 			mAnimationState->setLoop(true);
 			mAnimationState->setEnabled(true);				
-		}//if
-	}else{
+		}
+	}
+	else
+	{
 		Ogre::Real move = mWalkSpeed * evt.timeSinceLastFrame;
 		mDistance -= move;
-		if (mDistance <= 0.0f){                 
+		if (mDistance <= 0.0f)
+		{                 
 			mNode->setPosition(mDestination);
 			mDirection = Ogre::Vector3::ZERO;				
-			// Set animation based on if the robot has another point to walk to. 
-			if (!nextLocation()){
-				// Set Idle animation                     
+
+			if (!nextLocation())
+			{                  
 				mAnimationState = mEntity->getAnimationState("Idle");
 				mAnimationState->setLoop(true);
 				mAnimationState->setEnabled(true);
-			}else{
-				// Rotation Code will go here later
+			}
+			else
+			{
 				Ogre::Vector3 src = mNode->getOrientation() * Ogre::Vector3::UNIT_X;
-				if ((1.0f + src.dotProduct(mDirection)) < 0.0001f) {
+				if ((1.0f + src.dotProduct(mDirection)) < 0.0001f) 
+				{
 					mNode->yaw(Ogre::Degree(180));						
-				}else{
+				}
+				else
+				{
 					Ogre::Quaternion quat = src.getRotationTo(mDirection);
 					mNode->rotate(quat);
-				} // else
-			}//else
+				}
+			}
 		}else{
 			mNode->translate(mDirection * move);
-		} // else
-	} // if
-
+		}
+	}
 
 	mAnimationState->addTime(evt.timeSinceLastFrame);
 
@@ -1512,26 +1453,11 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 		setMiniCamPosition(rayNode->getPosition());
 	}
 
-	//Update Bullet world
 	Globals::phyWorld->stepSimulation(dt,0); 
 	Globals::phyWorld->debugDrawWorld();
 
-	//Shows debug if F3 key down.
-	//Globals::dbgdraw->setDebugMode(mKeyboard->isKeyDown(OIS::KC_F3));
 	Globals::dbgdraw->setDebugMode(mGUI->Command_Bullet_Debug_Mode);
 	Globals::dbgdraw->step();
-
-// 	Ogre::Vector3 camPos = mCamera->getDerivedPosition();
-// 
-// 	if (camPos.y<0.5)
-// 	{
-// 		mCamera->setPosition(camPos.x, 0.5, camPos.z);
-// 	}
-
-// 	if(leapMotionRunning)
-// 	{
-// 		leapMotionUpdate();
-// 	}
 
 	return BaseApplication::frameRenderingQueued(evt);
 }
@@ -1539,24 +1465,20 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 void DPS::configureTerrainDefaults(Ogre::Light* light)
 {
-	// Configure global
 	mTerrainGlobals->setMaxPixelError(8);
-	// testing composite map
 	mTerrainGlobals->setCompositeMapDistance(3000);
 
-	// Important to set these so that the terrain knows what to use for derived (non-realtime) data
 	mTerrainGlobals->setLightMapDirection(light->getDerivedDirection());
 	mTerrainGlobals->setCompositeMapAmbient(mSceneMgr->getAmbientLight());
 	mTerrainGlobals->setCompositeMapDiffuse(light->getDiffuseColour());
 
-	// Configure default import settings for if we use imported image
 	Ogre::Terrain::ImportData& defaultimp = mTerrainGroup->getDefaultImportSettings();
 	defaultimp.terrainSize = 513;
 	defaultimp.worldSize = 12000.0f;
 	defaultimp.inputScale = 600;
 	defaultimp.minBatchSize = 33;
 	defaultimp.maxBatchSize = 65;
-	// textures
+
 	defaultimp.layerList.resize(3);
 	defaultimp.layerList[0].worldSize = 100;
 	defaultimp.layerList[0].textureNames.push_back("dirt_grayrocky_diffusespecular.dds");
