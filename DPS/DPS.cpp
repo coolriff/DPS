@@ -227,9 +227,9 @@ void DPS::GameCALoadModel(void)
 
 	//$$$$$$$$$$$$$$$$$$$$$$$$$$  RZR  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-	RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
-	entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
-	entRZR_001->attachObject(RZR_001);
+// 	RZR_001 = mSceneMgr->createEntity("RZR-001", "RZR-002.mesh");
+// 	entRZR_001 = mSceneMgr->getRootSceneNode()->createChildSceneNode(Ogre::Vector3(1600,200,1420), rot);
+// 	entRZR_001->attachObject(RZR_001);
 
 	razor1 = mSceneMgr->createEntity("Razor1", "razor.mesh");
 	entRazor1 = mSceneMgr->getRootSceneNode()->createChildSceneNode();
@@ -430,6 +430,7 @@ bool DPS::nextLocation(void){
 	return true;
 }
 
+
 void DPS::createFrameListener(void){
 	BaseApplication::createFrameListener();
 
@@ -443,6 +444,7 @@ void DPS::createFrameListener(void){
 	mDirection = Ogre::Vector3::ZERO;
 }
 
+
 Ogre::Vector3 DPS::ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocation, Ogre::Real Time)
 {
 	Ogre::Vector3 mDest; 
@@ -451,6 +453,7 @@ Ogre::Vector3 DPS::ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocati
 	mDest.z = srcLocation.z + (destLocation.z - srcLocation.z) * Time;
 	return mDest;
 }
+
 
 // void DPS::addPhoto(void)
 // {
@@ -932,10 +935,7 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine > 5400 && timeLine < 5700)
 	{
-		camPos = mCamera->getPosition();
-		targetPos = Ogre::Vector3(2094,7,1332);
-		camLerpPos = ogreLerp(camPos, targetPos, Time);
-		mCamera->setPosition(camLerpPos);
+		mCamera->setPosition(2094,7,1332);
 		mCamera->lookAt(1900,70,1358);
 	}
 
@@ -1040,13 +1040,13 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 	if (timeLine == 6000)
 	{
-		dpsHelper->createFire(Ogre::Vector3(2423,2412,615),"dropFire_1",1);
+		dpsHelper->createFire(Ogre::Vector3(2423,2412,615),"dropFire_1",1000);
+		dpsHelper->createFire(Ogre::Vector3(1823,2412,615),"dropFire_2",1000);
 		setMiniCamPosition(mSceneMgr->getSceneNode("dropFire_1")->getPosition());
 		mGUI->miniCameraWindow->setVisible(true);
 		mCamera->setPosition((mSceneMgr->getSceneNode("dropFire_1")->getPosition()+100));
 		mCamera->lookAt(2423,412,615);
 	}
-
 
 	if (timeLine > 6000 && timeLine < 7200)
 	{
@@ -1074,22 +1074,179 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 
 		if (timeLine > 6900 && timeLine < 7200)
 		{
-			mCamera->setPosition(pos.z-50,pos.y+50,pos.z-50);
+			mCamera->setPosition(pos.z-50,pos.y+50,pos.z+50);
 			mCamera->lookAt(2423,412,615);
 		}
 	}
 
+	if (timeLine > 7200 && timeLine < 7260)
+	{
+		entRazor3->roll(Degree(Time * 240));
+		entRazor2->roll(Degree(-(Time * 240)));
+	}
 
+	if (timeLine == 7260)
+	{
+		entRazor1->setPosition(2123,412,315);
+		entRazor2->setPosition(2403,77,757);
+		entRazor3->setPosition(1882,88,692);
+		mCamera->setPosition(2105,631,-18);
+		mCamera->lookAt(2124,195,774);
 
+		setMiniCamPosition(entRazor1->getPosition());
+	}
 
-		
+	if (timeLine > 7440 && timeLine < 7540)
+	{
+		entRazor1->setOrientation(mCamera->getOrientation());
+		entRazor1->yaw(Degree(180));
+		setMiniCamPosition(entRazor1->getPosition());
 
+		camPos = entRazor1->getPosition();
+		targetPos = Ogre::Vector3(2440,148,1680);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		entRazor1->setPosition(camLerpPos);
 
+		camLerpPos = ogreLerp(mCamera->getPosition(), entRazor1->getPosition(), Time*0.5);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition());
+	}
+
+	if (timeLine > 7540 && timeLine < 7640)
+	{
+		entRazor1->setOrientation(mCamera->getOrientation());
+		entRazor1->yaw(Degree(180));
+		setMiniCamPosition(entRazor1->getPosition());
+
+		camPos = entRazor1->getPosition();
+		targetPos = Ogre::Vector3(3409,769,4533);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		entRazor1->setPosition(camLerpPos);
+
+		camLerpPos = ogreLerp(mCamera->getPosition(), entRazor1->getPosition(), Time*0.5);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition());
+	}
+
+	if (timeLine > 7640 && timeLine < 7740)
+	{
+		entRazor1->setOrientation(mCamera->getOrientation());
+		entRazor1->yaw(Degree(180));
+		setMiniCamPosition(entRazor1->getPosition());
+
+		camPos = entRazor1->getPosition();
+		targetPos = Ogre::Vector3(1848,721,5717);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		entRazor1->setPosition(camLerpPos);
+
+		camLerpPos = ogreLerp(mCamera->getPosition(), entRazor1->getPosition(), Time*0.5);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition());
+	}
+
+	if (timeLine > 7740 && timeLine < 7840)
+	{
+		entRazor1->setOrientation(mCamera->getOrientation());
+		entRazor1->yaw(Degree(180));
+		setMiniCamPosition(entRazor1->getPosition());
+
+		camPos = entRazor1->getPosition();
+		targetPos = Ogre::Vector3(-3652,875,3733);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		entRazor1->setPosition(camLerpPos);
+
+		camLerpPos = ogreLerp(mCamera->getPosition(), entRazor1->getPosition(), Time*0.5);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition());
+	}
+
+	if (timeLine > 7840 && timeLine < 7940)
+	{
+		entRazor1->setOrientation(mCamera->getOrientation());
+		entRazor1->yaw(Degree(180));
+		mGUI->miniCameraWindow->setVisible(false);
+
+		camPos = entRazor1->getPosition();
+		targetPos = Ogre::Vector3(245,14122,-28909);
+		camLerpPos = ogreLerp(camPos, targetPos, Time);
+		entRazor1->setPosition(camLerpPos);
+
+		camLerpPos = ogreLerp(mCamera->getPosition(), entRazor1->getPosition(), Time*0.5);
+		mCamera->setPosition(camLerpPos);
+		mCamera->lookAt(entRazor1->getPosition());
+	}
 }
+
+
+// ------------------------------- Seek -----------------------------------
+// 
+//  Given a target, this behavior returns a steering force which will
+//  direct the agent towards the target
+// ------------------------------------------------------------------------
+void DPS::seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
+{
+	Ogre::Vector3 mAgentPosition = mCamera->getDerivedPosition();
+	Ogre::Quaternion mAgentOrientation = mCamera->getDerivedOrientation();
+	Ogre::Vector3 mVectorToTarget = TargetPosition - mAgentPosition; // A-B = B->A
+	mAgentPosition.normalise();
+	mAgentOrientation.normalise();
+
+	Ogre::Vector3 mAgentHeading = mAgentOrientation * mAgentPosition;
+	Ogre::Vector3 mTargetHeading = TargetOrientation * TargetPosition;
+	mAgentHeading.normalise();
+	mTargetHeading.normalise();
+
+	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
+	Ogre::Vector3 mAgentVO = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
+	Ogre::Vector3 mTargetVO = TargetOrientation * Ogre::Vector3::UNIT_Y;
+
+	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
+	Ogre::Vector3 mSteeringForce = mAgentOrientation.Inverse() * mVectorToTarget;
+	mSteeringForce.normalise();
+
+	float mYaw = mSteeringForce.x;
+	float mPitch = mSteeringForce.y;
+	float mRoll = mTargetVO.getRotationTo(mAgentVO).getRoll().valueRadians();
+
+	mCamera->setPosition(mAgentPosition.x+mYaw,mAgentPosition.y+mPitch,mAgentPosition.z+mRoll);
+} // Seek
+
+// ----------------------------- Flee -------------------------------------
+// 
+//  Does the opposite of Seek
+// ------------------------------------------------------------------------
+void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
+{
+	Ogre::Vector3 mAgentPosition = mCamera->getDerivedPosition();
+	Ogre::Quaternion mAgentOrientation = mCamera->getDerivedOrientation();
+	Ogre::Vector3 mVectorToTarget = TargetPosition - mAgentPosition; // A-B = B->A
+	mAgentPosition.normalise();
+	mAgentOrientation.normalise();
+
+	Ogre::Vector3 mAgentHeading = mAgentOrientation * mAgentPosition;
+	Ogre::Vector3 mTargetHeading = TargetOrientation * TargetPosition;
+	mAgentHeading.normalise();
+	mTargetHeading.normalise();
+
+	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
+	Ogre::Vector3 mAgentVO = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
+	Ogre::Vector3 mTargetVO = TargetOrientation * Ogre::Vector3::UNIT_Y;
+
+	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
+	Ogre::Vector3 mSteeringForce = mAgentOrientation * mVectorToTarget;
+	mSteeringForce.normalise();
+
+	float mYaw      = mSteeringForce.x;
+	float mPitch   = mSteeringForce.y;
+	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
+
+	mCamera->setPosition(mYaw,mPitch,mRoll);
+} // Flee
 
 
 bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
+
 	if (mDirection == Ogre::Vector3::ZERO) {
 		if (nextLocation()) {
 			// Set walking animation
@@ -1129,9 +1286,9 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 	times = evt.timeSinceLastFrame;
 
-	++timeLine;
-
 	GameCA(timeLine, times);
+
+	++timeLine;
 
 	if(mGUI->Simulation_Stop)
 	{
@@ -1182,78 +1339,6 @@ bool DPS::frameRenderingQueued(const Ogre::FrameEvent& evt)
 }
 
 
-// ------------------------------- Seek -----------------------------------
-// 
-//  Given a target, this behavior returns a steering force which will
-//  direct the agent towards the target
-// ------------------------------------------------------------------------
-// void DPS::seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
-// {
-// 	Ogre::Vector3 mAgentPosition      = mGlobalResource->LocalPlayerObjectScene->getInventoryPosition();
-// 	Ogre::Quaternion mAgentOrientation   = mGlobalResource->LocalPlayerObjectScene->getInventoryOrientation();
-// 	Ogre::Vector3 mVectorToTarget      = TargetPosition - mAgentPosition; // A-B = B->A
-// 	mAgentPosition.normalise();
-// 	mAgentOrientation.normalise();
-// 
-// 	Ogre::Vector3 mAgentHeading      = mAgentOrientation * mAgentPosition;
-// 	Ogre::Vector3 mTargetHeading      = TargetOrientation * TargetPosition;
-// 	mAgentHeading.normalise();
-// 	mTargetHeading.normalise();
-// 
-// 	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
-// 	Ogre::Vector3 mAgentVO      = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
-// 	Ogre::Vector3 mTargetVO      = TargetOrientation * Ogre::Vector3::UNIT_Y;
-// 
-// 	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
-// 	Ogre::Vector3 mSteeringForce = mAgentOrientation.Inverse() * mVectorToTarget;
-// 	mSteeringForce.normalise();
-// 
-// 	float mYaw      = mSteeringForce.x;
-// 	float mPitch   = mSteeringForce.y;
-// 	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
-// 
-// 	clsSystemControls::getSingleton().setPitchControl( mPitch );
-// 	clsSystemControls::getSingleton().setYawControl( mYaw );
-// 	clsSystemControls::getSingleton().setRollControl( mRoll );
-// 
-// } // Seek
-// 
-// 
-// ----------------------------- Flee -------------------------------------
-// 
-//  Does the opposite of Seek
-// ------------------------------------------------------------------------
-// void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
-// {
-// 	Ogre::Vector3 mAgentPosition      = mGlobalResource->LocalPlayerObjectScene->getInventoryPosition();
-// 	Ogre::Quaternion mAgentOrientation   = mGlobalResource->LocalPlayerObjectScene->getInventoryOrientation();
-// 	Ogre::Vector3 mVectorToTarget      = TargetPosition - mAgentPosition; // A-B = B->A
-// 	mAgentPosition.normalise();
-// 	mAgentOrientation.normalise();
-// 
-// 	Ogre::Vector3 mAgentHeading      = mAgentOrientation * mAgentPosition;
-// 	Ogre::Vector3 mTargetHeading      = TargetOrientation * TargetPosition;
-// 	mAgentHeading.normalise();
-// 	mTargetHeading.normalise();
-// 
-// 	// Orientation control - Ogre::Vector3::UNIT_Y is common up vector.
-// 	Ogre::Vector3 mAgentVO      = mAgentOrientation.Inverse() * Ogre::Vector3::UNIT_Y;
-// 	Ogre::Vector3 mTargetVO      = TargetOrientation * Ogre::Vector3::UNIT_Y;
-// 
-// 	// Compute new torque scalar (-1.0 to 1.0) based on heading vector to target.
-// 	Ogre::Vector3 mSteeringForce = mAgentOrientation * mVectorToTarget;
-// 	mSteeringForce.normalise();
-// 
-// 	float mYaw      = mSteeringForce.x;
-// 	float mPitch   = mSteeringForce.y;
-// 	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
-// 
-// 	clsSystemControls::getSingleton().setPitchControl( mPitch );
-// 	clsSystemControls::getSingleton().setYawControl( mYaw );
-// 	clsSystemControls::getSingleton().setRollControl( mRoll );
-// 
-// } // Flee
-
 void DPS::configureTerrainDefaults(Ogre::Light* light)
 {
 	// Configure global
@@ -1286,6 +1371,7 @@ void DPS::configureTerrainDefaults(Ogre::Light* light)
 	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
 }
 
+
 void DPS::defineTerrain(long x, long y)
 {
 	Ogre::String filename = mTerrainGroup->generateFilename(x, y);
@@ -1301,6 +1387,7 @@ void DPS::defineTerrain(long x, long y)
 		mTerrainsImported = true;
 	}
 }
+
 
 void DPS::initBlendMaps(Ogre::Terrain* terrain)
 {
@@ -1334,6 +1421,7 @@ void DPS::initBlendMaps(Ogre::Terrain* terrain)
 	blendMap0->update();
 	blendMap1->update();
 }
+
 
 void DPS::getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
 {
@@ -1403,8 +1491,6 @@ void DPS::clearScreen(void)
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Enable_Mini_Camera")->setEnabled(true);
 	mGUI->mGuiSystem->findWidget<MyGUI::Widget>("Command_Disable_Mini_Camera")->setEnabled(false);
 	mGUI->miniCameraWindow->setVisible(false);
-
-
 	solidScreen();
 }
 
@@ -2008,7 +2094,7 @@ void DPS::resetCamera(Ogre::Vector3 camPos)
 
 void DPS::setMiniCamPosition(Ogre::Vector3 camPos)
 {
-	miniCam->setPosition(50+camPos);
+	miniCam->setPosition(200+camPos);
 	miniCam->lookAt(camPos);
 	miniCam->setNearClipDistance(5);
 }

@@ -258,7 +258,8 @@ class DPS : public BaseApplication
 		void configureTerrainDefaults(Ogre::Light* light);
 		void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img);
 		Ogre::Vector3 ogreLerp (Ogre::Vector3 srcLocation, Ogre::Vector3 destLocation, Ogre::Real Time);
-		//void addPhoto(void);
+		void seek(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation);
+		void flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation);
 
 		Ogre::Vector3 camLerpPos;
 		Ogre::Vector3 camLerpPos1;
