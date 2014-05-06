@@ -81,6 +81,11 @@ void GUI::createGUI(size_t _index)
 	createSimulationSpeedWindow();
 /*	createFPSWindow();*/
 
+	//hide the menu
+	MyGUI::Widget* widget;
+	widget = mGuiSystem->findWidget<MyGUI::Widget>("Menu");
+	widget->setVisible(false);
+
 }
 
 void GUI::destroyGUI(void)

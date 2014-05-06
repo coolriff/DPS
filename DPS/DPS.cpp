@@ -502,7 +502,6 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 	{
 		mCamera->setPosition(Ogre::Vector3(237,452,2037));
 		mCamera->lookAt(mSinbadNode->getPosition());
-/*		delete rect1;*/
 	}
 
 	if(timeLine > 240 && timeLine < 360 )
@@ -1254,6 +1253,31 @@ void DPS::GameCA(int timeLine, Ogre::Real Time)
 		camLerpPos = ogreLerp(mCamera->getPosition(), entRazor1->getPosition(), Time*0.5);
 		mCamera->setPosition(camLerpPos);
 		mCamera->lookAt(entRazor1->getPosition());
+	}
+
+	if (timeLine == 8060)
+	{
+		rect3 = new Rectangle2D(true);
+		rect3->setCorners(-1.0, 1.0, 1.0, -1.0);
+		rect3->setMaterial("Examples/todo1");
+		rect3->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+
+		AxisAlignedBox *aabb3 = new AxisAlignedBox();
+		aabb3->setInfinite();
+
+		rect3->setBoundingBox(*aabb3);                             
+		photoNode3 = mSceneMgr->getRootSceneNode()->createChildSceneNode("BackgroundNode3");             
+		photoNode3->attachObject(rect3);
+	}
+
+	if (timeLine == 8180)
+	{
+		rect3->setMaterial("Examples/todo2");
+	}
+
+	if (timeLine == 12000)
+	{
+		delete rect3;
 	}
 }
 
