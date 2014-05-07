@@ -1368,11 +1368,11 @@ void DPS::flee(Ogre::Vector3 TargetPosition, Ogre::Quaternion TargetOrientation)
 	Ogre::Vector3 mSteeringForce = mAgentOrientation * mVectorToTarget;
 	mSteeringForce.normalise();
 
-	float mYaw      = mSteeringForce.x;
-	float mPitch   = mSteeringForce.y;
-	float mRoll      = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
+	float mYaw = mSteeringForce.x;
+	float mPitch = mSteeringForce.y;
+	float mRoll = mTargetVO.getRotationTo( mAgentVO ).getRoll().valueRadians();
 
-	mCamera->setPosition(mYaw,mPitch,mRoll);
+	mCamera->setPosition(mAgentPosition.x+mYaw,mAgentPosition.y+mPitch,mAgentPosition.z+mRoll);
 }
 
 
